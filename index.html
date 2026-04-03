@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#38bdf8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EnglishApp">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>İngilizce Günlük Pratik</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 30px 0 20px;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 30px;
+        }
+        .header h1 { font-size: 28px; color: #38bdf8; margin-bottom: 8px; }
+        .header .subtitle { color: #94a3b8; font-size: 14px; }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            text-align: center;
+            background: #1e293b;
+            padding: 15px 25px;
+            border-radius: 12px;
+            min-width: 120px;
+        }
+        .stat-value { font-size: 28px; font-weight: bold; color: #38bdf8; }
+        .stat-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+        /* Stage Navigation */
+        .stage-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .stage-btn {
+            padding: 10px 20px;
+            border: 2px solid #334155;
+            background: transparent;
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .stage-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+        .stage-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; font-weight: bold; }
+        .stage-btn.completed { border-color: #22c55e; color: #22c55e; }
+        .stage-btn.completed::after { content: ' ✓'; }
+
+        /* Content Area */
+        .stage-content {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            min-height: 400px;
+        }
+        .stage-title {
+            font-size: 22px;
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
+        .stage-desc {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Word Table */
+        .word-table { width: 100%; border-collapse: collapse; }
+        .word-table th {
+            background: #334155;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 13px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .word-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #334155;
+            font-size: 15px;
+        }
+        .word-table tr:hover td { background: #334155; }
+        .word-en { color: #38bdf8; font-weight: 600; }
+        .word-pron { color: #94a3b8; font-size: 13px; }
+        .word-type {
+            background: #334155;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        /* Quiz */
+        .quiz-question {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        .quiz-number {
+            color: #38bdf8;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .quiz-text { font-size: 16px; line-height: 1.6; margin-bottom: 12px; }
+        .quiz-hint { color: #f59e0b; font-style: italic; }
+        .quiz-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .quiz-input:focus { border-color: #38bdf8; }
+        .quiz-input.correct { border-color: #22c55e; background: #052e16; }
+        .quiz-input.wrong { border-color: #ef4444; background: #350a0a; }
+        .quiz-answer {
+            margin-top: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        .quiz-answer.show { display: block; }
+        .quiz-answer.correct-answer { color: #22c55e; }
+        .quiz-answer.wrong-answer { color: #ef4444; }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: #38bdf8; color: #0f172a; }
+        .btn-primary:hover { background: #7dd3fc; }
+        .btn-success { background: #22c55e; color: #fff; }
+        .btn-success:hover { background: #4ade80; }
+        .btn-secondary { background: #334155; color: #e2e8f0; }
+        .btn-secondary:hover { background: #475569; }
+        .btn-center { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+
+        /* Writing Practice */
+        .writing-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            font-family: inherit;
+        }
+        .writing-area:focus { border-color: #38bdf8; }
+        .writing-prompt {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid #f59e0b;
+        }
+        .writing-words {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+        .writing-word-tag {
+            background: #334155;
+            color: #38bdf8;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Results */
+        .result-card {
+            text-align: center;
+            padding: 40px;
+        }
+        .result-score {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .result-score.great { color: #22c55e; }
+        .result-score.ok { color: #f59e0b; }
+        .result-score.bad { color: #ef4444; }
+        .result-message { font-size: 18px; color: #94a3b8; margin-bottom: 10px; }
+        .result-detail { font-size: 14px; color: #64748b; margin-bottom: 30px; }
+
+        /* Sentence Example Cards */
+        .sentence-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+        }
+        .sentence-en { font-size: 16px; margin-bottom: 6px; line-height: 1.5; }
+        .sentence-tr { color: #94a3b8; font-size: 14px; line-height: 1.5; }
+        .sentence-word-highlight { color: #38bdf8; font-weight: 600; }
+
+        /* Pattern Section */
+        .pattern-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 3px solid #a78bfa;
+        }
+        .pattern-text { font-size: 17px; color: #a78bfa; font-weight: 600; margin-bottom: 4px; }
+        .pattern-meaning { color: #94a3b8; font-size: 14px; margin-bottom: 8px; }
+        .pattern-example { font-size: 15px; }
+        .pattern-example-tr { color: #94a3b8; font-size: 13px; }
+
+        /* Dashboard */
+        .dashboard-section { margin-bottom: 30px; }
+        .dashboard-section h3 { color: #38bdf8; margin-bottom: 15px; font-size: 18px; }
+        .weak-words { display: flex; flex-wrap: wrap; gap: 8px; }
+        .weak-word {
+            background: #451a03;
+            color: #fb923c;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .strong-word {
+            background: #052e16;
+            color: #4ade80;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .start-section { text-align: center; margin-top: 30px; }
+        .daily-info {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .daily-info .day-num { font-size: 48px; font-weight: bold; color: #38bdf8; }
+        .daily-info .day-label { color: #94a3b8; }
+
+        /* Streak fire */
+        .streak-fire { color: #f59e0b; }
+
+        /* Add Word Form */
+        .add-form-group { margin-bottom: 15px; }
+        .add-form-group label {
+            display: block;
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .add-form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .add-form-input:focus { border-color: #38bdf8; }
+        .add-form-row { display: flex; gap: 15px; }
+        .add-form-row .add-form-group { flex: 1; }
+        .sentence-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .sentence-input-row input { flex: 1; }
+        .remove-sentence-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .add-sentence-btn {
+            background: transparent;
+            border: 2px dashed #334155;
+            color: #94a3b8;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .add-sentence-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+        .word-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #0f172a;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .word-list-item .word-info { flex: 1; }
+        .word-list-item .word-name { color: #38bdf8; font-weight: 600; font-size: 16px; }
+        .word-list-item .word-meaning { color: #94a3b8; font-size: 13px; }
+        .word-list-item .word-badge {
+            background: #334155;
+            color: #cbd5e1;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+        .delete-word-btn {
+            background: transparent;
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            border-radius: 6px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .delete-word-btn:hover { background: #ef4444; color: white; }
+        .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn {
+            padding: 8px 20px;
+            border: 2px solid #334155;
+            background: transparent;
+            color: #94a3b8;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .tab-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .success-msg {
+            background: #052e16;
+            border: 1px solid #22c55e;
+            color: #4ade80;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: none;
+        }
+        .success-msg.show { display: block; }
+
+        /* Loading spinner */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+        .loading .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #334155;
+            border-top-color: #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 15px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* PWA Install Banner */
+        .pwa-banner {
+            background: linear-gradient(135deg, #1e3a5f, #1e293b);
+            border: 1px solid #38bdf8;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+        .pwa-banner.show { display: flex; }
+        .pwa-banner-text { flex: 1; }
+        .pwa-banner-title { font-size: 15px; font-weight: 600; color: #38bdf8; }
+        .pwa-banner-desc { font-size: 13px; color: #94a3b8; margin-top: 3px; }
+        .pwa-banner .btn { white-space: nowrap; font-size: 14px; padding: 8px 18px; }
+        .pwa-dismiss {
+            background: none; border: none; color: #64748b; cursor: pointer;
+            font-size: 20px; padding: 0 5px; line-height: 1;
+        }
+
+        /* Notification Settings */
+        .notif-settings {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+        .notif-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .notif-info { flex: 1; }
+        .notif-title { font-size: 15px; font-weight: 600; }
+        .notif-desc { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .toggle-switch {
+            position: relative;
+            width: 50px; height: 28px;
+            background: #334155;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex-shrink: 0;
+        }
+        .toggle-switch.active { background: #22c55e; }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px; height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 3px; left: 3px;
+            transition: transform 0.3s;
+        }
+        .toggle-switch.active::after { transform: translateX(22px); }
+        .time-picker {
+            display: flex; align-items: center; gap: 8px;
+            margin-top: 12px; padding-top: 12px;
+            border-top: 1px solid #1e293b;
+        }
+        .time-picker label { font-size: 13px; color: #94a3b8; }
+        .time-picker input[type="time"] {
+            background: #1e293b; border: 1px solid #334155;
+            color: #e2e8f0; padding: 6px 10px; border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container { padding: 10px; }
+            .stage-content { padding: 20px; }
+            .stats-bar { gap: 10px; }
+            .stat-item { min-width: 90px; padding: 10px 15px; }
+            .word-table { font-size: 13px; }
+            .word-table th, .word-table td { padding: 8px 10px; }
+            .pwa-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>English Daily Practice</h1>
+            <div class="subtitle">1125 kelime havuzu - Her gün 5 kelime, istersen ekstra getir</div>
+        </div>
+
+        <!-- PWA Install Banner -->
+        <div class="pwa-banner" id="pwaBanner">
+            <div class="pwa-banner-text">
+                <div class="pwa-banner-title">Telefonuna Kur!</div>
+                <div class="pwa-banner-desc">Ana ekrana ekle, offline kullan, bildirim al</div>
+            </div>
+            <button class="btn btn-primary" id="pwaInstallBtn" onclick="installPWA()">Kur</button>
+            <button class="pwa-dismiss" onclick="dismissPWA()">&times;</button>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="streakCount">0</div>
+                <div class="stat-label">Gün Serisi <span class="streak-fire">&#128293;</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalWords">0</div>
+                <div class="stat-label">Toplam Kelime</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="todayScore">-</div>
+                <div class="stat-label">Bugünün Skoru</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="masteredCount">0</div>
+                <div class="stat-label">Hakim Kelime</div>
+            </div>
+        </div>
+
+        <div class="stage-nav" id="stageNav">
+            <button class="stage-btn active" onclick="navigateStage('dashboard', this)">Ana Sayfa</button>
+            <button class="stage-btn" onclick="navigateStage('stage1', this)" id="navStage1">1. Kelimeler</button>
+            <button class="stage-btn" onclick="navigateStage('stage2', this)" id="navStage2">2. Cümleler</button>
+            <button class="stage-btn" onclick="navigateStage('stage3a', this)" id="navStage3a">3A. Boşluk</button>
+            <button class="stage-btn" onclick="navigateStage('stage3b', this)" id="navStage3b">3B. Çeviri</button>
+            <button class="stage-btn" onclick="navigateStage('stage4', this)" id="navStage4">4. Yazma</button>
+            <button class="stage-btn" onclick="navigateStage('patterns', this)" id="navPatterns">Kalıplar</button>
+            <button class="stage-btn" onclick="navigateStage('notebook', this)" id="navNotebook" style="border-color:#a78bfa; color:#a78bfa;">Defterim</button>
+            <button class="stage-btn" onclick="navigateStage('addword', this)" id="navAddword" style="border-color:#22c55e; color:#22c55e;">+ Kelime Ekle</button>
+        </div>
+
+        <div class="stage-content" id="contentArea">
+            <!-- Dynamic content here -->
+        </div>
+    </div>
+
+    <script>
+    // ==================== ORIGINAL 45 WORDS (already studied, with sentences) ====================
+    const ORIGINAL_WORDS = [
+        { en: "commit", pron: "/k\u0259\u02C8m\u026At/", tr: "Kaydetmek, i\u015flemek", sentences: [
+            { en: "I always **commit** my changes at the end of the day.", tr: "G\u00fcn sonunda de\u011fi\u015fikliklerimi her zaman kaydederim." },
+            { en: "Don't forget to **commit** before switching branches.", tr: "Dal de\u011fi\u015ftirmeden \u00f6nce kaydetmeyi unutma." },
+            { en: "She **committed** the fix to the main branch.", tr: "D\u00fczeltmeyi ana dala kaydetti." }
+        ]},
+        { en: "update", pron: "/\u028CpˈdeɪIt/", tr: "G\u00fcncellemek", sentences: [
+            { en: "Did you **update** the report file?", tr: "Rapor dosyas\u0131n\u0131 g\u00fcncelledin mi?" },
+            { en: "The system needs an **update** right away.", tr: "Sistem hemen bir g\u00fcncellemeye ihtiya\u00e7 duyuyor." },
+            { en: "I **updated** the package to the latest version.", tr: "Paketi en son s\u00fcr\u00fcme g\u00fcncelledim." }
+        ]},
+        { en: "implement", pron: "/\u02C8\u026Am.pl\u026A.ment/", tr: "Uygulamak, devreye almak", sentences: [
+            { en: "We need to **implement** the new feature.", tr: "Yeni \u00f6zelli\u011fi uygulamamız gerekiyor." },
+            { en: "Can you **implement** this design by Friday?", tr: "Bu tasar\u0131m\u0131 cumaya kadar uygulayabilir misin?" },
+            { en: "They **implemented** a caching system.", tr: "Bir \u00f6nbellekleme sistemi uygulad\u0131lar." }
+        ]},
+        { en: "develop", pron: "/dɪˈvel.əp/", tr: "Geli\u015ftirmek", sentences: [
+            { en: "I want to **develop** my coding skills.", tr: "Kodlama becerilerimi geli\u015ftirmek istiyorum." },
+            { en: "We are **developing** a new module.", tr: "Yeni bir mod\u00fcl geli\u015ftiriyoruz." },
+            { en: "This project was **developed** in three months.", tr: "Bu proje \u00fc\u00e7 ayda geli\u015ftirildi." }
+        ]},
+        { en: "maintain", pron: "/meɪnˈteɪn/", tr: "S\u00fcrd\u00fcrmek, bak\u0131m yapmak", sentences: [
+            { en: "It is important to **maintain** the server.", tr: "Sunucunun bak\u0131m\u0131n\u0131 yapmak \u00f6nemlidir." },
+            { en: "Who **maintains** this legacy code?", tr: "Bu eski kodu kim bak\u0131m\u0131n\u0131 yap\u0131yor?" },
+            { en: "We need to **maintain** a clean codebase.", tr: "Temiz bir kod taban\u0131 s\u00fcrd\u00fcrmemiz gerekiyor." }
+        ]},
+        { en: "deliver", pron: "/dɪˈlɪv.ər/", tr: "Teslim etmek", sentences: [
+            { en: "Can you **deliver** the project by Friday?", tr: "Projeyi cumaya kadar teslim edebilir misin?" },
+            { en: "We **delivered** the sprint on time.", tr: "Sprinti zaman\u0131nda teslim ettik." },
+            { en: "The team **delivers** high-quality work.", tr: "Ekip y\u00fcksek kaliteli i\u015f teslim eder." }
+        ]},
+        { en: "resolve", pron: "/rɪˈzɒlv/", tr: "\u00c7\u00f6zmek, halletmek", sentences: [
+            { en: "We must **resolve** this technical issue.", tr: "Bu teknik sorunu \u00e7\u00f6zmeliyiz." },
+            { en: "I **resolved** the merge conflict.", tr: "Birle\u015ftirme \u00e7at\u0131\u015fmas\u0131n\u0131 \u00e7\u00f6zd\u00fcm." },
+            { en: "Can you **resolve** this bug today?", tr: "Bu hatay\u0131 bug\u00fcn \u00e7\u00f6zebilir misin?" }
+        ]},
+        { en: "analyze", pron: "/ˈæn.əl.aɪz/", tr: "Analiz etmek", sentences: [
+            { en: "We need to **analyze** the user data.", tr: "Kullan\u0131c\u0131 verilerini analiz etmemiz gerekiyor." },
+            { en: "I **analyzed** the error logs carefully.", tr: "Hata g\u00fcnl\u00fcklerini dikkatlice analiz ettim." },
+            { en: "Let's **analyze** the performance metrics.", tr: "Performans metriklerini analiz edelim." }
+        ]},
+        { en: "verify", pron: "/ˈver.ɪ.faɪ/", tr: "Do\u011frulamak, teyit etmek", sentences: [
+            { en: "Please **verify** your email address.", tr: "L\u00fctfen e-posta adresinizi do\u011frulay\u0131n." },
+            { en: "I need to **verify** the test results.", tr: "Test sonu\u00e7lar\u0131n\u0131 do\u011frulaman gerekiyor." },
+            { en: "**Verify** that the API returns correct data.", tr: "API'nin do\u011fru veri d\u00f6nd\u00fc\u011f\u00fcn\u00fc do\u011frulay\u0131n." }
+        ]},
+        { en: "investigate", pron: "/ɪnˈves.tɪ.ɡeɪt/", tr: "Ara\u015ft\u0131rmak, incelemek", sentences: [
+            { en: "I need to **investigate** the error log.", tr: "Hata g\u00fcnl\u00fc\u011f\u00fcn\u00fc incelemem gerekiyor." },
+            { en: "We should **investigate** why the build failed.", tr: "Yap\u0131n\u0131n neden ba\u015far\u0131s\u0131z oldu\u011funu ara\u015ft\u0131rmal\u0131y\u0131z." },
+            { en: "The team is **investigating** the outage.", tr: "Ekip kesintiyi ara\u015ft\u0131r\u0131yor." }
+        ]},
+        { en: "adjust", pron: "/əˈdʒʌst/", tr: "Ayarlamak, d\u00fczenlemek", sentences: [
+            { en: "You can **adjust** the settings here.", tr: "Ayarlar\u0131 buradan d\u00fczenleyebilirsin." },
+            { en: "I need to **adjust** the query parameters.", tr: "Sorgu parametrelerini ayarlamam gerekiyor." },
+            { en: "Let's **adjust** the deadline.", tr: "Teslim tarihini ayarlayal\u0131m." }
+        ]},
+        { en: "confirm", pron: "/kənˈfɜːm/", tr: "Onaylamak", sentences: [
+            { en: "Please **confirm** your email address.", tr: "L\u00fctfen e-posta adresinizi onaylay\u0131n." },
+            { en: "Can you **confirm** the meeting time?", tr: "Toplant\u0131 saatini onaylayabilir misin?" },
+            { en: "I **confirmed** the deployment schedule.", tr: "Da\u011f\u0131t\u0131m takvimini onaylad\u0131m." }
+        ]},
+        { en: "determine", pron: "/dɪˈtɜː.mɪn/", tr: "Belirlemek", sentences: [
+            { en: "We need to **determine** the project deadline.", tr: "Proje teslim tarihini belirlememiz gerekiyor." },
+            { en: "Let's **determine** the root cause.", tr: "Temel nedeni belirleyelim." },
+            { en: "I couldn't **determine** which version is correct.", tr: "Hangi s\u00fcr\u00fcm\u00fcn do\u011fru oldu\u011funu belirleyemedim." }
+        ]},
+        { en: "collaborate", pron: "/kəˈlæb.ə.reɪt/", tr: "\u0130\u015f birli\u011fi yapmak", sentences: [
+            { en: "Let's **collaborate** on this task.", tr: "Bu g\u00f6revde i\u015f birli\u011fi yapal\u0131m." },
+            { en: "I like to **collaborate** with experienced developers.", tr: "Deneyimli geli\u015ftiricilerle i\u015f birli\u011fi yapmay\u0131 severim." },
+            { en: "Our teams **collaborate** using Git.", tr: "Ekiplerimiz Git kullanarak i\u015f birli\u011fi yap\u0131yor." }
+        ]},
+        { en: "prepare", pron: "/prɪˈpeər/", tr: "Haz\u0131rlamak", sentences: [
+            { en: "I **prepare** dinner every evening.", tr: "Her ak\u015fam yemek haz\u0131rlar\u0131m." },
+            { en: "Let me **prepare** the demo environment.", tr: "Demo ortam\u0131n\u0131 haz\u0131rlayay\u0131m." },
+            { en: "We need to **prepare** for the code review.", tr: "Kod incelemesine haz\u0131rlanmam\u0131z gerekiyor." }
+        ]},
+        { en: "improve", pron: "/ɪmˈpruːv/", tr: "Geli\u015ftirmek, iyile\u015ftirmek", sentences: [
+            { en: "I **improve** my skills every day.", tr: "Her g\u00fcn becerilerimi geli\u015ftiriyorum." },
+            { en: "We need to **improve** the page load time.", tr: "Sayfa y\u00fckleme s\u00fcresini iyile\u015ftirmemiz gerekiyor." },
+            { en: "This refactoring **improved** readability.", tr: "Bu yeniden d\u00fczenleme okunabilirli\u011fi iyile\u015ftirdi." }
+        ]},
+        { en: "prefer", pron: "/prɪˈfɜːr/", tr: "Tercih etmek", sentences: [
+            { en: "I **prefer** working in the morning.", tr: "Sabahlar\u0131 \u00e7al\u0131\u015fmay\u0131 tercih ederim." },
+            { en: "Do you **prefer** VS Code or IntelliJ?", tr: "VS Code mu IntelliJ mi tercih edersin?" },
+            { en: "I **prefer** writing tests before code.", tr: "Koddan \u00f6nce test yazmay\u0131 tercih ederim." }
+        ]},
+        { en: "estimate", pron: "/ˈes.tɪ.meɪt/", tr: "Tahmin etmek", sentences: [
+            { en: "Can you give me a cost **estimate**?", tr: "Bana bir maliyet tahmini verebilir misin?" },
+            { en: "I **estimate** this task will take two days.", tr: "Bu g\u00f6revin iki g\u00fcn s\u00fcrece\u011fini tahmin ediyorum." },
+            { en: "The initial **estimate** was too optimistic.", tr: "\u0130lk tahmin \u00e7ok iyimserdi." }
+        ]},
+        { en: "notice", pron: "/ˈnəʊ.tɪs/", tr: "Fark etmek, bildirim", sentences: [
+            { en: "Did you **notice** the change?", tr: "De\u011fi\u015fikli\u011fi fark ettin mi?" },
+            { en: "I **noticed** a typo in the config file.", tr: "Yap\u0131land\u0131rma dosyas\u0131nda bir yaz\u0131m hatas\u0131 fark ettim." },
+            { en: "Nobody **noticed** the bug for weeks.", tr: "Haftalarca kimse hatay\u0131 fark etmedi." }
+        ]},
+        { en: "efficient", pron: "/ɪˈfɪʃ.ənt/", tr: "Verimli, etkili", sentences: [
+            { en: "This new software is very **efficient**.", tr: "Bu yeni yaz\u0131l\u0131m \u00e7ok verimli." },
+            { en: "We need a more **efficient** algorithm.", tr: "Daha verimli bir algoritmaya ihtiyac\u0131m\u0131z var." },
+            { en: "The new process is much more **efficient**.", tr: "Yeni s\u00fcre\u00e7 \u00e7ok daha verimli." }
+        ]},
+        { en: "flexible", pron: "/ˈflek.sə.bəl/", tr: "Esnek", sentences: [
+            { en: "We have **flexible** working hours.", tr: "Esnek \u00e7al\u0131\u015fma saatlerimiz var." },
+            { en: "The system should be **flexible** enough.", tr: "Sistem yeterince esnek olmal\u0131." },
+            { en: "I need a **flexible** schedule this week.", tr: "Bu hafta esnek bir programa ihtiyac\u0131m var." }
+        ]},
+        { en: "necessary", pron: "/ˈnes.ə.ser.i/", tr: "Gerekli, zorunlu", sentences: [
+            { en: "Is it **necessary** to restart the computer?", tr: "Bilgisayar\u0131 yeniden ba\u015flatmak gerekli mi?" },
+            { en: "Testing is **necessary** before deployment.", tr: "Da\u011f\u0131t\u0131mdan \u00f6nce test gereklidir." },
+            { en: "Make only the **necessary** changes.", tr: "Sadece gerekli de\u011fi\u015fiklikleri yap." }
+        ]},
+        { en: "urgent", pron: "/ˈɜː.dʒənt/", tr: "Acil, ivedi", sentences: [
+            { en: "This email is very **urgent**.", tr: "Bu e-posta \u00e7ok acil." },
+            { en: "We have an **urgent** hotfix to deploy.", tr: "Da\u011f\u0131t\u0131lmas\u0131 gereken acil bir d\u00fczeltmemiz var." },
+            { en: "Is this task **urgent**?", tr: "Bu g\u00f6rev acil mi?" }
+        ]},
+        { en: "available", pron: "/əˈveɪ.lə.bəl/", tr: "M\u00fcsait, mevcut", sentences: [
+            { en: "Are you **available** for a meeting at 2 PM?", tr: "Saat 14'te toplant\u0131 i\u00e7in m\u00fcsait misin?" },
+            { en: "The API is not **available** right now.", tr: "API \u015fu an mevcut de\u011fil." },
+            { en: "When will you be **available**?", tr: "Ne zaman m\u00fcsait olacaks\u0131n?" }
+        ]},
+        { en: "appropriate", pron: "/əˈprəʊ.pri.ət/", tr: "Uygun, yerinde", sentences: [
+            { en: "Choose an **appropriate** variable name.", tr: "Uygun bir de\u011fi\u015fken ad\u0131 se\u00e7." }
+        ]},
+        { en: "relevant", pron: "/ˈrel.ə.vənt/", tr: "\u0130lgili, alakal\u0131", sentences: [
+            { en: "Only include **relevant** information.", tr: "Sadece ilgili bilgileri dahil et." }
+        ]},
+        { en: "crucial", pron: "/ˈkruː.ʃəl/", tr: "\u00c7ok \u00f6nemli, kritik", sentences: [
+            { en: "Code review is **crucial** for quality.", tr: "Kod incelemesi kalite i\u00e7in \u00e7ok \u00f6nemlidir." }
+        ]},
+        { en: "common", pron: "/ˈkɒm.ən/", tr: "Yayg\u0131n, ortak", sentences: [
+            { en: "This is a **common** error in coding.", tr: "Bu kodlamada yayg\u0131n bir hatad\u0131r." }
+        ]},
+        { en: "potential", pron: "/pəˈten.ʃəl/", tr: "Potansiyel, olas\u0131", sentences: [
+            { en: "There is a **potential** security risk here.", tr: "Burada potansiyel bir g\u00fcvenlik riski var." }
+        ]},
+        { en: "experience", pron: "/ɪkˈspɪə.ri.əns/", tr: "Deneyim, tecr\u00fcbe", sentences: [
+            { en: "I have five years of **experience** in coding.", tr: "Kodlama alan\u0131nda be\u015f y\u0131ll\u0131k deneyimim var." }
+        ]},
+        { en: "opportunity", pron: "/ˌɒp.əˈtjuː.nə.ti/", tr: "F\u0131rsat", sentences: [
+            { en: "Don't miss this **opportunity**.", tr: "Bu f\u0131rsat\u0131 ka\u00e7\u0131rma." }
+        ]},
+        { en: "improvement", pron: "/ɪmˈpruːv.mənt/", tr: "Geli\u015fim, ilerleme", sentences: [
+            { en: "There is always room for **improvement**.", tr: "Her zaman iyile\u015ftirme i\u00e7in yer vard\u0131r." }
+        ]},
+        { en: "environment", pron: "/ɪnˈvaɪ.rən.mənt/", tr: "Ortam, \u00e7evre", sentences: [
+            { en: "Set up the development **environment** first.", tr: "\u00d6nce geli\u015ftirme ortam\u0131n\u0131 kur." }
+        ]},
+        { en: "solution", pron: "/səˈluː.ʃən/", tr: "\u00c7\u00f6z\u00fcm", sentences: [
+            { en: "We found a permanent **solution**.", tr: "Kal\u0131c\u0131 bir \u00e7\u00f6z\u00fcm bulduk." }
+        ]},
+        { en: "feedback", pron: "/ˈfiːd.bæk/", tr: "Geri bildirim", sentences: [
+            { en: "**Feedback** helps us improve.", tr: "Geri bildirim iyile\u015fmemize yard\u0131mc\u0131 olur." }
+        ]},
+        { en: "challenge", pron: "/ˈtʃæl.ɪndʒ/", tr: "Zorluk, meydan okuma", sentences: [
+            { en: "Learning a language is a big **challenge**.", tr: "Dil \u00f6\u011frenmek b\u00fcy\u00fck bir zorluktur." }
+        ]},
+        { en: "requirement", pron: "/rɪˈkwaɪə.mənt/", tr: "Gereksinim, \u015fart", sentences: [
+            { en: "What are the system **requirements**?", tr: "Sistem gereksinimleri nelerdir?" }
+        ]},
+        { en: "progress", pron: "/ˈprəʊ.ɡres/", tr: "\u0130lerleme", sentences: [
+            { en: "I am making good **progress** in English.", tr: "\u0130ngilizcede iyi bir ilerleme kaydediyorum." }
+        ]},
+        { en: "schedule", pron: "/ˈʃedʒ.uːl/", tr: "Program, takvim, planlamak", sentences: [
+            { en: "Let's **schedule** a meeting for tomorrow.", tr: "Yar\u0131n i\u00e7in bir toplant\u0131 planlayal\u0131m." }
+        ]},
+        { en: "success", pron: "/səkˈses/", tr: "Ba\u015far\u0131", sentences: [
+            { en: "Hard work is the key to **success**.", tr: "\u00c7ok \u00e7al\u0131\u015fmak ba\u015far\u0131n\u0131n anahtar\u0131d\u0131r." }
+        ]},
+        { en: "resource", pron: "/rɪˈzɔːs/", tr: "Kaynak", sentences: [
+            { en: "Time is our most valuable **resource**.", tr: "Zaman en de\u011ferli kayna\u011f\u0131m\u0131zd\u0131r." }
+        ]},
+        { en: "impact", pron: "/ˈɪm.pækt/", tr: "Etki", sentences: [
+            { en: "What is the **impact** of this change?", tr: "Bu de\u011fi\u015fikli\u011fin etkisi nedir?" }
+        ]},
+        { en: "constraint", pron: "/kənˈstreɪnt/", tr: "K\u0131s\u0131tlama", sentences: [
+            { en: "Budget is a big **constraint**.", tr: "B\u00fct\u00e7e b\u00fcy\u00fck bir k\u0131s\u0131tlama." }
+        ]},
+        { en: "conclusion", pron: "/kənˈkluː.ʒən/", tr: "Sonu\u00e7, karar", sentences: [
+            { en: "We reached the same **conclusion**.", tr: "Ayn\u0131 sonuca vard\u0131k." }
+        ]}
+    ];
+
+    // ==================== WORD DATABASE ==
+    let PDF_WORDS = [{"en":"abolish","tr":"İptal Etmek","pron":"Ebolış"},{"en":"abolition","tr":"Kaldırmak","pron":"Ebolışın"},{"en":"absorb","tr":"1)Emmek, Karşılamak, Dengelemek 2)Fikir Almak","pron":"Ibsorb"},{"en":"abuse","tr":"Kötüye Kullanma, Suistimal Etme, Kötü Söyleme","pron":"Ebyus"},{"en":"academic","tr":"Akademik","pron":"Ekıdemik"},{"en":"accelerator","tr":"Gaz Pedalı","pron":"Ekselıreytır"},{"en":"accent","tr":"Şive, Aksan","pron":"Eksınt"},{"en":"access","tr":"1)Giriş 2)Yol","pron":"Ekses"},{"en":"accessible","tr":"1)İçine Girilebilinir 2)Kolay Bulunur","pron":"Eksesıbıl"},{"en":"accounting","tr":"Muhasebe","pron":"Ekaunting"},{"en":"accumulate","tr":"Toplamak, Biriktirmek","pron":"Ekyumyuleyt"},{"en":"accused","tr":"1)Sanık 2)Suçlamak","pron":"Ekyuzıd"},{"en":"accustom","tr":"Alıştırmak","pron":"Ekastım"},{"en":"accustomed","tr":"Alışık, Alışkın","pron":"Ekastımd"},{"en":"achieve","tr":"Üstünden Gelme, Erişmek, Başarmak","pron":"Eρiv"},{"en":"achievement","tr":"Başarı","pron":"Eρivmınt"},{"en":"acid","tr":"Asit","pron":"Esid"},{"en":"acknowledge","tr":"Doğrulamak","pron":"Eknolıρ"},{"en":"acquire","tr":"Edinmek","pron":"İkwaır"},{"en":"acquisition","tr":"Edinme, İstimlak, El Koyma","pron":"Ekwızışın"},{"en":"brake","tr":"Frenlemek, Fren","pron":"Breyk"},{"en":"branch","tr":"1)Dal 2)Şube, Kol","pron":"Branρ"},{"en":"brand","tr":"1)Marka 2)Lekelemek, Kötü Ün","pron":"Brend"},{"en":"brand-new","tr":"Yeni Model, Yepyeni","pron":"Brend Niyu"},{"en":"break down","tr":"1)Çöküş 2)Ayırma, Sınıflama, Detaylandırma","pron":"Brek Davn"},{"en":"break-out","tr":"1)Aniden Başlama, Patlak Verme(Savaş)2)Kaçmak(Hapis)","pron":"Brek Aut"},{"en":"breast","tr":"Göğüs","pron":"Brest"},{"en":"bribe","tr":"Rüşvet","pron":"Brayb"},{"en":"bride","tr":"Gelin","pron":"Brayd"},{"en":"briefcase","tr":"İş Çantası","pron":"Brifkeys"},{"en":"brilliant","tr":"Parlak,Akıllı","pron":"Brilyınt"},{"en":"brochure","tr":"Broşür","pron":"Brıuşır"},{"en":"broken","tr":"Kırık","pron":"Brıukın"},{"en":"broker","tr":"Komisyoncu, Simsar","pron":"Brıukır"},{"en":"brooch","tr":"Broş, İğne","pron":"Broş"},{"en":"brother-in-law","tr":"Kayınbırader","pron":"Bradır İn Lo"},{"en":"brow","tr":"Alın","pron":"Brau"},{"en":"bucket","tr":"Kova","pron":"Bakıt"},{"en":"bull","tr":"Boğa","pron":"Bul"},{"en":"bullet","tr":"Mermi","pron":"Bulıt"},{"en":"addict","tr":"Tiryaki, Müptela","pron":"Edikt"},{"en":"admiral","tr":"Amiral","pron":"Edmirıl"},{"en":"admission","tr":"1)Kabul, İtiraf 2)Giriş","pron":"Edmişın"},{"en":"adopt","tr":"1)Kabul Etmek 2)Evlat Edinmek","pron":"Edopt"},{"en":"adverse","tr":"Zıt, Karşı","pron":"Edvörs"},{"en":"airport","tr":"Hava Alanı","pron":"Eyirport"},{"en":"album","tr":"Albüm","pron":"Elbım"},{"en":"alcohol","tr":"Alkol","pron":"Elkıhol"},{"en":"allocate","tr":"Tahsis Etmek, Dağıtmak, Bölüştürmek","pron":"Elıkeyt"},{"en":"allocations","tr":"Tahsisat","pron":"Elıkeyşın"},{"en":"allowance","tr":"Düzenli Sağlanan Para, Harçlık","pron":"Elauıns"},{"en":"ally","tr":"Anlaşma, Birleşme","pron":"Elay"},{"en":"alphabet","tr":"Alfabe","pron":"Elfıbit"},{"en":"alter","tr":"Değiştirmek","pron":"Oltır"},{"en":"alternative","tr":"Alternatif, Seçenek","pron":"Oltörnıtiv"},{"en":"amateur","tr":"Amatör","pron":"Emıtör"},{"en":"ambulance","tr":"Ambulans","pron":"Embyulıns"},{"en":"amend","tr":"Düzelme, Ayarlama","pron":"Emend"},{"en":"ample","tr":"Geniş, Bol","pron":"Empıl"},{"en":"anchor","tr":"1)Çapa 2)Demir Atmak (Gemi)","pron":"Enkır"},{"en":"angel","tr":"Melek","pron":"Eyncıl"},{"en":"anger","tr":"Kızmak","pron":"Engır"},{"en":"angle","tr":"Açı, Köşe","pron":"Engıl"},{"en":"anticipate","tr":"1)Ön Görmek 2)Beklemek","pron":"Entisipeyt"},{"en":"bureau","tr":"Büro","pron":"Büuro"},{"en":"bureaucracy","tr":"Bürokrasi","pron":"Bürakresi"},{"en":"by the way","tr":"Bunun Yanında, Aklıma Gelmişken","pron":"Bay Dı Vey"},{"en":"cabbage","tr":"Lahana","pron":"Kebic"},{"en":"cabin","tr":"Kabin","pron":"Kebin"},{"en":"cabinet","tr":"Kabine","pron":"Kebınıt"},{"en":"calf","tr":"1)Fil Veya Balina Yavrusu, Buzağı 2)Baldır","pron":"Kaıf"},{"en":"camel","tr":"Deve","pron":"Keml"},{"en":"canary","tr":"1) Kanarya Kuşu 2)Kanarya Sarısı","pron":"Kıneri"},{"en":"cancellation","tr":"İptal","pron":"Kensıleyşın"},{"en":"cannon","tr":"Top (Silah)","pron":"Kenın"},{"en":"capable","tr":"Muktedir","pron":"Keypıbıl"},{"en":"carbonpaper","tr":"Karbon Kâğıdı","pron":"Karbın Peypır"},{"en":"carefree","tr":"Önemsemeyen","pron":"Keyfri"},{"en":"careful","tr":"Dikkatli","pron":"Keyrfıl"},{"en":"careless","tr":"Dikkatsiz","pron":"Keyrlıs"},{"en":"cargo","tr":"Kargo","pron":"Kargo"},{"en":"carrier","tr":"Taşıyıcı","pron":"Keriyır"},{"en":"carrot","tr":"Havuç","pron":"Kerıt"},{"en":"carryover","tr":"Devir","pron":"Keriovır"},{"en":"cartridge","tr":"Kartuş, Şarjör","pron":"Kartrıρ"},{"en":"cash-register","tr":"Yazar Kasa","pron":"Keş-Recıstır"},{"en":"casual","tr":"1)Planlanmıyan (Casual Meeting) 2)Normal, Sade","pron":"Keşuıl"},{"en":"caterpillar","tr":"Tırtıl","pron":"Ketırpilır"},{"en":"antique","tr":"Antika","pron":"Entik"},{"en":"anxiously","tr":"Endişeli Olmak","pron":"Enkşıslıy"},{"en":"apartment","tr":"Apartman Dairesi","pron":"Epartmınt"},{"en":"apparently","tr":"Bariz Olmak, Görünmek","pron":"Eparıntliy"},{"en":"article of association","tr":"Ana Sözleşme","pron":"Artıkıl Iv Isosieyşın"},{"en":"aspect","tr":"Görünüş, Görüş, Hal, Çehre, Durum","pron":"Espekt"},{"en":"asset","tr":"Varlık","pron":"Eset"},{"en":"association","tr":"Cemiyet, Birlik,Aynı Şeyle İlgili Olan","pron":"Esuşeytın"},{"en":"assurance","tr":"Güven, İnanç,Söz","pron":"Eşurıns"},{"en":"assure","tr":"Temin Etmek, Söz Vermek, İkna Etmek","pron":"Eşuır"},{"en":"assured","tr":"1)Önceden Belli 2)Kendine Güvenen","pron":"Eşurıd"},{"en":"attachment","tr":"İlave, Ek","pron":"Etaρmınt"},{"en":"attendant","tr":"1) Hizmetçi, Hizmetkar 2) Refakat Eden Kimse","pron":"Itendınt"},{"en":"auction","tr":"Müzayede, Mezat","pron":"Okşın"},{"en":"audience","tr":"İzleyici (Tv,Tiyatro Vb.)","pron":"Odyıns"},{"en":"augment","tr":"İlave Etmek, Arttırmak, Zam Yapmak","pron":"Ogment"},{"en":"augmentation","tr":"Zam, Ekleme","pron":"Ogmentetiş ın"},{"en":"author","tr":"Yazar","pron":"Othır"},{"en":"authority","tr":"Otorite","pron":"Othoriti"},{"en":"award","tr":"Mükafat","pron":"İwood"},{"en":"awkward","tr":"1)Acemi,Sakar 2)Kullanılması, Anlaşılması Güç","pron":"Okvırd"},{"en":"babysitter","tr":"Çocuk Bakıcısı","pron":"Beybisitır"},{"en":"cauliflower","tr":"Karnıbahar","pron":"Koliflavır"},{"en":"caution","tr":"Uyarı","pron":"Koşın"},{"en":"cave","tr":"Mağara","pron":"Keyv"},{"en":"cease","tr":"Durdurmak","pron":"Siis"},{"en":"cease-fire","tr":"Ateş-Kes","pron":"Siis-Fayır"},{"en":"celebration","tr":"Kutlama","pron":"Selibreyşın"},{"en":"cement","tr":"Çimento","pron":"Sıment"},{"en":"central","tr":"Merkezi","pron":"Sentrıl"},{"en":"centre","tr":"Orta, Merkez","pron":"Sentır"},{"en":"cereal","tr":"Tahıl, Mısır","pron":"Siyriyıl"},{"en":"chamber","tr":"Oda (Chamber Of Commerce = Ticaret Odası Vb.)","pron":"Ρembır"},{"en":"champagne","tr":"Şampanya","pron":"Şempeyn"},{"en":"channel","tr":"Kanal (Tv, Radyo Gibi.)","pron":"Ρenıl"},{"en":"chapter","tr":"Bölüm, Konu","pron":"Ρeptır"},{"en":"charity","tr":"Hayır Severlik,Yardım Severlik","pron":"Ρerıti"},{"en":"charlatan","tr":"Şarlatan","pron":"Carlıtın"},{"en":"chart","tr":"Tablo,Çizelge","pron":"Ρart"},{"en":"charter","tr":"1)Patent,Berat,Devlet Onaylı 2)Kiralık Uçak,Gemi Vb.","pron":"Ρartır"},{"en":"chase","tr":"Kovalamak","pron":"Ρeys"},{"en":"chat","tr":"Çene Çalmak,Sohbet","pron":"Ρet"},{"en":"cheek","tr":"1)Yanak 2)Popo","pron":"Ρiik"},{"en":"cheeky","tr":"Yüzsüz, Kaba,Kibar Olmayan","pron":"Ρiki"},{"en":"bachelor","tr":"1)Bekar 2)Üniversitenin İlk Derecesi","pron":"Beρılır"},{"en":"backbone","tr":"1)Omurga 2)Temel Taşı, En Önemli Bölüm","pron":"Bekbon"},{"en":"bale","tr":"Balya (Halı,Tütün Vs.)","pron":"Beyl"},{"en":"banal","tr":"Banal,Adi","pron":"Bınaal"},{"en":"bandage","tr":"Bandaj,Yara Bandı","pron":"Bendıρ"},{"en":"baneful","tr":"Kötü, Kötü Şey (A Baneful Influence=Kötü Etki)","pron":"Beynful"},{"en":"banish","tr":"1)Sürgüne Yollama 2)Düşünmekten Vazgeçme","pron":"Beniş"},{"en":"barbarous","tr":"Barbar, Vahşi","pron":"Barbırıs"},{"en":"barber","tr":"Berber","pron":"Baabır"},{"en":"basin","tr":"1) Leğen 2) Leğen Dolusu 3) Havza","pron":"Beysın"},{"en":"bastardize","tr":"1)Değerini Düşürmek 2)Konunun Anlamını Değiştirmek","pron":"Bestırdayz"},{"en":"battery","tr":"Pil","pron":"Betıri"},{"en":"bawl","tr":"Bağırmak Veya Ağlamak (Seslice)","pron":"Bavıl"},{"en":"beforehand","tr":"Önceden","pron":"Bifor Hend"},{"en":"bias","tr":"Ön Yargı,Eğilim","pron":"Bays"},{"en":"birthday","tr":"Doğumgünü","pron":"Börthdey"},{"en":"bladder","tr":"1) Mesane, Kese, Sidik Torbası 2)İç Lastik","pron":"Bledır"},{"en":"blade","tr":"Ustura, Bıçak","pron":"Bleyd"},{"en":"blister","tr":"Kabarcık","pron":"Blistır"},{"en":"blockade","tr":"Ablukaya Alma","pron":"Blokeyd"},{"en":"blouse","tr":"Bluz","pron":"Blauz"},{"en":"cheerful","tr":"Neşeli,Şen,Mutlu","pron":"Ρiirful"},{"en":"chef","tr":"Ahçı,Şef (Yalnız Yiyecek Konusunda )","pron":"Şef"},{"en":"cheque","tr":"Çek","pron":"Ρek"},{"en":"chest","tr":"1)Göğüs 2)Sandık","pron":"Ρest"},{"en":"chest of drawers","tr":"Çekmeceli Dolap, Konsül","pron":"Ρest Of Drewır"},{"en":"chestnut","tr":"Kestane","pron":"Ρesnat"},{"en":"chilli","tr":"Çok Acı","pron":"Ciliy"},{"en":"chilly","tr":"Rahatsız Edici Soğuk","pron":"Çiliy"},{"en":"chimney","tr":"Baca","pron":"Çimni"},{"en":"china","tr":"1) Çin 2) Çini ,Porselen V.B","pron":"Çaynı"},{"en":"chip","tr":"Ufak Parça","pron":"Çip"},{"en":"chocolate","tr":"Çikulata","pron":"Çaklıt"},{"en":"choice","tr":"Seçim, İstek, Tercih","pron":"Çoyıs"},{"en":"choke","tr":"1)Boğma,Tıkama (Boğarak Öldürmek) 2)Jikle","pron":"Çhok"},{"en":"chop","tr":"1)Kesmek,Yarmak 2)Pirzola","pron":"Cop"},{"en":"chuckle","tr":"Kıkırdama","pron":"Ρakıl"},{"en":"cigar","tr":"Puro","pron":"Sigaar"},{"en":"circuit","tr":"Devre(Close Cırcuıt Tv,Short- Cırcuıt=Kısa Devre Vb)","pron":"Sörkıt"},{"en":"claimant","tr":"Mahkemeden Hak Talep Eden,Davacı","pron":"Klemınt"},{"en":"clap","tr":"Alkışlamak","pron":"Klep"},{"en":"clay","tr":"Kil","pron":"Kıley"},{"en":"bodyguard","tr":"Koruma Görevlisi, Goril","pron":"Badigard"},{"en":"boiler","tr":"Kazan","pron":"Boylır"},{"en":"bolt","tr":"1)Cıvata2)Sürgü(Kap ı) 3)Ani Kaçış(Korkuyla) 4)Somun","pron":"Bolt"},{"en":"bonnet","tr":"1)Çocuk Başlığı 2)Arabanın Kaputu","pron":"Bonıt"},{"en":"bony","tr":"Çok Zayıf","pron":"Boni"},{"en":"booklet","tr":"Broşür","pron":"Buklıt"},{"en":"boom","tr":"1)Patlamak 2)Çok Hızlı Genişlemek","pron":"Buum"},{"en":"boot","tr":"1)Ayakkabı,Bot 2)Bagaj","pron":"Buut"},{"en":"boring","tr":"Sıkıcı (I'm Bored=Sıkıldım,I'm Boring=Sıkıcıyım)","pron":"Boring"},{"en":"bother","tr":"Can Sıkmak,Üzmek","pron":"Bodır"},{"en":"bounce","tr":"1)Yansıtmak 2)Zıplatmak (Top Vs.)","pron":"Bauns"},{"en":"bound","tr":"Bağlı, Sınırlı,Atlamak","pron":"Baund"},{"en":"boundary","tr":"Sınır","pron":"Baundri"},{"en":"code","tr":"Kod","pron":"Kod"},{"en":"collapse","tr":"1)Çökmek 2)Katlamak","pron":"Kıleps"},{"en":"colleague","tr":"Meslektaş","pron":"Koliig"},{"en":"collective agreement","tr":"Toplu Sözleşme","pron":"Kollektiv Egrimınt"},{"en":"colonel","tr":"Albay","pron":"Körlnıl"},{"en":"column","tr":"Sütun","pron":"Kolım"},{"en":"coma","tr":"Koma, Koma Hali","pron":"Komı"},{"en":"come across","tr":"Tesadüfen Karşılaşmak Veya Bulmak","pron":"Kam Ekros"},{"en":"comet","tr":"Kuyruklu Yıldız","pron":"Kamit"},{"en":"client","tr":"Müşteri,Müvekkil","pron":"Klaynt"},{"en":"climate","tr":"Iklım","pron":"Klaymıt"},{"en":"clinic","tr":"Klinik","pron":"Klınik"},{"en":"clip","tr":"Kırpmak,Kesmek,Klips (Kağıt,Saρ Vb.)","pron":"Klip"},{"en":"cloth","tr":"Bez ( A Piece Of Cloth )","pron":"Kloth"},{"en":"clown","tr":"Palyaço","pron":"Klaun"},{"en":"clue","tr":"İpucu","pron":"Klu"},{"en":"clutch","tr":"1) Debrijaj 2) Kavrama","pron":"Klaρ"},{"en":"co","tr":"Beraber (Co-Operate,Co- Education)","pron":"Ko"},{"en":"cooperate","tr":"Birlikte Çalışmak","pron":"Koopereyt"},{"en":"coast","tr":"Kıyı, Sahil","pron":"Kost"},{"en":"cock","tr":"1)Horoz,Erkek Kuş 2)Erkeklik Organı","pron":"Kak"},{"en":"cocoa","tr":"Kakao","pron":"Koko"},{"en":"despite","tr":"Rağmen","pron":"Dıspayt"},{"en":"destination","tr":"Varış Noktası","pron":"Destıneyşın"},{"en":"detach","tr":"Ayırmak","pron":"Ditaρ"},{"en":"detective","tr":"Dedektif","pron":"Dıdektiv"},{"en":"dew","tr":"Kırağı (Nem)","pron":"Düu"},{"en":"diagram","tr":"Şema, Diyagram","pron":"Dayıgrım"},{"en":"diameter","tr":"Çap","pron":"Dayametır"},{"en":"dice","tr":"Zarlar ( Tavla )","pron":"Days"},{"en":"diet","tr":"Rejim, Diyet","pron":"Dayt"},{"en":"commemorate","tr":"Anmak (Kötü, Üzücü Bir Olayı)","pron":"Kımemorey t"},{"en":"commission","tr":"1)Atamak,Görevlen dirmek 2)Komisyon (Kurul,Ücret)","pron":"Kamişın"},{"en":"commit","tr":"Suç İşlemek (To Commit Murder)","pron":"Kımit"},{"en":"commitment","tr":"1)Taahhüt 2)Sorumluluk","pron":"Komitmınt"},{"en":"communicate","tr":"İletişim","pron":"Kımyunikey t"},{"en":"commute","tr":"Evden İşe Hergün Uzun Yol Gidip Gelmek","pron":"Kımyut"},{"en":"compensate","tr":"Telafi Etmek,Karşılamak","pron":"Kompınseyt"},{"en":"compensation","tr":"Telafi,Tazminat","pron":"Kompınsey şın"},{"en":"complicated","tr":"Karışık,Komplike","pron":"Komplıkeyt ıd"},{"en":"component","tr":"Unsur, Parça, Bileşimde Bulunan","pron":"Kımponınt"},{"en":"compose","tr":"Yapım (Şiir,Şarkı,Sanat Eseri)","pron":"Kımpoz"},{"en":"composition","tr":"Kompozisyon, Birleşik","pron":"Kompızişın"},{"en":"compromise","tr":"Uzlaşma","pron":"Komprımay z"},{"en":"computer","tr":"Kompütür,Bilgisayar","pron":"Kompitür"},{"en":"concentrate","tr":"Konsantre,Yoğun","pron":"Konsıntreyt"},{"en":"concept","tr":"Genel Fikir,Düşünce,Anlayı ş-I Have No Conception Why","pron":"Konsept"},{"en":"concern","tr":"İlgi, Üzüntü, Endişe","pron":"Konsöön"},{"en":"conclusion","tr":"Karar,Sonuç","pron":"Kınkıluşın"},{"en":"digest","tr":"1)Hazm Etmek2)Olayı Kavramak 3)Özet,Ana Felsefe,Kura","pron":"Daycest"},{"en":"dim","tr":"Kısık, Sönük","pron":"Dim"},{"en":"dip","tr":"Daldırmak","pron":"Dıp"},{"en":"directory","tr":"Rehber (Telefon Vb.)","pron":"Direktiri"},{"en":"disaster","tr":"Felaket, Afet","pron":"Dızastır"},{"en":"disclose","tr":"Açığa, Meydana Çıkarmak, Bilinmesini Sağlamak","pron":"Diskloz"},{"en":"disco","tr":"Disko","pron":"Disko"},{"en":"disgust","tr":"Tiksinti","pron":"Dısgast"},{"en":"dismay","tr":"1)Süpriz 2)Üzüntü","pron":"Dismey"},{"en":"dispatch","tr":"Sevk Etmek, Yollamak","pron":"Dispeρ"},{"en":"displace","tr":"Yerinden Çıkarmak (Kuvvet Etkisi İle)","pron":"Displeys"},{"en":"distinction","tr":"Küçük Farklılık","pron":"Dıstingşın"},{"en":"dive","tr":"Dalış","pron":"Dayv"},{"en":"diver","tr":"Dalgıç","pron":"Dayvır"},{"en":"divorce","tr":"Boşanmak","pron":"Dıvöös"},{"en":"dominate","tr":"Hakim Olma","pron":"Domineyt"},{"en":"donate","tr":"Bağış Yapmak","pron":"Doneyt"},{"en":"condemn","tr":"1)Cezalandırmak 2)Mahkum Etmek(Veya Zorunlu Kılmak)","pron":"Kındem"},{"en":"conduct","tr":"Davranış, Tavır,Yol Göstermek","pron":"Kondakt"},{"en":"cone","tr":"1)Koni 2)Külah (Dondurma)","pron":"Kon"},{"en":"conference","tr":"Konferans","pron":"Konfırıns"},{"en":"confine","tr":"Kuşatmak,Hapsetm ek,Sınırlamak","pron":"Kınfayn"},{"en":"conflict","tr":"Çatışma,Çelişki","pron":"Konflıkt"},{"en":"consent","tr":"Kabul Etme,Onaylama","pron":"Kınsent"},{"en":"consequently","tr":"Bundan Dolayı,Sonuç Olarak,Sonunda","pron":"Konsikvıntl y"},{"en":"consign","tr":"1)Satış İçin Gönderme2)Başkası na Devretme(Sorumlul uk","pron":"Kınsayn"},{"en":"consistent","tr":"Tutarlı, Uyumlu (Kişi, Yazı Vb)","pron":"Kansıstınt"},{"en":"constitute","tr":"Oluşmak,Kurmak","pron":"Konstituut"},{"en":"constitution","tr":"Anayasa","pron":"Konstituşın"},{"en":"construct","tr":"İnşa Etmek,Yapmak","pron":"Kınstrak"},{"en":"consume","tr":"Tüketmek","pron":"Kınsyuum"},{"en":"consumption","tr":"Tüketim","pron":"Kınsomşın"},{"en":"contact","tr":"Temas, Dokunma","pron":"Kontekt"},{"en":"contest","tr":"Yarışma","pron":"Kontest"},{"en":"continent","tr":"Kıta","pron":"Kontınınt"},{"en":"contract","tr":"Kontrat,Anlaşma","pron":"Kontrekt"},{"en":"contribute","tr":"Katkıda Bulunmak","pron":"Kıntrıbiyut"},{"en":"convict","tr":"Mahkum,Suçlu","pron":"Konvıkt"},{"en":"convince","tr":"İkna Etmek","pron":"Kınvins"},{"en":"donation","tr":"Bağış","pron":"Doneyşın"},{"en":"donor","tr":"Bağış Yapan,İyilik Sever (Organ, Okul Bağışı Vb.)","pron":"Donır"},{"en":"doom","tr":"Kötü Kader,Kör Talih","pron":"Duum"},{"en":"doomsday","tr":"Ahiret Günü","pron":"Duumsdey"},{"en":"dose","tr":"Bir Seferde Alınan İlaç Miktarı","pron":"Dos"},{"en":"down payment","tr":"Peşin (Ödeme)","pron":"Davn Peymınt"},{"en":"doze","tr":"Uyuklamak, Hafif Uyku","pron":"Doz"},{"en":"dozen","tr":"Düzine","pron":"Dozen"},{"en":"draft","tr":"1)Suret, Müsvedde 2)Banka Çeki, Ödeme Emri","pron":"Draaft"},{"en":"drag","tr":"Sürüklemek","pron":"Dreg"},{"en":"dragon","tr":"Ejderha","pron":"Dregın"},{"en":"drain","tr":"Lağım, Su Yolu","pron":"Dreyn"},{"en":"drama","tr":"Dram","pron":"Draam"},{"en":"draught","tr":"Hava Akımı, Ceryan","pron":"Draaft"},{"en":"draughts","tr":"Dama Oyunu","pron":"Draafts"},{"en":"drawer","tr":"Çekmece, Göz","pron":"Drovır"},{"en":"drawn","tr":"Boğulmak","pron":"Droovn"},{"en":"drug","tr":"Uyuşturucu Madde,İlaç","pron":"Drag"},{"en":"drum","tr":"1)Davul 2)Makara 3)Varil, Bidon","pron":"Dram"},{"en":"duck","tr":"1)Ördek 2)Başını Eğmek","pron":"Dak"},{"en":"duckling","tr":"Küçük Ördek","pron":"Dakling"},{"en":"duel","tr":"Düello","pron":"Duyıl"},{"en":"cope","tr":"Başa Çıkmak,Ayak Uydurmak","pron":"Kop"},{"en":"cordon","tr":"1)Polis 2)Asker Kordonu","pron":"Kordın"},{"en":"cork","tr":"Mantar ,(Cork- Screw :Mantar Açacağı)","pron":"Kook"},{"en":"corpse","tr":"Ceset","pron":"Korps"},{"en":"correspondent","tr":"1)Mektuplaşan, yMektuba Cevap Veren 2)Muhabir","pron":"Korıspondı nt"},{"en":"corridor","tr":"Koridor","pron":"Koridoor"},{"en":"corruption","tr":"Rüşvetçilik,Yolsuzlu k","pron":"Kırapşın"},{"en":"cosmetic","tr":"Kozmetik","pron":"Kozmetik"},{"en":"costume","tr":"Kostüm","pron":"Kostiyum"},{"en":"coupe","tr":"Spor Araba","pron":"Kupe"},{"en":"coupon","tr":"Kupon","pron":"Kuupon"},{"en":"cracker","tr":"Kraker","pron":"Krekır"},{"en":"cramp","tr":"Kramp","pron":"Kremp"},{"en":"crane","tr":"Vinç İle Kaldırmak, Vinç","pron":"Kreyn"},{"en":"credit","tr":"Kredi","pron":"Kredit"},{"en":"crisis","tr":"Kriz","pron":"Kraysız"},{"en":"crisp","tr":"Cibs,Kızarmış Kuru Patates","pron":"Krisp"},{"en":"critical","tr":"Kritik","pron":"Kritikıl"},{"en":"crocodile","tr":"Afrika Timsahı","pron":"Krokıdayl"},{"en":"crossword","tr":"Çapraz Bulmaca","pron":"Krosvörd"},{"en":"crow","tr":"1)Karga 2)Horoz Ötüşü","pron":"Kro"},{"en":"crucial","tr":"En Önemli An (Karar İρin Vb.)","pron":"Kuruşıl"},{"en":"dustbin","tr":"Çöp Tenekesi","pron":"Dastbın"},{"en":"dye","tr":"Boya, Boyamak (Saç,Kağıt Vb.)","pron":"Day"},{"en":"dynamite","tr":"Dinamit","pron":"Daynımeyt"},{"en":"dynamo","tr":"Dinamo","pron":"Daynımu"},{"en":"dynasty","tr":"Hanedanlık","pron":"Dınısti"},{"en":"eagle","tr":"Kartal","pron":"İgıl"},{"en":"earthquake","tr":"Deprem","pron":"Örthkweik"},{"en":"eel","tr":"Yılan Balığı","pron":"İil"},{"en":"elapse","tr":"Zamanın Geçmesi (3 Days Have Elapsed)","pron":"İleps"},{"en":"embark","tr":"1)Gemi Yada Uçakla Gitmek 2)Birşey Yapmaya Başlamak","pron":"İmbark"},{"en":"embarrassme nt","tr":"1)Sıkıntı 2)Utanmak","pron":"İmbarısmınt"},{"en":"embrace","tr":"Sarılmak","pron":"İmbreys"},{"en":"emotion","tr":"Kuvvetli Duygu","pron":"İmoşın"},{"en":"emphasis","tr":"Önemli,Şiddetli Vurgu","pron":"Emfisıs"},{"en":"emphasize","tr":"Üzerinde Durmak","pron":"Emfısays"},{"en":"emphatic","tr":"Kesinlikle,Mutlak,Kesin(Emph atic Victory=Kesin Zafer","pron":"İmfetic"},{"en":"empire","tr":"İmparatorluk","pron":"Empayır"},{"en":"enormous","tr":"Kocaman, İri","pron":"İnormiyus"},{"en":"entitle","tr":"Yetki Vermek, Hak Vermek","pron":"İntaytıl"},{"en":"epitaph","tr":"Mezar Taşı Yazısı","pron":"Epitaf"},{"en":"equalize","tr":"Eşitlemek","pron":"İlkvılayz"},{"en":"equip","tr":"Donatmak","pron":"İkvip"},{"en":"equipment","tr":"Tesisat,Donanım","pron":"İkvıpmınt"},{"en":"crude","tr":"Petrol ( Crude Oil=Ham Petrol)","pron":"Crud"},{"en":"curry","tr":"Hafif Acılı","pron":"Köri"},{"en":"cushion","tr":"Yastık","pron":"Kuşın"},{"en":"cylinder","tr":"Silindir","pron":"Siylındır"},{"en":"daisy","tr":"Papatya","pron":"Deyzi"},{"en":"damage","tr":"Zarar, Zarar Vermek","pron":"Demıρ"},{"en":"darling","tr":"Sevgili","pron":"Daling"},{"en":"date","tr":"1)Hurma 2)Randevu","pron":"Deyt"},{"en":"deadline","tr":"Mühlet,Son Teslim Tarihi","pron":"Dedlayn"},{"en":"deadlock","tr":"1)Çıkmaz 2)Açmaz","pron":"Dedlok"},{"en":"deaf","tr":"Sağır","pron":"Def"},{"en":"debatable","tr":"Tartışabilinir","pron":"Dibeytıbıl"},{"en":"debate","tr":"Tartışma","pron":"Dibeyt"},{"en":"debt","tr":"Borç","pron":"Det"},{"en":"decay","tr":"Çürümek, Bozulmak","pron":"Dikey"},{"en":"decent","tr":"Doğru, Haklı,İyi","pron":"Disınt"},{"en":"decline","tr":"Azaltmak, Gerilemek, Düşmek","pron":"Diklayn"},{"en":"decrease","tr":"Azalmak","pron":"Dikriis"},{"en":"default","tr":"İfa Etmeme, Hazır Bulunmama (Default Payment= Ödememe)","pron":"Difolt"},{"en":"defer","tr":"Geciktirme, Erteleme","pron":"Diför"},{"en":"deficit","tr":"Açık (Budget Deficit=Bütçe Açığı)","pron":"Defisit"},{"en":"definition","tr":"Tanımlama","pron":"Defineyşın"},{"en":"escort","tr":"Konvoy,Refakat","pron":"Eskort"},{"en":"estate","tr":"1) Steyşın Araba 2) Mal, Mülk, Arsa","pron":"Isteyt"},{"en":"evacuate","tr":"1)Boşaltma,Tahliye Etmek 2)Tehlikeden Uzaklaştırmak","pron":"Iveküueit"},{"en":"evidence","tr":"Delil","pron":"Evidıns"},{"en":"evolution","tr":"Evrim","pron":"İvulişın"},{"en":"ex","tr":"Sabık, Eski (Ex-Wife, Ex- President, Ex-Gırl Friend)","pron":"Eks"},{"en":"exceed","tr":"Aşırı","pron":"İksid"},{"en":"exclaim","tr":"Bağırmak","pron":"İkskleym"},{"en":"exclusive","tr":"Umuma Açık Olmayan, Başkalarıyla Paylaşılmayan","pron":"İksklusiiv"},{"en":"execute","tr":"Yapmak, Yerine Getirmek, İnfaz Etmek, İdam Etmek","pron":"Eksikiyut"},{"en":"exhaust","tr":"1)Yorulma,Bitme 2)Egzos","pron":"İgzoost"},{"en":"exhibit","tr":"Teşhir Etmek, Göstermek","pron":"İgzıbit"},{"en":"exhibition","tr":"Sergi","pron":"Ekzıbişın"},{"en":"expand","tr":"1)Büyümek,Genişlemek2)Dah a Samimi Ve Konuşkan Olmak","pron":"Ikspend"},{"en":"expansion","tr":"1) Genişleme, Büyüme 2) Genişleyen Kısım, Ek","pron":"Ikspanşın"},{"en":"experiment","tr":"Deney","pron":"Iksperımınt"},{"en":"expire","tr":"Sürenin Dolması","pron":"İkspayır"},{"en":"explosive","tr":"Patlayıcı Madde","pron":"İksplıusiv"},{"en":"export","tr":"İhraç Malı, İhracat","pron":"Eksport"},{"en":"extinguish","tr":"Işığı Veya Ateşi Söndürmek","pron":"İkstingwişh"},{"en":"extreme","tr":"Son Derece, Aşırı","pron":"İkstriim"},{"en":"eyebrow","tr":"Kaş","pron":"Aybrau"},{"en":"deliberately","tr":"Kasten","pron":"Dilibirıtli"},{"en":"demoralize","tr":"Cesaretini Kırmak, Moral Bozmak","pron":"Dimorılayz"},{"en":"dependent","tr":"Bağımlı (In Dependent:Bağımsı z)","pron":"Dıpendınt"},{"en":"deputation","tr":"Vekillik","pron":"Deputeyşın"},{"en":"deputy","tr":"Vekil","pron":"Depyuti"},{"en":"desperate","tr":"Umutsuz, Çok Ciddi","pron":"Despırit"},{"en":"fame","tr":"Şöhret, Ün","pron":"Feym"},{"en":"fan","tr":"1)Hava Hareketi 2)Taraftar","pron":"Fen"},{"en":"fancy","tr":"1)Hayal Kurma 2)Hoş Zevkli 3)Fantazi","pron":"Fensi"},{"en":"feature","tr":"Özellik","pron":"Fiiρır"},{"en":"fed up","tr":"Bıkmak (I'm Fed Up:Bıktım)","pron":"Fedap"},{"en":"federal","tr":"Federal, Federe, Grup İçinde Birleşmiş","pron":"Fedırıl"},{"en":"ferry","tr":"Feribot, Araba Vapuru","pron":"Feri"},{"en":"fertile","tr":"1)Gübre 2)Üretken","pron":"Förtaıl"},{"en":"fertilize","tr":"1)Gübreleme 2)Döllenme (Bees Fertilize The Flowers)","pron":"Förtılaız"},{"en":"festival","tr":"Festival","pron":"Festıvıl"},{"en":"fiance","tr":"Nişanlı","pron":"Fiansey"},{"en":"fiction","tr":"Kurgu (Roman)","pron":"Fikşın"},{"en":"fig","tr":"1)İncir 2)Çok Önemsiz Konu","pron":"Fig"},{"en":"firebrigade","tr":"İtfaiye","pron":"Fayı- Brigeyd"},{"en":"fiscal","tr":"Devletin,Para,Vergi, Borç İle İlişkili (Fiscal Year)","pron":"Fiskıl"},{"en":"fist","tr":"Yumruk","pron":"Fist"},{"en":"eyelash","tr":"Kirpik","pron":"Ayleş"},{"en":"eyelid","tr":"Göz Kapağı","pron":"Aylid"},{"en":"fable","tr":"Masal, Efsane","pron":"Feybıl"},{"en":"fabulous","tr":"Harika, İnanılmaz","pron":"Febulıs"},{"en":"fact","tr":"Gerçek","pron":"Fek"},{"en":"fake","tr":"Taklit, Sahte","pron":"Feyk"},{"en":"imagination","tr":"Tasavvur, Hayal","pron":"İmecıneyşın"},{"en":"imagine","tr":"Tasavvur Etmek, Hayal Etmek","pron":"İmecın"},{"en":"imitate","tr":"Örnek Almak, Taklit Etmek","pron":"İmiteyt"},{"en":"imitation","tr":"Taklit","pron":"İmiteyşın"},{"en":"immoral","tr":"Ahlaksız, Edepsiz","pron":"İmorıl"},{"en":"impair","tr":"Bozmak","pron":"İmpeyır"},{"en":"implement","tr":"1)Yürürlüğe Koymak 2)Alet","pron":"Implımınt"},{"en":"imply","tr":"İma Etme","pron":"İmplay"},{"en":"impress","tr":"Etkilemek","pron":"İmpıres"},{"en":"impressive","tr":"Etkili,Etkileyici","pron":"İmpıresiv"},{"en":"incentive","tr":"Teşvik","pron":"İnsentiv"},{"en":"incidentally","tr":"Bunun Yanında (=By The Way)","pron":"İnsidentli"},{"en":"indefinite","tr":"Belirsiz","pron":"İndefinıt"},{"en":"indefinitely","tr":"Sonsuz, Süresiz","pron":"İndefinitli"},{"en":"indemnify","tr":"1)Tazminat Ödemek, Söz Vermek, Zararı Karşılamak","pron":"İndemnifaı"},{"en":"indemnity","tr":"Tazminat","pron":"İndemniti"},{"en":"flea","tr":"Pire","pron":"Flii"},{"en":"flee","tr":"Kaçmak","pron":"Flii"},{"en":"fleet","tr":"Filo (Gemi Vb.)","pron":"Fliit"},{"en":"flipper","tr":"1) Yüzme Paleti, 2) Yüzgeç","pron":"Flipır"},{"en":"florist","tr":"Çiçekçi, Çiçek Yetiştiren Kimse","pron":"Florıst"},{"en":"fluent","tr":"Akıcı","pron":"Flüınt"},{"en":"foam","tr":"Köpük","pron":"Fom"},{"en":"foam rubber","tr":"Sünger","pron":"Fom Rabır"},{"en":"folk","tr":"Halk","pron":"Folk"},{"en":"football","tr":"Futbol","pron":"Futbool"},{"en":"footprint","tr":"Ayak İzi","pron":"Futprint"},{"en":"foreman","tr":"Ustabaşı, Formen","pron":"Formın"},{"en":"forever","tr":"Devamlı Olarak","pron":"Fırevır"},{"en":"forge","tr":"1)Sahtesini Yapmak 2)Demir Metale Şekil Vermek","pron":"Forρ"},{"en":"forger","tr":"Üçkağıtçı, Taklitçi","pron":"Forcır"},{"en":"formal","tr":"Resmi, Ciddi","pron":"Formıl"},{"en":"forthwith","tr":"Derhal, Hemen","pron":"Forthvit"},{"en":"foul","tr":"Pis, Kirli","pron":"Fol"},{"en":"found","tr":"İnşa Etmek Veya Başlamak","pron":"Faund"},{"en":"fragile","tr":"Kolay Kırılabir","pron":"Freρayıl"},{"en":"frank","tr":"Açık Sözlü, Samimi","pron":"Frenk"},{"en":"freight","tr":"Hamule, Navlun","pron":"Freyt"},{"en":"index","tr":"İndex","pron":"İndeks"},{"en":"individual","tr":"Ayrı, Birey, Fert, Kimse","pron":"İndivicul"},{"en":"indorse","tr":"Çeki Cıro Etmek,Onaylamak","pron":"İndoos"},{"en":"endorsement","tr":"Tastik,Onay,Cıro","pron":"İndoosmınt"},{"en":"inevitable","tr":"Kaçınılmaz, Herhalde Olan","pron":"Inevıtıbl"},{"en":"infinite","tr":"Sonsuz","pron":"Infinit"},{"en":"inflammable","tr":"Ateş Alabilir","pron":"İnflemıbıl"},{"en":"inflate","tr":"Şişmek","pron":"İnfleyt"},{"en":"inflation","tr":"Enflasyon","pron":"İnfleyşın"},{"en":"inflexible","tr":"Eğilmesi Zor, Bükülmez, İnatçı","pron":"İnfleksıbıl"},{"en":"initial","tr":"İlk Harf, Birinci, Baştaki,Paraf","pron":"İnişıl"},{"en":"initiative","tr":"İlk Hareket, Başlatma, İnsiyatif (Take The İnitiative)","pron":"İnişıtiv"},{"en":"inject","tr":"Şırınga Yapmak","pron":"İncekt"},{"en":"innocent","tr":"Suçsuz, Masum","pron":"İnısınt"},{"en":"insecure","tr":"Emniyetsiz","pron":"İnsikuır"},{"en":"insolvent","tr":"Müflis","pron":"İnsolvınt"},{"en":"inspire","tr":"Akla, Fikre Getirme, Esinleme, İlham Gelmesi","pron":"İnspayır"},{"en":"instant","tr":"Hızlı,Derhal","pron":"İnstınt"},{"en":"insulate","tr":"İzole Etmek","pron":"İnsuleyt"},{"en":"insult","tr":"Hakaret Etme, Onur Kırma","pron":"İnsalt"},{"en":"intangible","tr":"Manevi, Maddi Olmayan, Intangıble Asset=Maddi,Varlık","pron":"İntencıbıl"},{"en":"intense","tr":"Derin Üzüntü, Güçlü Duygu","pron":"İntens"},{"en":"fridge","tr":"Buzdolabı","pron":"Fric"},{"en":"frontier","tr":"Sınır","pron":"Frantier"},{"en":"fry","tr":"Kızartmak","pron":"Fray"},{"en":"full stop","tr":"Nokta","pron":"Fulstop"},{"en":"fundamental","tr":"Temel, Önem, Çok Gerekli","pron":"Fandımentıl"},{"en":"funeral","tr":"Cenaze","pron":"Füunırıl"},{"en":"furthermore","tr":"Yanında, Ayrıca, Üstelik (=Moreover)","pron":"Fördırmor"},{"en":"fuse","tr":"Sigorta (Elektrik Vb.)","pron":"Füuz"},{"en":"fuss","tr":"Telaş, Telaşlanmak","pron":"Faas"},{"en":"gaol","tr":"Hapishane","pron":"Jeil"},{"en":"gay","tr":"1)Mutlu, Parlak, Çok Renkli 2)Homo","pron":"Gey"},{"en":"gear","tr":"Vites","pron":"Giır"},{"en":"germ","tr":"Mikrop","pron":"Cörm"},{"en":"ghost","tr":"Hayalet, Hortlak","pron":"Gost"},{"en":"gigolo","tr":"Jigolo","pron":"Jigolo"},{"en":"ginger","tr":"Zencefil, Hafif Kahverengi","pron":"Cincır"},{"en":"globe","tr":"Küre, Dünya","pron":"Glob"},{"en":"glue","tr":"Yapıştırıcı","pron":"Glu"},{"en":"goal","tr":"Hedef, Gaye, Gol","pron":"Gol"},{"en":"gossip","tr":"Dedikodu Yapmak, Dedikodu","pron":"Gosip"},{"en":"grapefruit","tr":"Greyfurt","pron":"Greypfruut"},{"en":"grateful","tr":"Minnettar","pron":"Greytıfıl"},{"en":"gravestone","tr":"Mezartaşı","pron":"Grıyvıstun"},{"en":"intensive","tr":"Yoğun (Labour İntensive:Emek Yoğun)","pron":"İntensiv"},{"en":"interfere","tr":"1)Karışma Müdahele Etme 2)Parazit Yapma (Tv,Radyo)","pron":"İnterfir"},{"en":"intestines","tr":"Bağırsaklar","pron":"İntestinz"},{"en":"invade","tr":"İstila Etmek","pron":"İnveyd"},{"en":"invoice","tr":"Fatura","pron":"İnvoys"},{"en":"involve","tr":"İşe Dalmak, Karışmak,Gerektirmek,İçerme k","pron":"İnvolv"},{"en":"ironically","tr":"Tam Aksi Olma,İnadına(İnadına Tatilde Yağmur Yağdı.)","pron":"Ayronikli"},{"en":"irritate","tr":"Kızdırmak, Sinirlendirmek, Tahriş Etmek (Deri Vb.)","pron":"İriteyt"},{"en":"itch","tr":"Kaşındırmak","pron":"İtρi"},{"en":"item","tr":"Birim","pron":"Aytım"},{"en":"jack","tr":"1)Kriko 2)Vale (Oyun Kağıdında) 3)Torpil Yaptırmak","pron":"Cek"},{"en":"jackal","tr":"Çakal","pron":"Cekıl"},{"en":"jacket","tr":"Ceket","pron":"Cekıt"},{"en":"jaguar","tr":"Jaguar","pron":"Ceguar"},{"en":"jar","tr":"Kavanoz","pron":"Caar"},{"en":"jeans","tr":"Jin, Kot Pantolon (Pamuklu)","pron":"Ciinz"},{"en":"jelly","tr":"Jöle","pron":"Celi"},{"en":"jellyfish","tr":"Denizanası, Medüs, Su Medüsü","pron":"Celifiş"},{"en":"jockey","tr":"Cokey","pron":"Cokey"},{"en":"jubilee","tr":"Jübile","pron":"Cubılii"},{"en":"keen","tr":"Keskin (Keen On:Hoşlanmak)","pron":"Kiin"},{"en":"ketchup","tr":"Ketçap","pron":"Ketρıp"},{"en":"kidnap","tr":"Zorla Kaçırmak (İnsan, Hayvan Vb.)","pron":"Kıdnep"},{"en":"graveyard","tr":"Mezarlık, Mezar","pron":"Greyvyard"},{"en":"greengrocer","tr":"Manav","pron":"Gıringırosır"},{"en":"groom","tr":"Damat","pron":"Gruum"},{"en":"grumble","tr":"Sızlanmak,Yakınmak","pron":"Grambıl"},{"en":"guarantee","tr":"Garanti","pron":"Garentii"},{"en":"guided missile","tr":"Yl Güdümlü Roket","pron":"Gaydıd Misayl"},{"en":"guitar","tr":"Gitar","pron":"Gitaar"},{"en":"gulf","tr":"Körfez","pron":"Galf"},{"en":"guy","tr":"Adam","pron":"Gay"},{"en":"habitat","tr":"Doğal Yuva (Hayvan, Bitki Vb. Yaşadığı Yer)","pron":"Hebıtıt"},{"en":"hairdresser","tr":"Kuvaför, Berber","pron":"Herdresır"},{"en":"hairdryer","tr":"Saç Kurutma Makinası","pron":"Herdrayır"},{"en":"halt","tr":"Dur","pron":"Halt"},{"en":"ham","tr":"Domuz Ayağındaki Et","pron":"Hem"},{"en":"hand grenade","tr":"El Bombası","pron":"Hend Grineid"},{"en":"handicap","tr":"Sakat","pron":"Hendikap"},{"en":"hang on","tr":"Bekle","pron":"Hengon"},{"en":"happen","tr":"Olmak","pron":"Hepın"},{"en":"head quarters","tr":"Merkez, Karargah","pron":"Hedkuartırs"},{"en":"headline","tr":"Başlık (Gazetede)","pron":"Hedlayn"},{"en":"headphone","tr":"Kulaklık","pron":"Hedfon"},{"en":"hectare","tr":"Hektar","pron":"Hektar"},{"en":"heritage","tr":"Miras","pron":"Heritıc"},{"en":"hinge","tr":"1)Menteşe 2)Dayanak Noktası, Destek, 3)Esas","pron":"Hinρ"},{"en":"kidney","tr":"Böbrek","pron":"Kidniy"},{"en":"kin","tr":"Aile, Akraba","pron":"Kin"},{"en":"knight","tr":"Silahşör, Şovalye, Satrançta At","pron":"Nayt"},{"en":"knob","tr":"Tokmak, Tutacak","pron":"Nob"},{"en":"label","tr":"Etiket","pron":"Leybl"},{"en":"laboratory","tr":"Laboratuvar","pron":"Lıborıtri"},{"en":"ladle","tr":"Kepçe (Yemek)","pron":"Leydıl"},{"en":"lamppost","tr":"Sokak Lambası","pron":"Lembpost"},{"en":"lampshade","tr":"Abajur","pron":"Lempşeyd"},{"en":"lane","tr":"Dar Yol, Şerit (Oto Yolda Vb.)","pron":"Leyn"},{"en":"lash","tr":"Kamçı, Birşeyi Ani Ve Hızlı Sallamak","pron":"Leş"},{"en":"launch","tr":"Birşeye Başlamak, Roket Fırlatmak","pron":"Lonρ"},{"en":"laundrybasket","tr":"Çamaşır Sepeti","pron":"Londıribeskıt"},{"en":"league","tr":"Birlik, Lig","pron":"Liıg"},{"en":"leak","tr":"Akıntı, Sızmak","pron":"Liik"},{"en":"lease","tr":"Belirli Bir Zaman İçin Kiralama","pron":"Liis"},{"en":"lecture","tr":"Ders, Konferans Vermek","pron":"Lekρır"},{"en":"length","tr":"Uzunluk","pron":"Length"},{"en":"lettuce","tr":"Salata, Kıvırcık","pron":"Letıs"},{"en":"lever","tr":"Kaldıraç, Manivala","pron":"Liivır"},{"en":"liar","tr":"Yalancı","pron":"Layır"},{"en":"lick","tr":"Yalamak","pron":"Lik"},{"en":"lid","tr":"Kapak","pron":"Lid"},{"en":"lighter","tr":"Çakmak","pron":"Laytır"},{"en":"hold on","tr":"Bekle","pron":"Hold On"},{"en":"holy","tr":"Kutsal","pron":"Holi"},{"en":"hook","tr":"Çengel, Kanca","pron":"Huuk"},{"en":"horizontal","tr":"Yatay","pron":"Horizantıl"},{"en":"hose","tr":"Hortum","pron":"Hoz"},{"en":"hubbub","tr":"Gürültü","pron":"Habab"},{"en":"hug","tr":"Sarılmak, Kucaklamak","pron":"Hag"},{"en":"huge","tr":"Çok Büyük","pron":"Hüyρ"},{"en":"human","tr":"İnsan, Beşeri","pron":"Huiymın"},{"en":"hush","tr":"Sakinlik, Sessizlik, Sus","pron":"Haş"},{"en":"hut","tr":"Kulübe, Baraka","pron":"Hat"},{"en":"idiot","tr":"Aptal","pron":"İdyıt"},{"en":"ignition","tr":"1)Tutuşma, Ateşleme, Ateş Alma 2)Ateşleme Tertibatı","pron":"İgnişın"},{"en":"ignore","tr":"Önemsememek","pron":"İgnoor"},{"en":"illustrate","tr":"Resimle Göstermek","pron":"İlıstreyt"},{"en":"magnificent","tr":"Azamet, İhtişam","pron":"Megnıfısınt"},{"en":"magnifying-glass","tr":"Büyüteç","pron":"Megnıfaing -Glass"},{"en":"maid","tr":"Kadın Hizmetçi","pron":"Meyd"},{"en":"maintain","tr":"1)Bakım Onarım 2)Eski Halinde Koruma 3)Destekleme","pron":"Meynteyn"},{"en":"major","tr":"1)Büyük, Önemli 2)Binbaşı (Orduda)","pron":"Mecır"},{"en":"majority","tr":"Çoğunluk","pron":"Mıcorıti"},{"en":"maniac","tr":"Manyak","pron":"Meniyak"},{"en":"limit","tr":"Hat, Sınır, Limit","pron":"Limit"},{"en":"liquidate","tr":"Tasfiye Etmek, Öldürme, Kurtulmak, Başından Atmak","pron":"Likvideyt"},{"en":"literature","tr":"Edebiyat","pron":"Litricır"},{"en":"litter","tr":"Çöp,Dağınıklık","pron":"Litır"},{"en":"liver","tr":"Karaciğer","pron":"Livır"},{"en":"loaf","tr":"Bütün Ekmek, Vakti Boşa Geçirmek","pron":"Lof"},{"en":"loan","tr":"Ödünç Vermek, Borç Vermek, Borç","pron":"Lon"},{"en":"lobster","tr":"İstakoz","pron":"Lobstır"},{"en":"locate","tr":"Kurmak,Yerleştirmek","pron":"Lokeyt"},{"en":"lonely","tr":"Yalnız, Kimsesiz","pron":"Lanliy"},{"en":"lorry","tr":"Kamyon","pron":"Lori"},{"en":"loyal","tr":"Sadık","pron":"Loyıl"},{"en":"loyalty","tr":"Sadakat,Bağlılık","pron":"Loyıltiy"},{"en":"magazine","tr":"1)Silah Deposu 2)Magazin 3)Şarjür (Silahın)","pron":"Magızin"},{"en":"magnet","tr":"Mıknatıs","pron":"Magnit"},{"en":"palm","tr":"1)Avuç 2)Palmiye Ağacı","pron":"Paam"},{"en":"panel","tr":"Panel","pron":"Penıl"},{"en":"pants","tr":"1)Don 2)Pantolon (Ame)","pron":"Pents"},{"en":"parachute","tr":"Paraşüt","pron":"Perışut"},{"en":"parade","tr":"Resmi Geçit","pron":"Pıreyd"},{"en":"participate","tr":"Başkalarıyla Birlikte Çalışma, Oynama, Katılma","pron":"Partısipeyt"},{"en":"passive","tr":"Pasif, Eylemsiz","pron":"Pesiv"},{"en":"manual","tr":"El İle Yapılan","pron":"Menyul"},{"en":"manufacture","tr":"Üretmek (Fab. Vb)","pron":"Menufekρır"},{"en":"margin","tr":"Marj, Katkı","pron":"Maacın"},{"en":"marmalade","tr":"Marmelat","pron":"Maamıleyd"},{"en":"massacre","tr":"Katliam, Katliam Yapmak","pron":"Mesıkır"},{"en":"massive","tr":"Çok Büyük Ve Ağır","pron":"Mesiv"},{"en":"mat","tr":"Hasır, Paspas","pron":"Met"},{"en":"mate","tr":"Arkadaş","pron":"Meyt"},{"en":"mathematics","tr":"Matematik","pron":"Methemeti ks"},{"en":"mattress","tr":"Yatak, Sedir","pron":"Metrıs"},{"en":"mature","tr":"1)Olgun,Ergin(Hayv an,Meyve,İnsan)2)V adesi Gelen(Ödem","pron":"Meρur"},{"en":"maturity","tr":"Olgunluk Zamanı, Vade Zamanı","pron":"Meρuriti"},{"en":"maximum","tr":"Maksimum, Azami","pron":"Mexsimum"},{"en":"meadow","tr":"Çayır, Mera","pron":"Medo"},{"en":"mechanic","tr":"1)Makinist,Makina Ustası2)El Sanatlarına Ait3)Mekani","pron":"Mikenik"},{"en":"medical","tr":"Tıbbi","pron":"Medıkıl"},{"en":"merely","tr":"Sadece, Ancak","pron":"Miıli"},{"en":"merge","tr":"Birleşerek Kaybolma, Konsolidasyon (Şirket, Devlet)","pron":"Mörc"},{"en":"merit","tr":"Haketmek, Değmek","pron":"Merit"},{"en":"might","tr":"1)Kuvvet,Kudret 2)Belki (Might Be:Az İhtimalli.)","pron":"Mayt"},{"en":"mike","tr":"Mikrofon","pron":"Mayk"},{"en":"mild","tr":"1)Hafif 2)Yumuşak 3)Ilık","pron":"Mayld"},{"en":"pasta","tr":"Makarna (Hamurdan Yapılan Şeyler)","pron":"Pesti"},{"en":"paste","tr":"Beyaz Tutkal, Macun, Hamur","pron":"Peyst"},{"en":"pastime","tr":"Hoş İyi Zaman","pron":"Pastaym"},{"en":"path","tr":"Patika, Küçük Yol","pron":"Peth"},{"en":"patrol","tr":"Devriye","pron":"Petrol"},{"en":"patron","tr":"1)Destekleyici Kişi 2)Devamlı Müşteri","pron":"Petrın"},{"en":"pause","tr":"Mola, Ara","pron":"Poz"},{"en":"paw","tr":"Hayvan Pençesi","pron":"Poo"},{"en":"pea","tr":"Bezelye","pron":"Pii"},{"en":"peach","tr":"Şeftali","pron":"Piiρ"},{"en":"peak","tr":"Zirve, Tepe","pron":"Pik"},{"en":"peanut","tr":"Yer Fıstığı","pron":"Pinat"},{"en":"pearl","tr":"İnci","pron":"Pörl"},{"en":"peasant","tr":"Çiftçi, Köylü Kesim","pron":"Peznt"},{"en":"pedal","tr":"Pedal","pron":"Pedıl"},{"en":"pedestrian","tr":"Yaya Giden","pron":"Pidestriın"},{"en":"peel","tr":"Kabuk Soymak (Meyve)","pron":"Piil"},{"en":"penknife","tr":"Çakı","pron":"Pen Nayf"},{"en":"pension","tr":"Emekli Maaşı","pron":"Penşın"},{"en":"perfume","tr":"Parfüm","pron":"Pörfyüüm"},{"en":"peril","tr":"Büyük Tehlike","pron":"Peril"},{"en":"period","tr":"1)Çağ, Devir, Period 2)Adet (Hali)","pron":"Periid"},{"en":"millet","tr":"Darı","pron":"Milıt"},{"en":"millionaire","tr":"Milyoner","pron":"Milyıner"},{"en":"mince","tr":"Kıyma (Et Vb.), Kıymak","pron":"Mins"},{"en":"miracle","tr":"Mucize","pron":"Mirıkıl"},{"en":"miser","tr":"Hasis, Cimri","pron":"Mayzır"},{"en":"miserable","tr":"Sefil","pron":"Mizrıbıl"},{"en":"misery","tr":"Sefalet","pron":"Mısiri"},{"en":"mislay","tr":"Nereye Koyduğunu Unutmak","pron":"Misley"},{"en":"mobile","tr":"Oynak,Hareketli","pron":"Mobayl"},{"en":"moisture","tr":"Nem","pron":"Moısρır"},{"en":"mole","tr":"1)Köstebek 2)Vücuttaki Ben","pron":"Mol"},{"en":"monument","tr":"Anıt, Abide","pron":"Monımınt"},{"en":"mood","tr":"Mizaç, Ruh Hali","pron":"Muud"},{"en":"moral","tr":"Ahlak","pron":"Morıl"},{"en":"morale","tr":"Moral","pron":"Mıraal"},{"en":"mortgage","tr":"İpotek","pron":"Morgeyρ"},{"en":"mosquito","tr":"Sivrisinek","pron":"Mıskiito"},{"en":"moss","tr":"Yosun (Nemli Yerlerde Oluşan)","pron":"Mos"},{"en":"motion","tr":"Hareket, Önerme","pron":"Moşın"},{"en":"motive","tr":"1)Motivlenmek 2)Güdü","pron":"Motiv"},{"en":"mud-guard","tr":"Çamurluk","pron":"Madgard"},{"en":"multiply","tr":"Çarpmak, Çoğalmak","pron":"Maltıpılay"},{"en":"murmur","tr":"Mırıldanmak, Uğultu","pron":"Mörmır"},{"en":"muscle","tr":"Pazu, Kas","pron":"Masıl"},{"en":"permanent","tr":"Devamlı,Sürekli","pron":"Pörmınınt"},{"en":"persist","tr":"Devam Etmek","pron":"Pesist"},{"en":"pessimist","tr":"Kötümser","pron":"Pesimist"},{"en":"petrol station","tr":"Benzinci","pron":"Petrıl Steyşın"},{"en":"philosophy","tr":"Fizolofi","pron":"Fılosıfi"},{"en":"physical","tr":"Fiziksel","pron":"Fizıkıl"},{"en":"picket","tr":"Grev Gözcüsü, Fabrika Önünde Bekleme","pron":"Pıkıt"},{"en":"pickle","tr":"Turşu","pron":"Pıkıl"},{"en":"pillow","tr":"Yastık","pron":"Pilow"},{"en":"pillowcase","tr":"Yastık Kılıfı","pron":"Pilokeys"},{"en":"pinch","tr":"Çimdiklemek, Sıkıştırmak (Kapıya Vb.)","pron":"Pinρ"},{"en":"pincers","tr":"1)Kerpeten 2)Kıskaç (Yengecin V.B.)","pron":"Pinρırs"},{"en":"pioneer","tr":"Öncü","pron":"Paynır"},{"en":"pistol","tr":"Tabanca","pron":"Pıstıl"},{"en":"pity","tr":"Acımak (What A Pity : Ne Yazık)","pron":"Piti"},{"en":"plastic","tr":"Plastik","pron":"Plestik"},{"en":"platform","tr":"1)Platform, Yüksekçe Yer, Kürsü 2)Peron","pron":"Pletform"},{"en":"playground","tr":"Oyun Sahası","pron":"Pleygraund"},{"en":"plum","tr":"1)Erik 2)Bonbon Sekeri","pron":"Plam"},{"en":"plumber","tr":"Musluk Tamircisi","pron":"Plamır"},{"en":"pole","tr":"1)Kutup 2)Direk, Kazık","pron":"Pol"},{"en":"porcelain","tr":"Porselen","pron":"Poselın"},{"en":"porter","tr":"1)Hammal 2)Kapıcı","pron":"Pootır"},{"en":"postage","tr":"Posta Ücreti","pron":"Postıρ"},{"en":"museum","tr":"Müze","pron":"Müuzım"},{"en":"mushroom","tr":"Mantar","pron":"Maşrum"},{"en":"muslim","tr":"Müslüman","pron":"Mazlım"},{"en":"mustard","tr":"Hardal","pron":"Mastırd"},{"en":"mute","tr":"1)Sesiz 2)Dilsiz","pron":"Müut"},{"en":"mutter","tr":"Mırıldanmak, Kısık Sesle Söylenmek","pron":"Matır"},{"en":"mutual","tr":"Müşterek,İki Taraflı (Mutual Friend=Ortak Arkadaş)","pron":"Müuρul"},{"en":"napkin","tr":"Peçete","pron":"Nepkin"},{"en":"narrate","tr":"Anlatmak, Söylemek","pron":"Nıreyt"},{"en":"nasty","tr":"Pis, Kötü Kokulu, Hoş Olmayan","pron":"Nasti"},{"en":"naughty","tr":"Yaramaz (Naughty Child = Yaramaz Ρocuk)","pron":"Noti"},{"en":"needless","tr":"Lüzumsuz","pron":"Nidless"},{"en":"negotiate","tr":"Görüşmek,Müzaker e","pron":"Nigoşıeyt"},{"en":"network","tr":"Şebeke,Çalışma Ağı","pron":"Netwörk"},{"en":"nickname","tr":"Takılmış Ad, Lakap","pron":"Nikneym"},{"en":"nightmare","tr":"Kabus","pron":"Naytmeyr"},{"en":"nominate","tr":"1)Aday Göstermek(Başkan V.B) 2)Atamak,Görevlen dirme","pron":"Nomineyd"},{"en":"nonsense","tr":"Saçma","pron":"Nonsıs"},{"en":"notorious","tr":"Kötü Ünlü, Kötü Ün","pron":"Nutoriyus"},{"en":"novel","tr":"Roman","pron":"Novıl"},{"en":"nude","tr":"Çıplak","pron":"Nüud"},{"en":"nylon","tr":"Naylon","pron":"Naylon"},{"en":"poverty","tr":"Fakirlik","pron":"Povitı"},{"en":"power of attorney","tr":"Vekaletname","pron":"Pavır Iv Atörn"},{"en":"power-house","tr":"1)Elektrik Santralı 2)Olağanüstü Enerjiye Sahip Şey","pron":"Pauwırhaus"},{"en":"precious","tr":"Kıymetli, Çok Sevilen","pron":"Presis"},{"en":"precisely","tr":"Kesinlikle, Tam Manasıyla","pron":"Prısayzlı"},{"en":"prescription","tr":"Reçete","pron":"Priskrıpşın"},{"en":"preserve","tr":"Korumak,Konserve Yapmak","pron":"Prizörv"},{"en":"primarily","tr":"Ana Olarak","pron":"Pramırili"},{"en":"primary","tr":"1)Önceleri,Eskiden 2)Ana,Baş- Primary Cause 3)İlk Oku","pron":"Praymeri"},{"en":"primitive","tr":"1)İlkel 2)Basit, Modası Geçmiş","pron":"Primitiv"},{"en":"priority","tr":"Öncelik","pron":"Payoriti"},{"en":"privilege","tr":"İmtiyaz","pron":"Privılıρ"},{"en":"process","tr":"İşlem","pron":"Proses"},{"en":"prohibit","tr":"Yasaklamak","pron":"Prıhibit"},{"en":"promote","tr":"1)İlerleme,Terfi Etme 2)Tanıtım(Ürün Vb.Satış İρin)","pron":"Prımot"},{"en":"promotion","tr":"Terfi","pron":"Primoşın"},{"en":"propeller","tr":"1)İleriye Yürüten Şey 2)Vapur Veya Uçak Pervanesi","pron":"Prıpelır"},{"en":"proportion","tr":"Orantı","pron":"Propoşın"},{"en":"prosecute","tr":"Takip Etmek, Kavuşturmak, Dava Açmak, Suçlamak","pron":"Prasıkyut"},{"en":"prostitution","tr":"Fuhuş","pron":"Prostıtuşın"},{"en":"proverb","tr":"Ata Sözü","pron":"Provörb"},{"en":"provocation","tr":"Kışkırtma","pron":"Prıvıkeyşın"},{"en":"oar","tr":"Kürek","pron":"Or"},{"en":"oasis","tr":"Vaha","pron":"Oesis"},{"en":"oblige","tr":"1)Zorunlu Kılmak 2)Minettar Kılmak3)Yapmak,Sa ğlamak","pron":"Iblayc"},{"en":"occur","tr":"Olmak","pron":"Ikör"},{"en":"odd","tr":"Tuhaf,Acaip","pron":"Od"},{"en":"okay (ok)","tr":"Peki, Tamam","pron":"Okey"},{"en":"oldfashioned","tr":"Eski Moda","pron":"Old Feyşınd"},{"en":"omelette","tr":"Omlet","pron":"Omlıt"},{"en":"omit","tr":"Atlamak, Hariç Bırakmak","pron":"Imit"},{"en":"onion","tr":"Soğan","pron":"Anyın"},{"en":"option","tr":"Seçme, Seçenek, Opsiyon","pron":"Opşın"},{"en":"oral","tr":"Sözlü","pron":"Orıl"},{"en":"orbit","tr":"Yörünge","pron":"Orbit"},{"en":"orchard","tr":"Bostan","pron":"Orρıd"},{"en":"original","tr":"Orjinal, İlk, Yeni","pron":"Arıcınıl"},{"en":"oval","tr":"Oval","pron":"Ovıl"},{"en":"overdo","tr":"Fazla Pişirmek, Fazla Yapmak","pron":"Ovırdu"},{"en":"overdue","tr":"Vadesi Geçmiş","pron":"Overduu"},{"en":"overtake","tr":"Geçmek, Sollamak","pron":"Ovırteyk"},{"en":"overtime","tr":"Fazla Mesai","pron":"Ovırtaym"},{"en":"overwork","tr":"Fazla Çalışmak, Aşırı Çalışmak","pron":"Ovırvörk"},{"en":"owl","tr":"Baykuş","pron":"Aul"},{"en":"oxygen","tr":"Oksijen","pron":"Oksıcın"},{"en":"provoke","tr":"Kışkırtmak, Kızdırmaya Neden Olmak","pron":"Prıvok"},{"en":"publicity","tr":"İlan, Reklam, Yayınlama","pron":"Pablısiti"},{"en":"pull up","tr":"Aracı Durdurmak","pron":"Pull Ap"},{"en":"pulse","tr":"Nabız, Vuruş","pron":"Pals"},{"en":"pumpkin","tr":"Kabak","pron":"Pampkin"},{"en":"punctual","tr":"Tam Zamanında","pron":"Pankρuıl"},{"en":"pure","tr":"Saf, Temiz","pron":"Püur"},{"en":"purse","tr":"Küçük El Çantası","pron":"Pöös"},{"en":"pyramid","tr":"Piramit","pron":"Piramit"},{"en":"qualified","tr":"Ehliyetli, Kalifiye","pron":"Kwolifayd"},{"en":"quota","tr":"Kota, Kontenjan","pron":"Kwotı"},{"en":"quote","tr":"Aktarma, Söyleme","pron":"Kwot"},{"en":"racket","tr":"Raket","pron":"Rekit"},{"en":"radar","tr":"Radar","pron":"Reydır"},{"en":"railing","tr":"Bahce Parmaklıkları","pron":"Reiling"},{"en":"ram","tr":"1)Koç 2)Vurmak, Toslamak","pron":"Rem"},{"en":"rash","tr":"1)Hızlı, Acele 2)Çil","pron":"Raş"},{"en":"rat","tr":"Sıçan","pron":"Ret"},{"en":"rear","tr":"1)Yetiştirmek(İnsan,Kuş,Bitki) 2)Arka,Arka Taraf","pron":"Rıir"},{"en":"recession","tr":"Duraklama, Gerileme, Ekonomide Durgunluk","pron":"Riseşin"},{"en":"recipe","tr":"Yemek Tarifi","pron":"Resipi"},{"en":"recollect","tr":"Hatırlamak","pron":"Rekılekt"},{"en":"reconcile","tr":"Uzlaşma, Anlaşma Yapmak","pron":"Rekınsaıl"},{"en":"oyster","tr":"İstiridye","pron":"Oistır"},{"en":"packed","tr":"Kalabalık, Bir Sürü İnsan","pron":"Pekt"},{"en":"referendum","tr":"Referandum, Halk Oylaması","pron":"Refırendum"},{"en":"refill","tr":"Doldurmak","pron":"Rifıl"},{"en":"refreshme nts","tr":"Sandoviç, Tost, İçecek (Gar,İstasyon Gibi Yerlerde)","pron":"Rıfreşmınts"},{"en":"refrigerator","tr":"Buzdolabı","pron":"Refrıρıretır"},{"en":"region","tr":"Bölge","pron":"Ricın"},{"en":"register","tr":"1)Kütük,Sicil,Kayıt 2)Regıster Post=Taahütlü Mektup","pron":"Recıstır"},{"en":"regulation","tr":"Yönetmelik, Yasa","pron":"Reguleyşın"},{"en":"relate","tr":"Anlatmak, Nakletmek (Formal Tell)","pron":"Releyt"},{"en":"relevant","tr":"Bağıntılı, Konuyla İlişkili","pron":"Relıvınt"},{"en":"reliable","tr":"Güvenilir","pron":"Rilaybıl"},{"en":"reluctant","tr":"İsteksiz","pron":"Rilanktınt"},{"en":"remedy","tr":"Çare","pron":"Remidi"},{"en":"remit","tr":"1)Affetmek, Bağışlamak 2)Postayla Para Yollama-Havale","pron":"Rimit"},{"en":"remittance","tr":"Havele (Para)","pron":"Rimitıns"},{"en":"reputation","tr":"İtibar, Ün","pron":"Reputeyşın"},{"en":"research","tr":"Araştırma","pron":"Risörρ"},{"en":"resent","tr":"Hoşlanmamak, Kızmak","pron":"Rizent"},{"en":"reside","tr":"Oturmak, İkamet Etmek","pron":"Rizaıd"},{"en":"reconciliation","tr":"Uzlaşma","pron":"Rekınsilieyşin"},{"en":"referee","tr":"Hakem","pron":"Refiri"},{"en":"singular","tr":"Acaip, Tek, Eşsiz","pron":"Singulır"},{"en":"siren","tr":"Siren","pron":"Saırın"},{"en":"skim","tr":"Köpük, Yağını Almak (Süt, Yoğurt), Ana Fikri Almak","pron":"Skim"},{"en":"skull","tr":"Kafatası","pron":"Skal"},{"en":"slice","tr":"Dilim, Dilimlemek","pron":"Slays"},{"en":"slipper","tr":"Terlik","pron":"Slipır"},{"en":"slot","tr":"Uzun, Düz Delik, Boşluk, Jeton Koyma Yeri Vb.","pron":"Slot"},{"en":"smart","tr":"1)Akıllı 2)Açıkgöz 3)Şık","pron":"Smart"},{"en":"smuggle","tr":"Kaçakçılık (Gümrük,İρki,Esrar V.B.)","pron":"Smagıl"},{"en":"snack","tr":"Küçük, Hızlı Yenilen Yemek","pron":"Snek"},{"en":"snag","tr":"Pürüz","pron":"Sneg"},{"en":"snub","tr":"Küçümsemek, Hakir Görmek","pron":"Snab"},{"en":"so far","tr":"Şimdiye Kadar (=Up To Now)","pron":"So Far"},{"en":"soak","tr":"Islatmak","pron":"Sok"},{"en":"soccer","tr":"Futbol","pron":"Sokır"},{"en":"social","tr":"Sosyal","pron":"Soşıl"},{"en":"sock","tr":"1)Çorap 2)Vurmak,Kırmak 3)Put A Sock In It = Susmak","pron":"Sak"},{"en":"solidarity","tr":"Dayanışma","pron":"Soliderıti"},{"en":"resident","tr":"Bölgede Yaşayan, Oturan","pron":"Rezıdıns"},{"en":"respond","tr":"Cevap Vermek","pron":"Rispond"},{"en":"restore","tr":"1)Geri Verme 2)Yeniden Kullanıma Açma","pron":"Ristor"},{"en":"restrict","tr":"Sınırlamak","pron":"Rıstrikt"},{"en":"resume","tr":"Yeniden Başlamak","pron":"Rızuum"},{"en":"retail","tr":"Parekende, Parekende Satış","pron":"Riteil"},{"en":"retaliation","tr":"İntikam, Tepki, Misilleme","pron":"Ritalieyşın"},{"en":"revenue","tr":"Gelir","pron":"Revenüü"},{"en":"reverse","tr":"Ters, Arka (Reverse Gear = Geri Vites)","pron":"Rivörs"},{"en":"revise","tr":"Tekrar Gözden Geçirip Düzeltmek","pron":"Rıvayz"},{"en":"revolution","tr":"Devrim","pron":"Revolışın"},{"en":"rid","tr":"Atmak, Fırlatmak (To","pron":"Rid"},{"en":"rifle","tr":"Tüfek","pron":"Rayfıl"},{"en":"rocket","tr":"Roket","pron":"Rokıt"},{"en":"roundabout","tr":"1)Dolambaçlı, Dolaylı 2)Ada-Trafikte 3)Yaklaşık Olara","pron":"Raundıbaut"},{"en":"route","tr":"Rota","pron":"Ruut"},{"en":"rubber","tr":"1)Lastik, Kauçuk 2)Silgi","pron":"Rabır"},{"en":"rug","tr":"Küçük Halı, Kilim","pron":"Rag"},{"en":"ruin","tr":"Harabe, Yıkım, Mahvetme","pron":"Ruin"},{"en":"rust","tr":"Pas","pron":"Rast"},{"en":"sacrifice","tr":"Kurban, Fedakarlık","pron":"Sekrıfays"},{"en":"safari","tr":"Safari, Hayvan Avlama Yolculuğu","pron":"Sifaari"},{"en":"sophisticated","tr":"İncelikli Sosyal Hayattan Bilgisiolan,Ukala,Karışık","pron":"Sofistikeyt"},{"en":"souvenir","tr":"Hatıra","pron":"Suuvenır"},{"en":"span","tr":"1) İki Limit Arasındaki Şey, Zaman Vb. 2) Karış","pron":"Spen"},{"en":"spanner","tr":"Somun Sıkma Aleti(Adjustable Spanner=İngiliz Anahtar","pron":"Spenir"},{"en":"spectacular","tr":"Görülmeye Değer","pron":"Spektıkulır"},{"en":"spectator","tr":"İzleyici (Maρ Vb.)","pron":"Spekteytır"},{"en":"speedometer","tr":"Hızölçer","pron":"Spidamıtır"},{"en":"spice","tr":"Baharat","pron":"Spays"},{"en":"spider","tr":"Örümcek","pron":"Spaydır"},{"en":"spill","tr":"Dökmek,Saçmak (Sıvı)","pron":"Spil"},{"en":"spiral","tr":"Spiral","pron":"Spiral"},{"en":"spit","tr":"Tükürmek","pron":"Spit"},{"en":"splash","tr":"Sıçratma","pron":"Splaş"},{"en":"squash","tr":"1)Bir Çeşit Oyun 2)Sıkışmak","pron":"Skwaş"},{"en":"squeeze","tr":"Sıkışmak, Sıkıştırmak, Sıkmak","pron":"Skwiiz"},{"en":"stabilize","tr":"Dengeleme, Saptama","pron":"Stebilayz"},{"en":"stable","tr":"1)Ahır 2)İstikrarlı (Stable Goverment)","pron":"Sıteybıl"},{"en":"stadium","tr":"Stadyum","pron":"Stedyum"},{"en":"stall","tr":"1)Küçük Dükkan, Tezgah 2)Vakit Kazanma","pron":"Stool"},{"en":"stapler","tr":"Zımba (Tel)","pron":"Steipılr"},{"en":"stationery","tr":"Kırtasiye","pron":"Steyşınery"},{"en":"statue","tr":"Heykel","pron":"Statüü"},{"en":"safety-belt","tr":"Emniyet Kemeri","pron":"Seyftibelt"},{"en":"safety-pin","tr":"Çengelli İğne","pron":"Seyftipin"},{"en":"salmon","tr":"1) Som Balığı 2) Sarımsı, Pembe Renk","pron":"Semın"},{"en":"saloon","tr":"1)Saloon Car = Normal Araba 2)Salon 3)Gemi Salonu","pron":"Sıluun"},{"en":"salute","tr":"Selam Vermek (Askerυ)","pron":"Selüut"},{"en":"sample","tr":"Örnek, Numune","pron":"Sempıl"},{"en":"sandpaper","tr":"1) Zımpara Kağıdı 2) Zımparalamak","pron":"Sendpeypır"},{"en":"sardine","tr":"Sardalya","pron":"Saadin"},{"en":"satellite","tr":"Uydu","pron":"Setilayt"},{"en":"satin","tr":"Saten, Atlas","pron":"Setin"},{"en":"sauce","tr":"Salça, Sos","pron":"Soıs"},{"en":"saucepan","tr":"Tava","pron":"Soospen"},{"en":"saucer","tr":"Bardak Altlığı","pron":"Soosır"},{"en":"sausage","tr":"Sosis","pron":"Sosıρ"},{"en":"savage","tr":"Vahşi, Yabani, Yırtıcı","pron":"Seviρ"},{"en":"savour","tr":"Tat, Lezzet, Çeşni","pron":"Seyvır"},{"en":"saw","tr":"1)Testere 2)Görmek (See'nin Past Tens'i)","pron":"Soo"},{"en":"saxophone","tr":"Saksafon","pron":"Seksifon"},{"en":"scandal","tr":"Skandal","pron":"Skendıl"},{"en":"scare","tr":"Korkutmak","pron":"Skeir"},{"en":"scarf","tr":"Atkı","pron":"Skaaf"},{"en":"steak","tr":"Bonfile","pron":"Steyk"},{"en":"steel","tr":"1)Çelik 2)Büyük Güç","pron":"Stiil"},{"en":"steep","tr":"1)Hızlı Yükselme Veya Düşme, Geniş Açı 2)Çok Fazla","pron":"Stiip"},{"en":"step child","tr":"Üvey Çocuk","pron":"Step Ρayld"},{"en":"sterile","tr":"1)Ameliyatla Kısır Etmek 2)Bakteri","pron":"Sterayl"},{"en":"sterilize","tr":"Kısırlaştırma, Mikroplardan Arıtma","pron":"Sterilayz"},{"en":"stethoscope","tr":"Göğüs Dinleme Cihazı, Steteskop","pron":"Stethıskop"},{"en":"steward","tr":"1) Erkek Hostes 2) Kahya (Çiflik Vb.)","pron":"Stüvıd"},{"en":"stock certificate","tr":"Hisse Senedi","pron":"Stok Sertifikeyt"},{"en":"stool","tr":"Tabure","pron":"Stuul"},{"en":"storm","tr":"Fırtına","pron":"Stoom"},{"en":"strain","tr":"Germek, Süzmek, İnciltmek, Çok Güç, Zor","pron":"Streyn"},{"en":"strainer","tr":"Süzgeç","pron":"Streynır"},{"en":"strap","tr":"Tutacak, Askı (Elbise, Ayakkabı)","pron":"Strep"},{"en":"stretcher","tr":"Sedye","pron":"Streρır"},{"en":"structure","tr":"Yapı","pron":"Strakρır"},{"en":"studio","tr":"Sütüdyo","pron":"Stüudio"},{"en":"stutter","tr":"Kekelemek, Kekeme","pron":"Statır"},{"en":"style","tr":"Sitil","pron":"Stayl"},{"en":"submit","tr":"1)Reyine,Onamasına Bırakma 2)Teslim Olma,Boyun Eğme","pron":"Sıbmit"},{"en":"subscribe","tr":"1)Abone Parası Ödeme 2)Sürekli Para Yardımı Yapmak","pron":"Sebskrayb"},{"en":"scene","tr":"Olayın Geçtiği Yer, Manzara, Tiyatronun Bir Sahnesi","pron":"Siin"},{"en":"scheme","tr":"Plan, Proje","pron":"Skiim"},{"en":"scholarship","tr":"Burs","pron":"Skılırşip"},{"en":"scone","tr":"Bir Çeşit Üzümlü Ekmek Ve Tereyağ","pron":"Skon"},{"en":"scorpion","tr":"Akrep","pron":"Skorpion"},{"en":"scramble","tr":"1)Çırpmak 2)Hızlı Hareket Veya Tırmanış","pron":"Skrımbıl"},{"en":"scruff","tr":"1)Ense 2)Kirli,Pasaklı İnsan","pron":"Skraf"},{"en":"seal","tr":"1)Mühürlemek, (Kutu,Mektup,Kapı Vb.) 2)Fok Balığı","pron":"Siil"},{"en":"seaside","tr":"Deniz Kenarı","pron":"Sisayd"},{"en":"seat-belt","tr":"Emniyet Kemeri","pron":"Sit Belt"},{"en":"secondrate","tr":"İkinci Derece, Kalite","pron":"Sekınd Reyt"},{"en":"secure","tr":"Emniyetli, Sağlam","pron":"Seküür"},{"en":"see over","tr":"İmtihan Etmek, Çek Etmek","pron":"Siovır"},{"en":"segment","tr":"Dilim (Pasta, Portakal), Dilimlemek, Bölmek","pron":"Segmınt"},{"en":"senate","tr":"Senato","pron":"Senit"},{"en":"senior","tr":"Yaşça veya Kıdemce Büyük","pron":"Sinyır"},{"en":"sergeant","tr":"Çavuş","pron":"Sarcınt"},{"en":"serviette","tr":"Peçete","pron":"Sörviyet"},{"en":"set off, out","tr":"Seyahate Başlamak, Yola Çıkmak","pron":"Set Of,Set Aut"},{"en":"set on","tr":"Atak","pron":"Set On"},{"en":"sex","tr":"Cinsiyet, Cins","pron":"Seks"},{"en":"subsidize","tr":"Yardım Etme (In Scholl You Can Buy Subsidized Meats)","pron":"Sabsidayz"},{"en":"subsidy","tr":"Yardım, Sübvansiyon (Devletten)","pron":"Sabsidiy"},{"en":"substance","tr":"Madde, Cevher","pron":"Sabstıns"},{"en":"substitute","tr":"Vekil Tayin Etme, Yerine Geçme","pron":"Sabstitüvt"},{"en":"subtract","tr":"Çıkarmak (6-3=3)","pron":"Sabtrekt"},{"en":"sufficient","tr":"Yeterince","pron":"Sefişınt"},{"en":"suicide","tr":"İntihar (Commit Suicide : İntihar Etmek)","pron":"Suisayd"},{"en":"suitcase","tr":"Bavul (Elbise İρin)","pron":"Suitkeys"},{"en":"summary","tr":"Özet","pron":"Samiri"},{"en":"summit","tr":"Zirve","pron":"Samit"},{"en":"sunset","tr":"Güneşin Batışı","pron":"Sanset"},{"en":"superior","tr":"Daha İyi, Önemli, Akıllı","pron":"Süperiyır"},{"en":"supervise","tr":"Denetleme, Gözlem","pron":"Süpervayz"},{"en":"supplies","tr":"Erzak, Mal","pron":"Sıplayz"},{"en":"suppress","tr":"1)Baskı Altına Alma,Sindirme 2)Yayınlanmasını Önleme","pron":"Sıpres"},{"en":"supreme","tr":"Yüce, Üstün","pron":"Süupriim"},{"en":"surgeon","tr":"Cerrah","pron":"Söcın"},{"en":"surgery","tr":"Ameliyat","pron":"Söcırı"},{"en":"surrender","tr":"Teslim Olmak (To Yield)","pron":"Sırendır"},{"en":"suspend","tr":"Askıya Almak, Durdurmak","pron":"Sıspend"},{"en":"suspension","tr":"Asma,Asılma (Suspensıon Brıdge : Asma Köprü)","pron":"Sıspenşın"},{"en":"shallow","tr":"Sığ","pron":"Şelow"},{"en":"shampoo","tr":"Şampuan, Baş Yıkamak","pron":"Şempuu"},{"en":"shark","tr":"Köpek Balığı","pron":"Şark"},{"en":"sharp shooter","tr":"Keskin Nişancı","pron":"Şarpşutır"},{"en":"shave","tr":"Tıraş","pron":"Şeyv"},{"en":"shelf","tr":"Raf","pron":"Şelf"},{"en":"shield","tr":"Kalkan, Kılıf","pron":"Şiild"},{"en":"shift","tr":"1)Değiştirme 2)Vardiye","pron":"Şift"},{"en":"shoelace","tr":"Ayakkabı Bağı","pron":"Şuu Leys"},{"en":"shoot down","tr":"İmha Etmek, Hayır Cevabı, Olumsuz","pron":"Şut Daun"},{"en":"short cut","tr":"Kestirme","pron":"Şortkat"},{"en":"shortage","tr":"Yokluk, Kıtlık","pron":"Sortıρ"},{"en":"shrink","tr":"Çekmek, Küçülmek","pron":"Şringk"},{"en":"significant","tr":"Manalı, Önemli","pron":"Sinifıkınt"},{"en":"signpost","tr":"İşaret Direği","pron":"Saynpost"},{"en":"silly","tr":"Budala, Aptal","pron":"Sili"},{"en":"silo","tr":"Silo, Depo","pron":"Saylo"},{"en":"sincere","tr":"İçten, Samimi, Sahte Olmayan","pron":"Sinsiır"},{"en":"temple","tr":"Tapınak","pron":"Tempıl"},{"en":"temporary","tr":"Geçici","pron":"Temprıri"},{"en":"tempt","tr":"Cezbetmek, Şeytana Uydurmak","pron":"Tempt"},{"en":"tenant","tr":"Kiracı","pron":"Tenınt"},{"en":"tend","tr":"Meyilli Olmak","pron":"Tend"},{"en":"suspicion","tr":"Şüphe","pron":"Sıspışın"},{"en":"swan","tr":"Kuğu","pron":"Swan"},{"en":"sweat","tr":"Ter,Terlemek","pron":"Swet"},{"en":"sweater","tr":"Süveter","pron":"Swetır"},{"en":"swollen","tr":"Şişmiş","pron":"Swolın"},{"en":"syrup","tr":"Şurup","pron":"Sırıp"},{"en":"tablet","tr":"Tablet","pron":"Teblit"},{"en":"taboo","tr":"Ayıp, Argo, Tabu","pron":"Tabuu"},{"en":"talent","tr":"1)Kabiliyet (Üstün) 2)Seksi Cazibesi Olan Kadın","pron":"Telınt"},{"en":"tan","tr":"Ten Rengi","pron":"Ten"},{"en":"tangerine","tr":"Mandalina","pron":"Tengerin"},{"en":"tapemeasure","tr":"Mezura","pron":"Teip-Mejır"},{"en":"target","tr":"Hedef","pron":"Tergıt"},{"en":"tariff","tr":"Tarife, Fiat Listesi","pron":"Terif"},{"en":"tart","tr":"1)Turta,Tart,Pasta 2)Asit Tadı 3)Sokak Kadını,Fahişe","pron":"Tart"},{"en":"tease","tr":"1)Kızdırma,Yüz Verip Sonra Sırt Çevirme2)Kabartma(Sa","pron":"Tiiz"},{"en":"technique","tr":"Teknik","pron":"Teknik"},{"en":"teenager","tr":"13-19 Yaş Arası","pron":"Tiineρır"},{"en":"urban","tr":"Şehirsel, Kente Ait (Urban Life : Şehirsel Yaşam)","pron":"Ööbın"},{"en":"v.i.p.","tr":"(Very Important Person), Çok Önemli Kişi","pron":"Viaypi"},{"en":"vacation","tr":"Tatil","pron":"Vekeyşın"},{"en":"vacuum cleaner","tr":"Elektrik Süpürgesi","pron":"Vakuum Klinır"},{"en":"van","tr":"Minibüs","pron":"Ven"},{"en":"tent","tr":"Tente,Çadır","pron":"Tent"},{"en":"terminal","tr":"Terminal","pron":"Termınıl"},{"en":"terrace","tr":"Bitişik Evler","pron":"Terıs"},{"en":"terrify","tr":"Korkutmak","pron":"Terifay"},{"en":"territory","tr":"Toprak Parçası","pron":"Teritri"},{"en":"theme","tr":"Tema, Konu","pron":"Thiim"},{"en":"theory","tr":"Teori","pron":"Thiori"},{"en":"thermometer","tr":"Termometre","pron":"Themomitır"},{"en":"third","tr":"Üçüncü","pron":"Thöd"},{"en":"thirteenth","tr":"Onüçüncü","pron":"Thötiith"},{"en":"thirtieth","tr":"Otuzuncu","pron":"Thötith"},{"en":"thoroughly","tr":"Tamamıyla, Bütün İnce Detaylarıyla","pron":"Thruili"},{"en":"thoughtful","tr":"Düşünceli, Öbürlerini Düşünen","pron":"Thootful"},{"en":"thoughtless","tr":"Düşüncesiz","pron":"Thootlıs"},{"en":"thumb","tr":"El, Baş Parmağı","pron":"Tham"},{"en":"tick","tr":"Saat Sesi, Okey İşareti","pron":"Tik"},{"en":"tide","tr":"Gel-Git Olayı","pron":"Tayd"},{"en":"tiger","tr":"Kaplan","pron":"Taygır"},{"en":"tiny","tr":"Çok Küçük","pron":"Tayni"},{"en":"toilet","tr":"Tuvalet","pron":"Toilıt"},{"en":"token","tr":"1)İşaret 2)Jeton","pron":"Tokın"},{"en":"tomato","tr":"Domates","pron":"Tımaato"},{"en":"ton","tr":"Ton (1000 Kg.)","pron":"Tan"},{"en":"tone","tr":"Ton (Ses,Işık Vs.)","pron":"Ton"},{"en":"tool","tr":"Alet (Çekiρ, Balta Vb.)","pron":"Tuul"},{"en":"vanilla","tr":"Vanilya","pron":"Venilı"},{"en":"vaporize","tr":"Buharlaşmak","pron":"Veipırayz"},{"en":"vase","tr":"Vazo","pron":"Vaaz"},{"en":"veil","tr":"Duvak","pron":"Veil"},{"en":"vein","tr":"Damar","pron":"Veyn"},{"en":"velvet","tr":"Kadife","pron":"Velvıt"},{"en":"venture","tr":"Macera, Risk (Genelde İş Hayatında)","pron":"Venρır"},{"en":"verb","tr":"Fiil","pron":"Vörb"},{"en":"verdict","tr":"Hüküm","pron":"Vördikt"},{"en":"vertical","tr":"Dikey","pron":"Vörtıkıl"},{"en":"vest","tr":"Atlet, Fanila","pron":"Vest"},{"en":"vet","tr":"Veteriner","pron":"Vet"},{"en":"via","tr":"Geçerek, Oradan (We Go From London To Van Via Paris.)","pron":"Vaı"},{"en":"viable","tr":"Geçerli","pron":"Vaıbıl"},{"en":"vice","tr":"1)Yardımcı, Liderin Yardımcısı 2)Mengene","pron":"Vays"},{"en":"vicious circle","tr":"Kısır Döngü","pron":"Vişıs Sörkıl"},{"en":"victimize","tr":"Kurban Etmek","pron":"Viktımayz"},{"en":"vinegar","tr":"Sirke","pron":"Vinıgır"},{"en":"violin","tr":"Keman","pron":"Vaılın"},{"en":"vital","tr":"Çok Önenemli","pron":"Vaytıl"},{"en":"volcano","tr":"Volkan,Yanardağ","pron":"Volkeno"},{"en":"volleyball","tr":"Voleybol","pron":"Volıbol"},{"en":"voluntary","tr":"Gönüllü","pron":"Volıntri"},{"en":"vomit","tr":"Kusmak","pron":"Vamit"},{"en":"vowel","tr":"Sesli Harf (A,E,İ)","pron":"Vavıl"},{"en":"tooth pick","tr":"Kürdan","pron":"Tuuth Pik"},{"en":"torch","tr":"1)Meşale 2)El Feneri","pron":"Torρ"},{"en":"torpedo","tr":"Torpil","pron":"Torpiido"},{"en":"tortoise","tr":"Kaplumbağa","pron":"Tootıs"},{"en":"torture","tr":"İşkence, İşkence Etmek","pron":"Torρır"},{"en":"tough","tr":"Zor, Güç, Sert","pron":"Taf"},{"en":"tournament","tr":"Turnuva","pron":"Turnımınt"},{"en":"tradition","tr":"Gelenek","pron":"Tredişin"},{"en":"tragedy","tr":"Trajedi","pron":"Trejedi"},{"en":"transform","tr":"Bir Şeyin Şeklini Değiştirmek","pron":"Trensform"},{"en":"transparent","tr":"Saydam","pron":"Tresperint"},{"en":"trap","tr":"Tuzak, Kapan, Yakalamak","pron":"Trep"},{"en":"tremendous","tr":"Çok Büyük, Harika","pron":"Trimendıs"},{"en":"trigger","tr":"Tetik (Who Pulled Triger?)","pron":"Trigır"},{"en":"tripod","tr":"Üç Ayaklı Sehpa, Fotoğraf Sehpası","pron":"Traypod"},{"en":"troop","tr":"İnsan Veya Hayva Grubu, Sürü","pron":"Trup"},{"en":"troops","tr":"Askerler","pron":"Trups"},{"en":"truck","tr":"Kamyon","pron":"Trak"},{"en":"tuition","tr":"Öğretim, Özel Ders","pron":"Tuuşın"},{"en":"tulip","tr":"Lale, Lale Fidanı","pron":"Tüulıp"},{"en":"tummy","tr":"Mide","pron":"Tami"},{"en":"turban","tr":"Türban","pron":"Töbın"},{"en":"turnkey","tr":"Anahtar Teslim (Proje Vb.)","pron":"Törnkiy"},{"en":"vulnerable","tr":"Zayıf, Korumasız","pron":"Valnıbıl"},{"en":"vulture","tr":"1)Akbaba 2)Haris Kimse","pron":"Valρır"},{"en":"wager","tr":"İddiaya Girmek","pron":"Wacır"},{"en":"wagon","tr":"Yük Vagonu, At Arabası","pron":"Wegın"},{"en":"waist","tr":"Bel","pron":"Weyst"},{"en":"waistcoat","tr":"Yelek","pron":"Weystkot"},{"en":"wallet","tr":"Cüzdan","pron":"Walıt"},{"en":"walnut","tr":"Ceviz","pron":"Wolnat"},{"en":"warder","tr":"1) Bekçi, Muhafız 2) Gardiyan","pron":"Woodır"},{"en":"wardrobe","tr":"Gardrop, Büyük Dolap","pron":"Wordroop"},{"en":"ware","tr":"Eşya (Kitchen Ware Vb.)","pron":"Weyır"},{"en":"warehouse","tr":"Depo","pron":"Weyrhaus"},{"en":"warrant","tr":"Garanti","pron":"Warınt"},{"en":"wasp","tr":"Arı (Bal Arısı Değil)","pron":"Wasp"},{"en":"water proof","tr":"Su Geçirmeyen","pron":"Wotır Pruf"},{"en":"watercolours","tr":"Sulu Boya","pron":"Wotır Kolırs"},{"en":"whale","tr":"Balina","pron":"Weyl"},{"en":"what if","tr":"Ne Olurdu..","pron":"Wat İf"},{"en":"what's its (his/her) name","tr":"Bilmem Kim (Birisinin Adını Unutma)","pron":""},{"en":"what's more","tr":"Bunun Yanısıra, Üstelik","pron":"Wats Mor"},{"en":"what's what","tr":"İşin Önemini Bilmek (I Know What's What)","pron":"Wats Wat"},{"en":"wheel","tr":"Tekerlek, Çark, Tekerlekli Bir Şeyi Elle İtmek","pron":"Wiil"},{"en":"whim","tr":"Kapris","pron":"Whim"},{"en":"turnover","tr":"Ciro (Satıs)","pron":"Törnovır"},{"en":"typist","tr":"Daktiloda Yazı Yazan Kimse","pron":"Taypist"},{"en":"tyre","tr":"Lastik","pron":"Tayr"},{"en":"ufo","tr":"Unıdentıfıend Flyıng Object: Tanımlanmamış Uçan Cisi","pron":"Yufo"},{"en":"undergo","tr":"Katlanmak, Çekmek, Bir Olayın Olması","pron":"Andırgo"},{"en":"underline","tr":"Yazının, Kelimenin Altını Çizmek","pron":"Andırlayn"},{"en":"unfair","tr":"Adil Olmayan","pron":"Anfeyır"},{"en":"unit","tr":"Birim, 1-9 Arasındaki Sayılar","pron":"Yunıt"},{"en":"up to you","tr":"Sana Kalmış, Nasıl İstersen (It's Up To You)","pron":"Ap Tu Yu"},{"en":"upon","tr":"Üstünde","pron":"Ipon"},{"en":"upsidedown","tr":"Tepe Taklak, Ters Dönmek","pron":"Apsayd Down"},{"en":"whisper","tr":"Fısıldamak, Fısıldaşmak","pron":"Wispır"},{"en":"wind screen","tr":"Araba Ön Camı","pron":"Wind Skriin"},{"en":"windpipe","tr":"Nefes Borusu","pron":"Windpayp"},{"en":"windscreen wiper","tr":"Silecek","pron":"Windskriin Way"},{"en":"wing","tr":"Kanat (Kuş,Uçak)(Left Wing:Sol Kesimi Destekleyenler","pron":"Wing"},{"en":"wisdom","tr":"Akıl","pron":"Wizdım"},{"en":"witch","tr":"Cadı","pron":"Wiρ"},{"en":"worship","tr":"1)Tapmak, Tapınmak, İbadet 2)Hayranlık, Saygı","pron":"Wörşip"},{"en":"wrist","tr":"Bilek","pron":"Rist"},{"en":"zoom","tr":"Yaklaştırmak","pron":"Zum"}];
+
+    const PATTERNS = [
+        { pattern: "What have you been up to?", meaning: "Neler yapıyorsun?", example: "What have you been up to lately?", exampleTr: "Son zamanlarda neler yapıyorsun?" },
+        { pattern: "I'm in a rush.", meaning: "Acelem var.", example: "Sorry, I'm in a rush right now.", exampleTr: "Özür dilerim, şu an acelem var." },
+        { pattern: "Take your time.", meaning: "Acele etme.", example: "No pressure, take your time.", exampleTr: "Baskı yok, acele etme." },
+        { pattern: "I'm not sure.", meaning: "Emin değilim.", example: "I'm not sure about the answer.", exampleTr: "Cevaptan emin değilim." },
+        { pattern: "To be honest...", meaning: "Dürüst olmak gerekirse...", example: "To be honest, I didn't like it.", exampleTr: "Dürüst olmak gerekirse, beğenmedim." },
+        { pattern: "It's worth a try.", meaning: "Denemeye değer.", example: "It might work, it's worth a try.", exampleTr: "İşe yarayabilir, denemeye değer." },
+        { pattern: "Never mind", meaning: "Boşver / Önemi yok", example: "Never mind, I found my keys.", exampleTr: "Boşver, anahtarlarımı buldum." },
+        { pattern: "See you later.", meaning: "Sonra görüşürüz.", example: "I have to go, see you later.", exampleTr: "Gitmem lazım, sonra görüşürüz." },
+        { pattern: "Keep in touch", meaning: "İrtibatta kalalım", example: "Here is my number, let's keep in touch.", exampleTr: "İşte numaram, irtibatta kalalım." },
+        { pattern: "I'll get back to you.", meaning: "Sana geri döneceğim.", example: "I will check and get back to you.", exampleTr: "Kontrol edip sana döneceğim." },
+        { pattern: "I'm on my way", meaning: "Yoldayım", example: "I'm on my way, see you in 5 minutes.", exampleTr: "Yoldayım, 5 dakikaya görüşürüz." },
+        { pattern: "So far so good", meaning: "Şimdilik her şey yolunda", example: "How is the project? So far so good.", exampleTr: "Proje nasıl? Şimdilik her şey yolunda." },
+        { pattern: "Sounds good", meaning: "Kulağa hoş geliyor / Tamam", example: "Let's meet at 5 PM. Sounds good!", exampleTr: "Saat 5'te buluşalım. Tamam!" },
+        { pattern: "It's up to you", meaning: "Sana kalmış", example: "Pizza or pasta? It's up to you.", exampleTr: "Pizza mı makarna mı? Sana kalmış." },
+        { pattern: "Long story short", meaning: "Uzun lafın kısası", example: "Long story short, we missed the bus.", exampleTr: "Uzun lafın kısası, otobüsü kaçırdık." },
+        { pattern: "Give me a hand", meaning: "Bana yardım et", example: "Can you give me a hand with this?", exampleTr: "Buna bir el atabilir misin?" },
+        { pattern: "How much is this?", meaning: "Bu ne kadar?", example: "Excuse me, how much is this shirt?", exampleTr: "Pardon, bu gömlek ne kadar?" },
+        { pattern: "Can I pay by card?", meaning: "Kartla ödeyebilir miyim?", example: "I don't have cash, can I pay by card?", exampleTr: "Nakit yok, kartla ödeyebilir miyim?" }
+    ];
+
+    // ==================== SENTENCE CACHE (fetched from API) ====================
+    const SENTENCE_CACHE_KEY = 'english_sentence_cache_v1';
+
+    function loadSentenceCache() {
+        const saved = localStorage.getItem(SENTENCE_CACHE_KEY);
+        return saved ? JSON.parse(saved) : {};
+    }
+
+    function saveSentenceCache() {
+        localStorage.setItem(SENTENCE_CACHE_KEY, JSON.stringify(sentenceCache));
+    }
+
+    let sentenceCache = loadSentenceCache();
+
+    // Fetch sentences from free Dictionary API
+    // Translate English text to Turkish via MyMemory API
+    async function translateToTurkish(text) {
+        try {
+            const resp = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|tr`);
+            if (!resp.ok) return '';
+            const data = await resp.json();
+            if (data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
+                return data.responseData.translatedText;
+            }
+            return '';
+        } catch (err) {
+            return '';
+        }
+    }
+
+    async function fetchWordDetails(word) {
+        if (sentenceCache[word] && sentenceCache[word].sentences && sentenceCache[word].sentences.length > 0) {
+            // Check if cached sentences already have Turkish translations
+            if (sentenceCache[word].sentences[0].tr) {
+                return sentenceCache[word];
+            }
+        }
+
+        try {
+            const resp = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+            if (!resp.ok) {
+                return await generateFallbackSentences(word);
+            }
+            const data = await resp.json();
+            const entry = data[0];
+
+            // Extract phonetic
+            let phonetic = '';
+            if (entry.phonetic) phonetic = entry.phonetic;
+            else if (entry.phonetics) {
+                for (const p of entry.phonetics) {
+                    if (p.text) { phonetic = p.text; break; }
+                }
+            }
+
+            // Extract example sentences and definitions
+            const sentences = [];
+            let wordType = '';
+
+            for (const meaning of (entry.meanings || [])) {
+                if (!wordType) wordType = meaning.partOfSpeech || '';
+                for (const def of (meaning.definitions || [])) {
+                    if (def.example) {
+                        sentences.push({ en: def.example, def: def.definition });
+                    }
+                }
+            }
+
+            if (sentences.length === 0) {
+                return await generateFallbackSentences(word);
+            }
+
+            // Translate sentences to Turkish
+            const picked = sentences.slice(0, 2);
+            for (const s of picked) {
+                s.tr = await translateToTurkish(s.en);
+            }
+
+            const result = {
+                phonetic,
+                wordType,
+                sentences: picked,
+                fetched: true
+            };
+
+            sentenceCache[word] = result;
+            saveSentenceCache();
+            // Auto-assign category from API
+            if (wordType && !wordCategories[word]) {
+                const cat = posToCategory(wordType);
+                if (cat) { wordCategories[word] = cat; saveWordCategories(); }
+            }
+            return result;
+        } catch (err) {
+            console.warn('API fetch failed for:', word, err);
+            return await generateFallbackSentences(word);
+        }
+    }
+
+    async function generateFallbackSentences(word) {
+        // No API example found - just show the word meaning, no fake sentences
+        const result = {
+            phonetic: '',
+            wordType: '',
+            sentences: [],
+            fetched: false
+        };
+        sentenceCache[word] = result;
+        saveSentenceCache();
+        return result;
+    }
+
+    // Batch fetch for today's words
+    async function fetchTodayWordDetails(words) {
+        const promises = words.map(w => fetchWordDetails(w.en));
+        return Promise.all(promises);
+    }
+
+    // ==================== CUSTOM WORDS ====================
+    const CUSTOM_WORDS_KEY = 'english_custom_words_v1';
+
+    function loadCustomWords() {
+        const saved = localStorage.getItem(CUSTOM_WORDS_KEY);
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    function saveCustomWords() {
+        localStorage.setItem(CUSTOM_WORDS_KEY, JSON.stringify(customWords));
+    }
+
+    let customWords = loadCustomWords();
+
+    function getAllWords() {
+        return [...ORIGINAL_WORDS, ...PDF_WORDS.filter(w => !ORIGINAL_WORDS.some(o => o.en === w.en)), ...customWords];
+    }
+
+    // ==================== STATE MANAGEMENT ====================
+    const STORAGE_KEY = 'english_daily_v1';
+
+    function loadState() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return JSON.parse(saved);
+        return {
+            streak: 0,
+            lastPracticeDate: null,
+            wordStats: {},
+            completedStages: {},
+            todayWords: [],
+            todayDate: null,
+            writings: [],
+            totalSessions: 0
+        };
+    }
+
+    function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let state = loadState();
+    let currentStage = 'dashboard';
+    let quizAnswers3a = {};
+    let quizAnswers3b = {};
+
+    // ==================== DAILY WORD SELECTION (Spaced Repetition) ====================
+    function getTodayStr() {
+        return new Date().toISOString().split('T')[0];
+    }
+
+    function selectDailyWords() {
+        const today = getTodayStr();
+        const allWords = getAllWords();
+
+        if (state.todayDate === today && state.todayWords.length > 0) {
+            const valid = state.todayWords.every(key => allWords.some(w => w.en === key));
+            if (valid) return state.todayWords;
+        }
+        // Force re-select if switching from old 10-word system
+        state.todayWords = [];
+
+        // Split words into: seen (practiced before / original 45) and unseen (never practiced)
+        const seenWords = [];
+        const unseenWords = [];
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+
+        for (const w of allWords) {
+            const stats = state.wordStats[w.en];
+            const hasStats = stats && (stats.correct + stats.wrong) > 0;
+            const isOriginal = originalSet.has(w.en);
+
+            if (hasStats || isOriginal) {
+                const total = hasStats ? (stats.correct + stats.wrong) : 0;
+                const ratio = total === 0 ? 0.5 : stats.correct / total;
+                const daysSince = (hasStats && stats.lastSeen) ? Math.floor((Date.now() - new Date(stats.lastSeen).getTime()) / 86400000) : 30;
+                const priority = ratio * 10 - daysSince * 2 - ((hasStats ? stats.wrong : 0) * 3) + ((hasStats ? stats.streak : 0) * 5);
+                seenWords.push({ key: w.en, priority });
+            } else {
+                unseenWords.push({ key: w.en });
+            }
+        }
+
+        // 7 words from seen (weakest first), 3 words from unseen (random new words)
+        // If not enough seen words, fill with unseen; if not enough unseen, fill with seen
+        seenWords.sort((a, b) => a.priority - b.priority);
+        shuffleArray(unseenWords);
+
+        // Daily: 3 review + 2 new = 5 words
+        const DAILY_COUNT = 5;
+        const REVIEW_TARGET = 3;
+        const NEW_TARGET = 2;
+
+        const reviewCount = Math.min(REVIEW_TARGET, seenWords.length);
+        const newCount = Math.min(NEW_TARGET, unseenWords.length);
+        const fillCount = DAILY_COUNT - reviewCount - newCount;
+
+        const reviewCandidates = seenWords.slice(0, reviewCount * 2);
+        shuffleArray(reviewCandidates);
+        const reviewPick = reviewCandidates.slice(0, reviewCount).map(c => c.key);
+
+        const newPick = unseenWords.slice(0, newCount + fillCount).map(c => c.key);
+
+        // If we still need more from seen words
+        let extraFromSeen = [];
+        if (reviewPick.length + newPick.length < DAILY_COUNT && seenWords.length > reviewCount) {
+            const remaining = seenWords.filter(s => !reviewPick.includes(s.key));
+            shuffleArray(remaining);
+            extraFromSeen = remaining.slice(0, DAILY_COUNT - reviewPick.length - newPick.length).map(c => c.key);
+        }
+
+        const selected = [...reviewPick, ...newPick, ...extraFromSeen].slice(0, DAILY_COUNT);
+        shuffleArray(selected);
+
+        state.todayWords = selected;
+        state.todayDate = today;
+        state.completedStages = {};
+        quizAnswers3a = {};
+        quizAnswers3b = {};
+
+        // Update streak
+        if (state.lastPracticeDate) {
+            const lastDate = new Date(state.lastPracticeDate);
+            const now = new Date();
+            const diffDays = Math.floor((now - lastDate) / 86400000);
+            if (diffDays > 1) state.streak = 0;
+        }
+
+        saveState();
+        return selected;
+    }
+
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+    }
+
+    function getTodayWords() {
+        const keys = selectDailyWords();
+        const allWords = getAllWords();
+        return keys.map(key => allWords.find(w => w.en === key)).filter(Boolean);
+    }
+
+    // ==================== RENDERING ====================
+    function navigateStage(stage, btn) {
+        currentStage = stage;
+        document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        const content = document.getElementById('contentArea');
+        switch(stage) {
+            case 'dashboard': renderDashboard(content); break;
+            case 'stage1': renderStage1(content); break;
+            case 'stage2': renderStage2(content); break;
+            case 'stage3a': renderStage3a(content); break;
+            case 'stage3b': renderStage3b(content); break;
+            case 'stage4': renderStage4(content); break;
+            case 'patterns': renderPatterns(content); break;
+            case 'notebook': renderNotebook(content); break;
+            case 'addword': renderAddWord(content); break;
+            case 'results': renderResults(content); break;
+        }
+        updateStats();
+    }
+
+    function updateStats() {
+        const allWords = getAllWords();
+        document.getElementById('streakCount').textContent = state.streak;
+        document.getElementById('totalWords').textContent = allWords.length;
+
+        const todayCompleted = Object.keys(state.completedStages).length;
+        document.getElementById('todayScore').textContent = todayCompleted > 0 ? todayCompleted + '/6' : '-';
+
+        let mastered = 0;
+        for (const w of allWords) {
+            const s = state.wordStats[w.en];
+            if (s && s.streak >= 5) mastered++;
+        }
+        document.getElementById('masteredCount').textContent = mastered;
+    }
+
+    function renderDashboard(el) {
+        const words = getTodayWords();
+        const allWords = getAllWords();
+
+        // Count studied vs unstudied
+        // ORIGINAL_WORDS are always counted as "öğrenilen" (user already studied them)
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+        let quizStudiedCount = 0; // words studied via quizzes (outside original 45)
+        let weakWords = [];
+        let strongWords = [];
+        for (const w of allWords) {
+            const s = state.wordStats[w.en];
+            if (s && (s.correct + s.wrong) > 0) {
+                if (!originalSet.has(w.en)) quizStudiedCount++;
+                const total = s.correct + s.wrong;
+                const ratio = s.correct / total;
+                if (ratio < 0.5) weakWords.push(w.en);
+                else if (s.streak >= 3) strongWords.push(w.en);
+            }
+        }
+        const originalCount = ORIGINAL_WORDS.length;
+        const studiedCount = originalCount + quizStudiedCount;
+        const unstudiedCount = allWords.length - studiedCount;
+
+        // Mark today's words as review or new
+        const todayReview = words.filter(w => {
+            const s = state.wordStats[w.en];
+            return s && (s.correct + s.wrong) > 0;
+        });
+        const todayNew = words.filter(w => {
+            const s = state.wordStats[w.en];
+            return !s || (s.correct + s.wrong) === 0;
+        });
+
+        el.innerHTML = `
+            <div class="daily-info">
+                <div class="day-label">Bugünün Dersi Hazır!</div>
+                <div class="day-num">${new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}</div>
+                <div class="day-label">${words.length} kelime seni bekliyor
+                    (${todayReview.length} tekrar + ${todayNew.length} yeni)
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3>İlerleme Durumu</h3>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <div style="background:#1e3a5f; padding:10px 18px; border-radius:8px; border:1px solid #38bdf8;">
+                        <span style="color:#38bdf8; font-weight:bold; font-size:20px;">${originalCount}</span>
+                        <span style="color:#94a3b8; font-size:13px;"> öğrenilen (eski liste)</span>
+                    </div>
+                    <div style="background:#052e16; padding:10px 18px; border-radius:8px;">
+                        <span style="color:#4ade80; font-weight:bold; font-size:20px;">${quizStudiedCount}</span>
+                        <span style="color:#94a3b8; font-size:13px;"> yeni çalışılan</span>
+                    </div>
+                    <div style="background:#1e293b; padding:10px 18px; border-radius:8px;">
+                        <span style="color:#94a3b8; font-weight:bold; font-size:20px;">${unstudiedCount}</span>
+                        <span style="color:#64748b; font-size:13px;"> bekleyen</span>
+                    </div>
+                    <div style="background:#1e293b; padding:10px 18px; border-radius:8px;">
+                        <span style="color:#38bdf8; font-weight:bold; font-size:20px;">${allWords.length}</span>
+                        <span style="color:#64748b; font-size:13px;"> toplam</span>
+                    </div>
+                </div>
+                <div style="margin-top:10px; background:#334155; border-radius:6px; height:8px; overflow:hidden;">
+                    <div style="background:#38bdf8; height:100%; width:${Math.round(originalCount/allWords.length*100)}%; position:relative;"></div>
+                    <div style="background:#22c55e; height:100%; width:${Math.round(quizStudiedCount/allWords.length*100)}%; margin-top:-8px;margin-left:${Math.round(originalCount/allWords.length*100)}%;"></div>
+                </div>
+                <div style="color:#64748b; font-size:12px; margin-top:4px;">
+                    %${Math.round(studiedCount/allWords.length*100)} tamamlandı (${studiedCount}/${allWords.length})
+                </div>
+            </div>
+
+            ${weakWords.length > 0 ? `
+            <div class="dashboard-section">
+                <h3>Zayıf Kelimeler (daha çok pratik gerekiyor)</h3>
+                <div class="weak-words">
+                    ${weakWords.slice(0, 10).map(w => `<span class="weak-word">${w}</span>`).join('')}
+                </div>
+            </div>` : ''}
+
+            ${strongWords.length > 0 ? `
+            <div class="dashboard-section">
+                <h3>Güçlü Kelimeler</h3>
+                <div class="weak-words">
+                    ${strongWords.slice(0, 10).map(w => `<span class="strong-word">${w}</span>`).join('')}
+                </div>
+            </div>` : ''}
+
+            <div class="notif-settings">
+                <div class="notif-row">
+                    <div class="notif-info">
+                        <div class="notif-title">Gunluk Hatirlatma</div>
+                        <div class="notif-desc">Her gun belirledigin saatte bildirim al</div>
+                    </div>
+                    <div class="toggle-switch ${getNotifEnabled() ? 'active' : ''}" id="notifToggle" onclick="toggleNotification()"></div>
+                </div>
+                <div class="time-picker" id="timePicker" style="${getNotifEnabled() ? '' : 'display:none'}">
+                    <label>Saat:</label>
+                    <input type="time" id="notifTime" value="${getNotifTime()}" onchange="updateNotifTime(this.value)">
+                    <span style="font-size:12px; color:#64748b;" id="notifStatus">${getNotifEnabled() ? 'Bildirim aktif' : ''}</span>
+                </div>
+            </div>
+
+            <div class="start-section">
+                <p style="color:#94a3b8; margin-bottom:20px;">Her gun 5 kelime (3 tekrar + 2 yeni). Asama asama ilerle!</p>
+                <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn btn-primary" onclick="document.getElementById('navStage1').click()">Derse Basla</button>
+                    <button class="btn btn-secondary" onclick="addExtraWords()">+5 Ekstra Getir</button>
+                    ${state.todayWords.length > 5 ? `<button class="btn btn-secondary" style="border:1px solid #ef4444; color:#ef4444;" onclick="resetToDaily()">Ekstralari Kaldir (${state.todayWords.length - 5} fazla)</button>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderStage1(el) {
+        const words = getTodayWords();
+        el.innerHTML = `
+            <div class="stage-title">1. Aktif Hafıza Tablosu</div>
+            <div class="stage-desc">Bugünün 10 kelimesini incele. Okunuşuna ve anlamına dikkat et.</div>
+            <table class="word-table">
+                <thead>
+                    <tr><th></th><th>Kelime</th><th>Okunuş</th><th>Anlam</th></tr>
+                </thead>
+                <tbody>
+                    ${words.map(w => {
+                        const s = state.wordStats[w.en];
+                        const isOriginal = ORIGINAL_WORDS.some(o => o.en === w.en);
+                        const isNew = !isOriginal && (!s || (s.correct + s.wrong) === 0);
+                        return `
+                        <tr>
+                            <td>${isNew
+                                ? '<span style="background:#1e3a5f;color:#38bdf8;padding:2px 6px;border-radius:4px;font-size:11px;">YENİ</span>'
+                                : '<span style="background:#052e16;color:#4ade80;padding:2px 6px;border-radius:4px;font-size:11px;">TEKRAR</span>'
+                            }</td>
+                            <td class="word-en">${w.en}</td>
+                            <td class="word-pron">${w.pron || ''}</td>
+                            <td>${w.tr}</td>
+                        </tr>`;
+                    }).join('')}
+                </tbody>
+            </table>
+            <div class="btn-center">
+                <button class="btn btn-primary" onclick="completeStage('stage1'); document.getElementById('navStage2').click()">Hazır, Devam Et &rarr;</button>
+            </div>
+        `;
+    }
+
+    async function renderStage2(el) {
+        const words = getTodayWords();
+
+        // Check if any word needs API fetch
+        const needsApi = words.some(w => !w.sentences || w.sentences.length === 0);
+
+        if (needsApi) {
+            el.innerHTML = `
+                <div class="stage-title">2. Örnek Cümleler</div>
+                <div class="stage-desc">Cümleler yükleniyor...</div>
+                <div class="loading"><div class="spinner"></div><div>Cümleler getiriliyor...</div></div>
+            `;
+        }
+
+        // Fetch API details for words without built-in sentences
+        const detailsMap = {};
+        const apiWords = words.filter(w => !w.sentences || w.sentences.length === 0);
+        if (apiWords.length > 0) {
+            const apiDetails = await Promise.all(apiWords.map(w => fetchWordDetails(w.en)));
+            apiWords.forEach((w, i) => { detailsMap[w.en] = apiDetails[i]; });
+        }
+
+        // Build table rows
+        const rows = words.map(w => {
+            let exEn = '', exTr = '', phonetic = w.pron || '';
+
+            if (w.sentences && w.sentences.length > 0) {
+                const s = w.sentences[0];
+                exEn = s.en.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#38bdf8;">$1</strong>');
+                exTr = s.tr || '';
+            } else {
+                const detail = detailsMap[w.en];
+                if (detail) {
+                    phonetic = detail.phonetic || phonetic;
+                    if (detail.sentences && detail.sentences.length > 0) {
+                        const s = detail.sentences[0];
+                        const regex = new RegExp('(' + w.en + ')', 'gi');
+                        exEn = s.en.replace(regex, '<strong style="color:#38bdf8;">$1</strong>');
+                        exTr = s.tr || '';
+                    }
+                }
+            }
+
+            return `<tr>
+                <td class="word-en" style="white-space:nowrap;">${w.en}</td>
+                <td class="word-pron" style="white-space:nowrap;">${phonetic}</td>
+                <td>${w.tr}</td>
+                <td style="font-size:13px;">${exEn || '<span style="color:#475569;">—</span>'}</td>
+                <td style="font-size:13px; color:#94a3b8;">${exTr || '<span style="color:#475569;">—</span>'}</td>
+            </tr>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="stage-title">2. Örnek Cümleler</div>
+            <div class="stage-desc">Bugünün kelimelerini örnek cümleleriyle birlikte incele.</div>
+            <div style="overflow-x:auto;">
+            <table class="word-table">
+                <thead>
+                    <tr><th>Kelime</th><th>Okunuş</th><th>Anlam</th><th>Örnek Cümle</th><th>Türkçe Çeviri</th></tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+            </div>
+            <div class="btn-center">
+                <button class="btn btn-primary" onclick="completeStage('stage2'); document.getElementById('navStage3a').click()">Hazır, Teste Geç &rarr;</button>
+            </div>
+        `;
+    }
+
+    function renderStage3a(el) {
+        const words = getTodayWords();
+        const shuffled = [...words];
+        shuffleArray(shuffled);
+
+        el.innerHTML = `
+            <div class="stage-title">3A. Boşluk Doldurma Testi</div>
+            <div class="stage-desc">Türkçe anlamı verildi, İngilizce kelimeyi yaz.</div>
+            <form id="quiz3aForm" onsubmit="return checkQuiz3a(event)">
+                ${shuffled.map((w, i) => `
+                    <div class="quiz-question" id="q3a_${i}">
+                        <div class="quiz-number">Soru ${i + 1}/${shuffled.length}</div>
+                        <div class="quiz-text"><span class="quiz-hint">${w.tr}</span></div>
+                        <input type="text" class="quiz-input" id="input3a_${i}" data-answer="${w.en}" autocomplete="off" placeholder="İngilizce kelimeyi yaz...">
+                        <div class="quiz-answer" id="answer3a_${i}"></div>
+                    </div>
+                `).join('')}
+                <div class="btn-center">
+                    <button type="submit" class="btn btn-success">Kontrol Et</button>
+                </div>
+            </form>
+        `;
+    }
+
+    function checkQuiz3a(e) {
+        e.preventDefault();
+        let correct = 0;
+        const count = getTodayWords().length;
+
+        for (let i = 0; i < count; i++) {
+            const input = document.getElementById(`input3a_${i}`);
+            const answerDiv = document.getElementById(`answer3a_${i}`);
+            if (!input) continue;
+            const expected = input.dataset.answer.toLowerCase().trim();
+            const given = input.value.toLowerCase().trim();
+
+            if (given === expected) {
+                correct++;
+                input.classList.add('correct');
+                answerDiv.textContent = 'Doğru!';
+                answerDiv.className = 'quiz-answer show correct-answer';
+                updateWordStat(expected, true);
+            } else {
+                input.classList.add('wrong');
+                answerDiv.textContent = `Yanlış! Doğru cevap: ${expected}`;
+                answerDiv.className = 'quiz-answer show wrong-answer';
+                updateWordStat(expected, false);
+            }
+            input.disabled = true;
+        }
+
+        quizAnswers3a.score = correct;
+        quizAnswers3a.total = count;
+        const formEl = document.getElementById('quiz3aForm');
+        const btnDiv = formEl.querySelector('.btn-center');
+        btnDiv.innerHTML = `
+            <span style="font-size:18px; color:${correct >= Math.ceil(count*0.7) ? '#22c55e' : '#f59e0b'}; margin-right:15px;">${correct}/${count} Doğru</span>
+            <button class="btn btn-primary" onclick="completeStage('stage3a'); document.getElementById('navStage3b').click()">Devam Et &rarr;</button>
+        `;
+        return false;
+    }
+
+    function renderStage3b(el) {
+        const words = getTodayWords();
+        const shuffled = [...words];
+        shuffleArray(shuffled);
+
+        el.innerHTML = `
+            <div class="stage-title">3B. Direkt Çeviri Testi</div>
+            <div class="stage-desc">Sadece Türkçe anlam verildi. İngilizce karşılığını yaz. Cümle yok, ipucu yok!</div>
+            <form id="quiz3bForm" onsubmit="return checkQuiz3b(event)">
+                ${shuffled.map((w, i) => `
+                    <div class="quiz-question" id="q3b_${i}">
+                        <div class="quiz-number">Soru ${i + 1}/${shuffled.length}</div>
+                        <div class="quiz-text" style="font-size:20px; color:#f59e0b;">${w.tr}</div>
+                        <input type="text" class="quiz-input" id="input3b_${i}" data-answer="${w.en}" autocomplete="off" placeholder="İngilizce karşılığı...">
+                        <div class="quiz-answer" id="answer3b_${i}"></div>
+                    </div>
+                `).join('')}
+                <div class="btn-center">
+                    <button type="submit" class="btn btn-success">Kontrol Et</button>
+                </div>
+            </form>
+        `;
+    }
+
+    function checkQuiz3b(e) {
+        e.preventDefault();
+        let correct = 0;
+        const count = getTodayWords().length;
+
+        for (let i = 0; i < count; i++) {
+            const input = document.getElementById(`input3b_${i}`);
+            const answerDiv = document.getElementById(`answer3b_${i}`);
+            if (!input) continue;
+            const expected = input.dataset.answer.toLowerCase().trim();
+            const given = input.value.toLowerCase().trim();
+
+            if (given === expected) {
+                correct++;
+                input.classList.add('correct');
+                answerDiv.textContent = 'Doğru!';
+                answerDiv.className = 'quiz-answer show correct-answer';
+                updateWordStat(expected, true);
+            } else {
+                input.classList.add('wrong');
+                answerDiv.textContent = `Yanlış! Doğru cevap: ${expected}`;
+                answerDiv.className = 'quiz-answer show wrong-answer';
+                updateWordStat(expected, false);
+            }
+            input.disabled = true;
+        }
+
+        quizAnswers3b.score = correct;
+        quizAnswers3b.total = count;
+        const formEl = document.getElementById('quiz3bForm');
+        const btnDiv = formEl.querySelector('.btn-center');
+        btnDiv.innerHTML = `
+            <span style="font-size:18px; color:${correct >= Math.ceil(count*0.7) ? '#22c55e' : '#f59e0b'}; margin-right:15px;">${correct}/${count} Doğru</span>
+            <button class="btn btn-primary" onclick="completeStage('stage3b'); document.getElementById('navStage4').click()">Yazma Pratiğine Geç &rarr;</button>
+        `;
+        return false;
+    }
+
+    // Store writing words so we can check them later
+    let writingWordsForCheck = [];
+
+    function renderStage4(el) {
+        const words = getTodayWords();
+        const selected3 = [...words];
+        shuffleArray(selected3);
+        writingWordsForCheck = selected3.slice(0, 2);
+
+        el.innerHTML = `
+            <div class="stage-title">4. Yazma Pratiği</div>
+            <div class="stage-desc">Her kelimeyle İngilizce bir cümle kur. "Kontrol Et" ile gramerini ve kullanımını kontrol et!</div>
+            ${writingWordsForCheck.map((w, i) => `
+                <div class="writing-prompt" id="writingBlock_${i}">
+                    <div style="margin-bottom:8px;">
+                        <span class="writing-word-tag">${w.en}</span>
+                        <span style="color:#94a3b8; margin-left:10px;">(${w.tr})</span>
+                    </div>
+                    <textarea class="writing-area" id="writing_${i}" rows="2" placeholder="${w.en} kelimesiyle İngilizce bir cümle kur..."></textarea>
+                    <div id="writingFeedback_${i}" style="margin-top:8px;"></div>
+                </div>
+            `).join('')}
+            <div class="btn-center">
+                <button class="btn btn-primary" onclick="checkAllWritings()">Kontrol Et</button>
+            </div>
+            <div id="writingFinalBtn" style="display:none;">
+                <div class="btn-center" style="margin-top:15px;">
+                    <button class="btn btn-success" onclick="saveWritings(); completeStage('stage4'); finishDaily();">Dersi Tamamla</button>
+                </div>
+            </div>
+        `;
+    }
+
+    async function checkGrammar(text) {
+        try {
+            const resp = await fetch('https://api.languagetool.org/v2/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `text=${encodeURIComponent(text)}&language=en-US`
+            });
+            if (!resp.ok) return [];
+            const data = await resp.json();
+            return (data.matches || []).map(m => ({
+                message: m.message,
+                offset: m.offset,
+                length: m.length,
+                replacements: (m.replacements || []).slice(0, 3).map(r => r.value),
+                context: m.context ? m.context.text : ''
+            }));
+        } catch (err) {
+            return [];
+        }
+    }
+
+    async function checkAllWritings() {
+        for (let i = 0; i < writingWordsForCheck.length; i++) {
+            const w = writingWordsForCheck[i];
+            const textarea = document.getElementById(`writing_${i}`);
+            const feedbackDiv = document.getElementById(`writingFeedback_${i}`);
+            const text = textarea.value.trim();
+
+            if (!text) {
+                feedbackDiv.innerHTML = '<div style="color:#ef4444; font-size:14px;">Cümle yazmadın!</div>';
+                continue;
+            }
+
+            let issues = [];
+            let good = [];
+
+            // 1. Check if word is used
+            const wordRegex = new RegExp(w.en, 'i');
+            if (wordRegex.test(text)) {
+                good.push('Kelimeyi kullandın');
+            } else {
+                issues.push(`"<strong>${w.en}</strong>" kelimesini cümlede kullanmadın`);
+            }
+
+            // 2. Check minimum length
+            const wordCount = text.split(/\s+/).length;
+            if (wordCount >= 4) {
+                good.push(`${wordCount} kelimelik cümle`);
+            } else {
+                issues.push('Cümle çok kısa (en az 4 kelime olmalı)');
+            }
+
+            // 3. Check starts with capital, ends with punctuation
+            if (/^[A-Z]/.test(text)) {
+                good.push('Büyük harfle başlıyor');
+            } else {
+                issues.push('Cümle büyük harfle başlamalı');
+            }
+
+            if (/[.!?]$/.test(text)) {
+                good.push('Noktalama işareti var');
+            } else {
+                issues.push('Cümle sonuna nokta/soru/ünlem işareti koy');
+            }
+
+            // 4. Grammar check via LanguageTool API
+            feedbackDiv.innerHTML = '<div style="color:#94a3b8; font-size:13px;">Gramer kontrol ediliyor...</div>';
+            const grammarErrors = await checkGrammar(text);
+
+            if (grammarErrors.length === 0) {
+                good.push('Gramer hatası yok');
+            } else {
+                for (const err of grammarErrors) {
+                    let msg = err.message;
+                    if (err.replacements.length > 0) {
+                        msg += ` → <strong>${err.replacements.join(', ')}</strong>`;
+                    }
+                    issues.push(msg);
+                }
+            }
+
+            // 5. Show example sentence for comparison
+            let exampleHtml = '';
+            if (w.sentences && w.sentences.length > 0) {
+                const ex = w.sentences[0];
+                const exEn = ex.en.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#38bdf8;">$1</strong>');
+                exampleHtml = `
+                    <div style="background:#0f172a; padding:10px 14px; border-radius:8px; margin-top:8px; border-left:3px solid #38bdf8;">
+                        <div style="color:#64748b; font-size:11px; margin-bottom:4px;">ÖRNEK CÜMLE:</div>
+                        <div style="font-size:14px;">${exEn}</div>
+                        ${ex.tr ? `<div style="color:#94a3b8; font-size:13px;">${ex.tr}</div>` : ''}
+                    </div>
+                `;
+            } else {
+                // Try from cache
+                const cached = sentenceCache[w.en];
+                if (cached && cached.sentences && cached.sentences.length > 0) {
+                    const ex = cached.sentences[0];
+                    const regex = new RegExp(`(${w.en})`, 'gi');
+                    const exEn = ex.en.replace(regex, '<strong style="color:#38bdf8;">$1</strong>');
+                    exampleHtml = `
+                        <div style="background:#0f172a; padding:10px 14px; border-radius:8px; margin-top:8px; border-left:3px solid #38bdf8;">
+                            <div style="color:#64748b; font-size:11px; margin-bottom:4px;">ÖRNEK CÜMLE:</div>
+                            <div style="font-size:14px;">${exEn}</div>
+                            ${ex.tr ? `<div style="color:#94a3b8; font-size:13px;">${ex.tr}</div>` : ''}
+                        </div>
+                    `;
+                }
+            }
+
+            // Render feedback
+            const hasIssues = issues.length > 0;
+            feedbackDiv.innerHTML = `
+                ${good.length > 0 ? `<div style="color:#22c55e; font-size:13px; margin-bottom:4px;">${good.map(g => '&#10003; ' + g).join(' &nbsp;|&nbsp; ')}</div>` : ''}
+                ${issues.length > 0 ? `<div style="color:#f59e0b; font-size:13px;">${issues.map(g => '&#9888; ' + g).join('<br>')}</div>` : ''}
+                ${!hasIssues ? '<div style="color:#22c55e; font-size:15px; font-weight:bold; margin-top:4px;">Harika cümle!</div>' : ''}
+                ${exampleHtml}
+            `;
+
+            textarea.style.borderColor = hasIssues ? '#f59e0b' : '#22c55e';
+        }
+
+        // Show finish button
+        document.getElementById('writingFinalBtn').style.display = 'block';
+    }
+
+    // ==================== NOTEBOOK (Defterim) ====================
+    let notebookTab = 'words'; // 'words', 'patterns', 'writings', 'stats'
+
+    function renderNotebook(el) {
+        const allWords = getAllWords();
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+
+        // Collect studied words with full info
+        const studied = [];
+        let weakCount = 0, masteredCount = 0;
+        for (const w of allWords) {
+            const s = state.wordStats[w.en];
+            const hasStats = s && (s.correct + s.wrong) > 0;
+            const isOriginal = originalSet.has(w.en);
+            if (hasStats || isOriginal) {
+                const total = hasStats ? (s.correct + s.wrong) : 0;
+                const ratio = total === 0 ? 0 : s.correct / total;
+                studied.push({ ...w, correct: hasStats ? s.correct : 0, wrong: hasStats ? s.wrong : 0, streak: hasStats ? s.streak : 0, ratio, isOriginal, hasStats });
+                if (hasStats && ratio < 0.5) weakCount++;
+                if (hasStats && s.streak >= 5) masteredCount++;
+            }
+        }
+
+        const tabs = [
+            { key: 'words', label: `Kelimelerim (${studied.length})` },
+            { key: 'patterns', label: `Kalıplarım (${learnedPatterns.length})` },
+            { key: 'writings', label: 'Yazdıklarım' },
+            { key: 'stats', label: 'İstatistik' }
+        ];
+
+        let contentHtml = '';
+
+        if (notebookTab === 'words') {
+            contentHtml = renderNotebookWords(studied);
+        } else if (notebookTab === 'patterns') {
+            contentHtml = renderNotebookPatterns();
+        } else if (notebookTab === 'writings') {
+            contentHtml = renderNotebookWritings();
+        } else if (notebookTab === 'stats') {
+            contentHtml = renderNotebookStats(studied, weakCount, masteredCount);
+        }
+
+        el.innerHTML = `
+            <div class="stage-title">Defterim</div>
+            <div class="stage-desc">Öğrendiğin kelimeler, kalıplar ve yazdığın cümleler — Obsidian tarzında.</div>
+            <div class="tab-buttons" style="flex-wrap:wrap;">
+                ${tabs.map(t => `<button class="tab-btn ${notebookTab === t.key ? 'active' : ''}" onclick="notebookTab='${t.key}'; renderNotebook(document.getElementById('contentArea'))">${t.label}</button>`).join('')}
+            </div>
+            ${contentHtml}
+        `;
+    }
+
+    let nbWordSearch = '';
+    let nbWordCategory = 'all';
+
+    // ==================== WORD CATEGORIES (user-assigned) ====================
+    const WORD_CATEGORIES_KEY = 'english_word_categories_v1';
+    function loadWordCategories() {
+        const saved = localStorage.getItem(WORD_CATEGORIES_KEY);
+        return saved ? JSON.parse(saved) : {};
+    }
+    function saveWordCategories() {
+        localStorage.setItem(WORD_CATEGORIES_KEY, JSON.stringify(wordCategories));
+    }
+    let wordCategories = loadWordCategories(); // { "commit": "fiil", "efficient": "sifat", ... }
+
+    // Categorize original words
+    const ORIGINAL_FIILLER = ['commit','update','implement','develop','maintain','deliver','resolve','analyze','verify','investigate','adjust','confirm','determine','collaborate','prepare','improve','prefer'];
+    const ORIGINAL_SIFATLAR = ['efficient','flexible','necessary','urgent','available','appropriate','relevant','crucial','common','potential'];
+    const ORIGINAL_ISIMLER = ['experience','opportunity','improvement','environment','solution','feedback','challenge','requirement','progress','schedule','success','resource','impact','constraint','conclusion','estimate','notice'];
+
+    // Map English POS to Turkish category
+    function posToCategory(pos) {
+        if (!pos) return '';
+        const p = pos.toLowerCase();
+        if (p === 'verb') return 'fiil';
+        if (p === 'noun') return 'isim';
+        if (p === 'adjective') return 'sifat';
+        if (p === 'adverb') return 'zarf';
+        return 'diger';
+    }
+
+    // Auto-assign categories: original words + API cache
+    function autoAssignCategories() {
+        let changed = false;
+        // Original words
+        for (const en of ORIGINAL_FIILLER) { if (!wordCategories[en]) { wordCategories[en] = 'fiil'; changed = true; } }
+        for (const en of ORIGINAL_SIFATLAR) { if (!wordCategories[en]) { wordCategories[en] = 'sifat'; changed = true; } }
+        for (const en of ORIGINAL_ISIMLER) { if (!wordCategories[en]) { wordCategories[en] = 'isim'; changed = true; } }
+        // From API cache
+        for (const [word, data] of Object.entries(sentenceCache)) {
+            if (!wordCategories[word] && data.wordType) {
+                const cat = posToCategory(data.wordType);
+                if (cat) { wordCategories[word] = cat; changed = true; }
+            }
+        }
+        if (changed) saveWordCategories();
+    }
+    autoAssignCategories();
+
+    function setWordCategory(word, cat) {
+        if (cat === '') {
+            delete wordCategories[word];
+        } else {
+            wordCategories[word] = cat;
+        }
+        saveWordCategories();
+        renderNotebook(document.getElementById('contentArea'));
+    }
+
+    function cycleWordCategory(word) {
+        const order = ['fiil', 'sifat', 'isim', 'zarf', 'diger', ''];
+        const current = wordCategories[word] || '';
+        const idx = order.indexOf(current);
+        const next = order[(idx + 1) % order.length];
+        setWordCategory(word, next);
+    }
+
+    const CATEGORY_LABELS = { fiil: 'Fiil', sifat: 'Sıfat', isim: 'İsim', zarf: 'Zarf', diger: 'Diğer' };
+    const CATEGORY_COLORS = { fiil: '#38bdf8', sifat: '#f59e0b', isim: '#a78bfa', zarf: '#22c55e', diger: '#94a3b8' };
+
+    function getWordSentences(w) {
+        let exEn = '', exTr = '';
+        if (w.sentences && w.sentences.length > 0) {
+            const s = w.sentences[0];
+            exEn = s.en.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#38bdf8;">$1</strong>');
+            exTr = s.tr || '';
+        } else {
+            const cached = sentenceCache[w.en];
+            if (cached && cached.sentences && cached.sentences.length > 0) {
+                const s = cached.sentences[0];
+                const regex = new RegExp('(' + w.en + ')', 'gi');
+                exEn = s.en.replace(regex, '<strong style="color:#38bdf8;">$1</strong>');
+                exTr = s.tr || '';
+            }
+        }
+        return { exEn, exTr };
+    }
+
+
+    function renderNotebookWords(studied) {
+        if (studied.length === 0) {
+            return '<div style="color:#64748b; text-align:center; padding:30px;">Henüz çalışılan kelime yok.</div>';
+        }
+
+        // Count per user-assigned category
+        const catCounts = { fiil: 0, sifat: 0, isim: 0, zarf: 0, diger: 0, uncat: 0 };
+        for (const w of studied) {
+            const cat = wordCategories[w.en];
+            if (cat && catCounts[cat] !== undefined) catCounts[cat]++;
+            else if (cat) catCounts[cat]++;
+            else catCounts.uncat++;
+        }
+
+        // Apply category filter
+        let filtered = studied;
+        if (nbWordCategory === 'fiil') filtered = studied.filter(w => wordCategories[w.en] === 'fiil');
+        else if (nbWordCategory === 'sifat') filtered = studied.filter(w => wordCategories[w.en] === 'sifat');
+        else if (nbWordCategory === 'isim') filtered = studied.filter(w => wordCategories[w.en] === 'isim');
+        else if (nbWordCategory === 'zarf') filtered = studied.filter(w => wordCategories[w.en] === 'zarf');
+        else if (nbWordCategory === 'diger') filtered = studied.filter(w => wordCategories[w.en] === 'diger');
+        else if (nbWordCategory === 'uncat') filtered = studied.filter(w => !wordCategories[w.en]);
+        else if (nbWordCategory === 'weak') filtered = studied.filter(w => w.hasStats && w.ratio < 0.5);
+        else if (nbWordCategory === 'mastered') filtered = studied.filter(w => w.hasStats && w.streak >= 5);
+
+        // Apply search
+        if (nbWordSearch) {
+            const q = nbWordSearch.toLowerCase();
+            filtered = filtered.filter(w => w.en.includes(q) || w.tr.toLowerCase().includes(q));
+        }
+
+        const categories = [
+            { key: 'all', label: `Tümü (${studied.length})`, color: '#a78bfa' },
+            { key: 'fiil', label: `Fiiller (${catCounts.fiil})`, color: '#38bdf8' },
+            { key: 'sifat', label: `Sıfatlar (${catCounts.sifat})`, color: '#f59e0b' },
+            { key: 'isim', label: `İsimler (${catCounts.isim})`, color: '#a78bfa' },
+            { key: 'zarf', label: `Zarflar (${catCounts.zarf})`, color: '#22c55e' },
+            { key: 'diger', label: `Diğer (${catCounts.diger})`, color: '#94a3b8' },
+            { key: 'uncat', label: `Kategorisiz (${catCounts.uncat})`, color: '#64748b' },
+            { key: 'weak', label: `Zayıflar (${studied.filter(w => w.hasStats && w.ratio < 0.5).length})`, color: '#ef4444' },
+            { key: 'mastered', label: `Hakimler (${studied.filter(w => w.hasStats && w.streak >= 5).length})`, color: '#22c55e' }
+        ];
+
+        // Limit to 30 for performance
+        const showing = filtered.slice(0, 30);
+
+        const rows = showing.map(w => {
+            const { exEn, exTr } = getWordSentences(w);
+            const total = w.correct + w.wrong;
+            const pct = total > 0 ? Math.round(w.correct / total * 100) : -1;
+            const scoreColor = pct < 0 ? '#64748b' : pct >= 70 ? '#22c55e' : pct >= 40 ? '#f59e0b' : '#ef4444';
+            const scoreText = pct < 0 ? '—' : '%' + pct;
+            const cat = wordCategories[w.en] || '';
+            const catColor = CATEGORY_COLORS[cat] || '#64748b';
+            const catLabel = CATEGORY_LABELS[cat] || '';
+
+            return `<tr>
+                <td class="word-en" style="white-space:nowrap;">${w.en}</td>
+                <td class="word-pron" style="white-space:nowrap;">${w.pron || ''}</td>
+                <td style="white-space:nowrap;">
+                    ${cat ? `<span style="background:${catColor}22; color:${catColor}; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; cursor:pointer;" onclick="cycleWordCategory('${w.en}')" title="Tıkla: değiştir">${catLabel}</span>` : `<span style="color:#475569; font-size:11px; cursor:pointer;" onclick="cycleWordCategory('${w.en}')" title="Tıkla: kategori ata">—</span>`}
+                </td>
+                <td>${w.tr}</td>
+                <td style="font-size:13px; max-width:200px;">${exEn || '<span style="color:#475569;">—</span>'}</td>
+                <td style="font-size:13px; color:#94a3b8; max-width:200px;">${exTr || '<span style="color:#475569;">—</span>'}</td>
+                <td style="text-align:center;"><span style="color:${scoreColor}; font-weight:600;">${scoreText}</span></td>
+            </tr>`;
+        }).join('');
+
+        return `
+            <input type="text" class="add-form-input" id="nbSearchInput" placeholder="Kelime ara (İngilizce veya Türkçe)..." value="${nbWordSearch}"
+                oninput="clearTimeout(window._nbSearchTimer); window._nbSearchTimer=setTimeout(()=>{nbWordSearch=this.value; renderNotebook(document.getElementById('contentArea'));},300);"
+                style="margin-bottom:12px;">
+
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:15px;">
+                ${categories.map(c => `
+                    <button onclick="nbWordCategory='${c.key}'; renderNotebook(document.getElementById('contentArea'));"
+                        style="padding:5px 12px; border-radius:6px; font-size:12px; cursor:pointer; border:1px solid ${nbWordCategory === c.key ? c.color : '#334155'}; background:${nbWordCategory === c.key ? c.color : 'transparent'}; color:${nbWordCategory === c.key ? '#0f172a' : '#94a3b8'};">
+                        ${c.label}
+                    </button>
+                `).join('')}
+            </div>
+
+            ${filtered.length === 0 ? '<div style="color:#64748b; text-align:center; padding:20px;">Bu filtreyle eşleşen kelime yok.</div>' : `
+                <div style="color:#64748b; font-size:12px; margin-bottom:8px;">${showing.length}/${filtered.length} kelime gösteriliyor${filtered.length > 30 ? ' — arama ile daralt' : ''}</div>
+                <div style="max-height:500px; overflow-y:auto; overflow-x:auto;">
+                <table class="word-table">
+                    <thead>
+                        <tr><th>Kelime</th><th>Okunuş</th><th>Tür</th><th>Anlam</th><th>Örnek Cümle</th><th>Türkçe Çeviri</th><th>Skor</th></tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+                </div>
+            `}
+        `;
+    }
+
+    function renderNotebookPatterns() {
+        const learnedSet = new Set(learnedPatterns);
+        const learned = PATTERNS.filter(p => learnedSet.has(p.pattern));
+
+        if (learned.length === 0) {
+            return '<div style="color:#64748b; text-align:center; padding:30px;">Henüz öğrenilmiş kalıp yok. Kalıplar sayfasından "Öğrendim" butonuyla işaretle.</div>';
+        }
+
+        return `
+            <div style="color:#94a3b8; font-size:14px; margin-bottom:15px;">
+                ${learned.length} / ${PATTERNS.length} kalıp öğrenildi
+            </div>
+            <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
+            <table class="word-table">
+                <thead>
+                    <tr><th>Kalıp</th><th>Anlamı</th><th>Örnek</th><th>Çeviri</th></tr>
+                </thead>
+                <tbody>
+                    ${learned.map(p => `<tr>
+                        <td style="color:#22c55e; font-weight:600;">${p.pattern}</td>
+                        <td>${p.meaning}</td>
+                        <td style="font-size:13px;">${p.example}</td>
+                        <td style="font-size:13px; color:#94a3b8;">${p.exampleTr}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>
+        `;
+    }
+
+    function renderNotebookWritings() {
+        const writings = state.writings || [];
+        if (writings.length === 0) {
+            return '<div style="color:#64748b; text-align:center; padding:30px;">Henüz yazma pratiği yapmadın.</div>';
+        }
+        return `
+            <div style="max-height:600px; overflow-y:auto;">
+                ${writings.slice().reverse().map(entry => `
+                    <div style="background:#0f172a; border-radius:8px; padding:14px; margin-bottom:10px;">
+                        <div style="color:#38bdf8; font-size:13px; font-weight:600; margin-bottom:8px;">${entry.date}</div>
+                        ${entry.texts.map(t => `<div style="font-size:14px; margin-bottom:6px; padding:8px 12px; border-left:3px solid #a78bfa; background:#1e293b; border-radius:0 6px 6px 0;">${t}</div>`).join('')}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function renderNotebookStats(studied, weakCount, masteredCount) {
+        const allWords = getAllWords();
+        const totalSessions = state.totalSessions || 0;
+        const totalCorrect = Object.values(state.wordStats).reduce((sum, s) => sum + (s.correct || 0), 0);
+        const totalWrong = Object.values(state.wordStats).reduce((sum, s) => sum + (s.wrong || 0), 0);
+        const totalAnswers = totalCorrect + totalWrong;
+        const overallPct = totalAnswers > 0 ? Math.round(totalCorrect / totalAnswers * 100) : 0;
+
+        return `
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#38bdf8;">${studied.length}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Çalışılan Kelime</div>
+                </div>
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#94a3b8;">${allWords.length - studied.length}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Bekleyen Kelime</div>
+                </div>
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#22c55e;">${masteredCount}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Hakim Olunan</div>
+                </div>
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#ef4444;">${weakCount}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Zayıf Kelime</div>
+                </div>
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#f59e0b;">${state.streak || 0}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Gün Serisi</div>
+                </div>
+                <div style="background:#0f172a; padding:18px; border-radius:10px; text-align:center;">
+                    <div style="font-size:36px; font-weight:bold; color:#a78bfa;">${totalSessions}</div>
+                    <div style="color:#94a3b8; font-size:13px;">Toplam Oturum</div>
+                </div>
+            </div>
+            <div style="background:#0f172a; padding:18px; border-radius:10px;">
+                <div style="color:#94a3b8; font-size:13px; margin-bottom:8px;">Genel Başarı Oranı</div>
+                <div style="display:flex; align-items:center; gap:15px;">
+                    <div style="font-size:42px; font-weight:bold; color:${overallPct >= 70 ? '#22c55e' : overallPct >= 40 ? '#f59e0b' : '#ef4444'};">%${overallPct}</div>
+                    <div style="flex:1;">
+                        <div style="background:#334155; border-radius:6px; height:10px; overflow:hidden;">
+                            <div style="background:${overallPct >= 70 ? '#22c55e' : overallPct >= 40 ? '#f59e0b' : '#ef4444'}; height:100%; width:${overallPct}%;"></div>
+                        </div>
+                        <div style="color:#64748b; font-size:12px; margin-top:4px;">${totalCorrect} doğru / ${totalWrong} yanlış — toplam ${totalAnswers} cevap</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================== LEARNED PATTERNS ====================
+    const LEARNED_PATTERNS_KEY = 'english_learned_patterns_v1';
+
+    function loadLearnedPatterns() {
+        const saved = localStorage.getItem(LEARNED_PATTERNS_KEY);
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    function saveLearnedPatterns() {
+        localStorage.setItem(LEARNED_PATTERNS_KEY, JSON.stringify(learnedPatterns));
+    }
+
+    let learnedPatterns = loadLearnedPatterns(); // array of pattern strings
+
+    function toggleLearnedPattern(pattern) {
+        const idx = learnedPatterns.indexOf(pattern);
+        if (idx >= 0) {
+            learnedPatterns.splice(idx, 1); // geri al
+        } else {
+            learnedPatterns.push(pattern); // öğrendim
+        }
+        saveLearnedPatterns();
+        renderPatterns(document.getElementById('contentArea'));
+    }
+
+    function renderPatterns(el) {
+        const learnedSet = new Set(learnedPatterns);
+
+        // Show unlearned first, then offer to see learned
+        const unlearned = PATTERNS.filter(p => !learnedSet.has(p.pattern));
+        const shuffled = [...unlearned];
+        shuffleArray(shuffled);
+        const daily = shuffled.slice(0, 5);
+
+        el.innerHTML = `
+            <div class="stage-title">Günün Kalıpları</div>
+            <div class="stage-desc">
+                ${unlearned.length} yeni kalıp kaldı — öğrendiklerini işaretle, defterine eklensin.
+                <span style="color:#22c55e;">${learnedPatterns.length} öğrenildi</span> / ${PATTERNS.length} toplam
+            </div>
+
+            ${daily.length > 0 ? daily.map((p, i) => `
+                <div class="pattern-card" id="patternCard_${i}">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                        <div style="flex:1;">
+                            <div class="pattern-text">${p.pattern}</div>
+                            <div class="pattern-meaning">${p.meaning}</div>
+                            <div class="pattern-example">${p.example}</div>
+                            <div class="pattern-example-tr">${p.exampleTr}</div>
+                        </div>
+                        <button onclick="toggleLearnedPattern('${p.pattern.replace(/'/g, "\\'")}')"
+                            class="btn" style="padding:6px 14px; font-size:13px; background:#22c55e; color:#fff; white-space:nowrap;">
+                            Öğrendim &#10003;
+                        </button>
+                    </div>
+                </div>
+            `).join('') : '<div style="color:#22c55e; text-align:center; padding:30px; font-size:18px;">Tüm kalıpları öğrendin! Tebrikler!</div>'}
+
+            ${learnedPatterns.length > 0 ? `
+                <h3 style="color:#22c55e; font-size:16px; margin:25px 0 10px; border-bottom:1px solid #334155; padding-bottom:6px;">Öğrendiğin Kalıplar (${learnedPatterns.length})</h3>
+                ${PATTERNS.filter(p => learnedSet.has(p.pattern)).map(p => `
+                    <div class="pattern-card" style="border-left-color:#22c55e; opacity:0.8;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                            <div style="flex:1;">
+                                <div class="pattern-text" style="color:#22c55e;">${p.pattern}</div>
+                                <div class="pattern-meaning">${p.meaning}</div>
+                                <div class="pattern-example">${p.example}</div>
+                                <div class="pattern-example-tr">${p.exampleTr}</div>
+                            </div>
+                            <button onclick="toggleLearnedPattern('${p.pattern.replace(/'/g, "\\'")}')"
+                                class="btn" style="padding:6px 14px; font-size:12px; background:transparent; border:1px solid #ef4444; color:#ef4444; white-space:nowrap;">
+                                Geri Al
+                            </button>
+                        </div>
+                    </div>
+                `).join('')}
+            ` : ''}
+
+            <div class="btn-center">
+                <button class="btn btn-secondary" onclick="completeStage('patterns'); renderPatterns(document.getElementById('contentArea'));">Yeni 5 Kalıp Getir</button>
+            </div>
+        `;
+    }
+
+    function renderResults(el) {
+        const score3a = quizAnswers3a.score || 0;
+        const score3b = quizAnswers3b.score || 0;
+        const total3a = quizAnswers3a.total || 10;
+        const total3b = quizAnswers3b.total || 10;
+        const total = score3a + score3b;
+        const maxTotal = total3a + total3b;
+        const pct = Math.round((total / maxTotal) * 100);
+
+        let cls = 'bad', msg = 'Daha çok pratik gerekiyor!', emoji = '';
+        if (pct >= 80) { cls = 'great'; msg = 'Harika! Çok iyi gidiyorsun!'; emoji = '&#127881;'; }
+        else if (pct >= 50) { cls = 'ok'; msg = 'Fena değil, ama daha iyi olabilir!'; emoji = '&#128170;'; }
+
+        el.innerHTML = `
+            <div class="result-card">
+                <div class="stage-title">Günün Sonucu ${emoji}</div>
+                <div class="result-score ${cls}">%${pct}</div>
+                <div class="result-message">${msg}</div>
+                <div class="result-detail">
+                    Boşluk Doldurma: ${score3a}/${total3a} | Direkt Çeviri: ${score3b}/${total3b} | Toplam: ${total}/${maxTotal}
+                </div>
+                <div class="result-detail">
+                    Gün Serisi: ${state.streak} gün | Toplam Oturum: ${state.totalSessions}
+                </div>
+                <div class="btn-center">
+                    <button class="btn btn-primary" onclick="location.reload()">Ana Sayfaya Dön</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // ==================== HELPERS ====================
+    function updateWordStat(word, isCorrect) {
+        if (!state.wordStats[word]) {
+            state.wordStats[word] = { correct: 0, wrong: 0, lastSeen: null, streak: 0 };
+        }
+        const s = state.wordStats[word];
+        if (isCorrect) {
+            s.correct++;
+            s.streak++;
+        } else {
+            s.wrong++;
+            s.streak = 0;
+        }
+        s.lastSeen = getTodayStr();
+        saveState();
+    }
+
+    function completeStage(stage) {
+        state.completedStages[stage] = true;
+        const navBtn = document.getElementById('nav' + stage.charAt(0).toUpperCase() + stage.slice(1));
+        if (navBtn) navBtn.classList.add('completed');
+        saveState();
+        updateStats();
+    }
+
+    function saveWritings() {
+        const writings = [];
+        for (let i = 0; i < 2; i++) {
+            const ta = document.getElementById(`writing_${i}`);
+            if (ta && ta.value.trim()) writings.push(ta.value.trim());
+        }
+        if (writings.length > 0) {
+            state.writings.push({ date: getTodayStr(), texts: writings });
+        }
+        saveState();
+    }
+
+    function addExtraWords() {
+        const allWords = getAllWords();
+        const currentKeys = new Set(state.todayWords);
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+
+        // Find 5 more words not already in today's list
+        const candidates = allWords.filter(w => !currentKeys.has(w.en));
+        const seenExtra = [];
+        const unseenExtra = [];
+
+        for (const w of candidates) {
+            const stats = state.wordStats[w.en];
+            const hasStats = stats && (stats.correct + stats.wrong) > 0;
+            const isOriginal = originalSet.has(w.en);
+            if (hasStats || isOriginal) {
+                seenExtra.push(w.en);
+            } else {
+                unseenExtra.push(w.en);
+            }
+        }
+
+        shuffleArray(seenExtra);
+        shuffleArray(unseenExtra);
+
+        const extra = [...seenExtra.slice(0, 3), ...unseenExtra.slice(0, 2)];
+        if (extra.length === 0) {
+            alert('Eklenecek kelime kalmadı!');
+            return;
+        }
+
+        state.todayWords = [...state.todayWords, ...extra].slice(0, state.todayWords.length + 5);
+        state.completedStages = {}; // Reset stages since word list changed
+        saveState();
+
+        // Refresh dashboard
+        renderDashboard(document.getElementById('contentArea'));
+        updateStats();
+    }
+
+    function resetToDaily() {
+        state.todayWords = state.todayWords.slice(0, 5);
+        state.completedStages = {};
+        saveState();
+        renderDashboard(document.getElementById('contentArea'));
+        updateStats();
+    }
+
+    function finishDaily() {
+        const today = getTodayStr();
+        // Prevent double streak increment on same day
+        if (state.lastPracticeDate === today) {
+            currentStage = 'results';
+            renderResults(document.getElementById('contentArea'));
+            return;
+        }
+        state.lastPracticeDate = today;
+        state.streak++;
+        state.totalSessions++;
+        saveState();
+
+        currentStage = 'results';
+        renderResults(document.getElementById('contentArea'));
+    }
+
+    // ==================== ADD WORD ====================
+    let addWordTab = 'add';
+    let sentenceCount = 1;
+
+    function renderAddWord(el) {
+        const allWords = getAllWords();
+        el.innerHTML = `
+            <div class="stage-title">Kelime Yönetimi</div>
+            <div class="stage-desc">Yeni kelime ekle veya mevcut kelimeleri gör.</div>
+
+            <div class="tab-buttons">
+                <button class="tab-btn ${addWordTab === 'add' ? 'active' : ''}" onclick="addWordTab='add'; renderAddWord(document.getElementById('contentArea'))">Yeni Kelime Ekle</button>
+                <button class="tab-btn ${addWordTab === 'list' ? 'active' : ''}" onclick="addWordTab='list'; renderAddWord(document.getElementById('contentArea'))">Tüm Kelimeler (${allWords.length})</button>
+            </div>
+
+            <div class="success-msg" id="addSuccessMsg">Kelime başarıyla eklendi!</div>
+
+            ${addWordTab === 'add' ? renderAddForm() : renderWordList()}
+        `;
+    }
+
+    function renderAddForm() {
+        sentenceCount = 1;
+        return `
+            <form id="addWordForm" onsubmit="return handleAddWord(event)">
+                <div class="add-form-row">
+                    <div class="add-form-group">
+                        <label>İngilizce Kelime</label>
+                        <input type="text" class="add-form-input" id="newWordEn" placeholder="örn: accomplish" required>
+                    </div>
+                    <div class="add-form-group">
+                        <label>Okunuş</label>
+                        <input type="text" class="add-form-input" id="newWordPron" placeholder="örn: Ekamplış">
+                    </div>
+                </div>
+
+                <div class="add-form-group">
+                    <label>Türkçe Anlamı</label>
+                    <input type="text" class="add-form-input" id="newWordTr" placeholder="örn: Başarmak, tamamlamak" required>
+                </div>
+
+                <div class="btn-center">
+                    <button type="submit" class="btn btn-success">Kelimeyi Kaydet</button>
+                </div>
+                <p style="color:#64748b; font-size:12px; text-align:center; margin-top:10px;">
+                    Örnek cümleler API'den otomatik çekilecek.
+                </p>
+            </form>
+        `;
+    }
+
+    function handleAddWord(e) {
+        e.preventDefault();
+        const en = document.getElementById('newWordEn').value.trim().toLowerCase();
+        const pron = document.getElementById('newWordPron').value.trim() || '';
+        const tr = document.getElementById('newWordTr').value.trim();
+
+        // Check duplicate
+        const allWords = getAllWords();
+        if (allWords.some(w => w.en.toLowerCase() === en)) {
+            alert('Bu kelime zaten mevcut!');
+            return false;
+        }
+
+        const newWord = { en, pron, tr, custom: true, addedDate: getTodayStr() };
+        customWords.push(newWord);
+        saveCustomWords();
+
+        // Reset today's words so new word can appear
+        state.todayDate = null;
+        state.todayWords = [];
+        saveState();
+        selectDailyWords();
+
+        // Show success
+        const msg = document.getElementById('addSuccessMsg');
+        msg.classList.add('show');
+        msg.textContent = `"${en}" başarıyla eklendi! Toplam: ${getAllWords().length} kelime`;
+        setTimeout(() => msg.classList.remove('show'), 3000);
+
+        // Re-render form
+        const formArea = document.getElementById('addWordForm');
+        formArea.outerHTML = renderAddForm();
+        updateStats();
+        return false;
+    }
+
+    let wordListSearch = '';
+
+    function renderWordList() {
+        const allWords = getAllWords();
+        const customCount = customWords.length;
+
+        // Filter by search
+        const filtered = wordListSearch
+            ? allWords.filter(w => w.en.includes(wordListSearch.toLowerCase()) || w.tr.toLowerCase().includes(wordListSearch.toLowerCase()))
+            : allWords;
+
+        // Show max 50 at a time
+        const showing = filtered.slice(0, 50);
+
+        return `
+            <div style="margin-bottom:15px; color:#94a3b8; font-size:14px;">
+                ${allWords.length} toplam kelime ${customCount > 0 ? `(${customCount} eklenen)` : ''}
+            </div>
+            <input type="text" class="add-form-input" placeholder="Kelime ara (İngilizce veya Türkçe)..." value="${wordListSearch}"
+                oninput="wordListSearch=this.value; document.getElementById('wordListContainer').innerHTML = buildWordItems();"
+                style="margin-bottom:15px;">
+            <div id="wordListContainer" style="max-height:450px; overflow-y:auto;">
+                ${buildWordItemsFrom(showing)}
+            </div>
+            ${filtered.length > 50 ? `<div style="color:#64748b; font-size:13px; text-align:center; margin-top:10px;">İlk 50 gösteriliyor (toplam ${filtered.length}). Arama yaparak daraltın.</div>` : ''}
+        `;
+    }
+
+    function buildWordItems() {
+        const allWords = getAllWords();
+        const filtered = wordListSearch
+            ? allWords.filter(w => w.en.includes(wordListSearch.toLowerCase()) || w.tr.toLowerCase().includes(wordListSearch.toLowerCase()))
+            : allWords;
+        return buildWordItemsFrom(filtered.slice(0, 50));
+    }
+
+    function buildWordItemsFrom(list) {
+        return list.map(w => `
+            <div class="word-list-item">
+                <div class="word-info">
+                    <span class="word-name">${w.en}</span>
+                    ${w.custom ? '<span class="word-badge" style="background:#052e16; color:#4ade80;">eklenen</span>' : ''}
+                    <div class="word-meaning">${w.tr} ${w.pron ? '— ' + w.pron : ''}</div>
+                </div>
+                ${w.custom ? `<button class="delete-word-btn" onclick="deleteCustomWord('${w.en}')">Sil</button>` : ''}
+            </div>
+        `).join('');
+    }
+
+    function deleteCustomWord(en) {
+        if (!confirm(`"${en}" kelimesini silmek istediğinize emin misiniz?`)) return;
+        customWords = customWords.filter(w => w.en !== en);
+        saveCustomWords();
+        state.todayDate = null;
+        state.todayWords = [];
+        saveState();
+        selectDailyWords();
+        renderAddWord(document.getElementById('contentArea'));
+        updateStats();
+    }
+
+    // ==================== PWA & NOTIFICATIONS ====================
+    let deferredInstallPrompt = null;
+
+    // PWA Install
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        const dismissed = localStorage.getItem('pwa_banner_dismissed');
+        if (!dismissed) {
+            document.getElementById('pwaBanner').classList.add('show');
+        }
+    });
+
+    function installPWA() {
+        if (!deferredInstallPrompt) {
+            alert('Tarayicinin menusunden "Ana ekrana ekle" secenegini kullanabilirsin.');
+            return;
+        }
+        deferredInstallPrompt.prompt();
+        deferredInstallPrompt.userChoice.then(result => {
+            if (result.outcome === 'accepted') {
+                document.getElementById('pwaBanner').classList.remove('show');
+            }
+            deferredInstallPrompt = null;
+        });
+    }
+
+    function dismissPWA() {
+        document.getElementById('pwaBanner').classList.remove('show');
+        localStorage.setItem('pwa_banner_dismissed', '1');
+    }
+
+    window.addEventListener('appinstalled', () => {
+        document.getElementById('pwaBanner').classList.remove('show');
+        deferredInstallPrompt = null;
+    });
+
+    // Notification helpers
+    function getNotifEnabled() {
+        return localStorage.getItem('notif_enabled') === '1';
+    }
+
+    function getNotifTime() {
+        return localStorage.getItem('notif_time') || '09:00';
+    }
+
+    async function toggleNotification() {
+        const toggle = document.getElementById('notifToggle');
+        const timePicker = document.getElementById('timePicker');
+        const status = document.getElementById('notifStatus');
+
+        if (!getNotifEnabled()) {
+            // Enable
+            if (!('Notification' in window)) {
+                alert('Bu tarayici bildirimleri desteklemiyor.');
+                return;
+            }
+            const perm = await Notification.requestPermission();
+            if (perm !== 'granted') {
+                alert('Bildirim izni verilmedi. Tarayici ayarlarindan izin vermelisin.');
+                return;
+            }
+            localStorage.setItem('notif_enabled', '1');
+            toggle.classList.add('active');
+            timePicker.style.display = '';
+            status.textContent = 'Bildirim aktif';
+            scheduleNotification();
+        } else {
+            // Disable
+            localStorage.setItem('notif_enabled', '0');
+            toggle.classList.remove('active');
+            timePicker.style.display = 'none';
+            status.textContent = '';
+        }
+    }
+
+    function updateNotifTime(val) {
+        localStorage.setItem('notif_time', val);
+        const status = document.getElementById('notifStatus');
+        if (status) status.textContent = 'Saat guncellendi: ' + val;
+        scheduleNotification();
+    }
+
+    function scheduleNotification() {
+        if (!getNotifEnabled()) return;
+        const time = getNotifTime();
+        const [h, m] = time.split(':').map(Number);
+
+        // Tell service worker to schedule
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({
+                type: 'SCHEDULE_NOTIFICATION',
+                hour: h,
+                minute: m
+            });
+        }
+
+        // Also set a local fallback timer for current session
+        clearTimeout(window._notifTimer);
+        const now = new Date();
+        let target = new Date();
+        target.setHours(h, m, 0, 0);
+        if (target <= now) target.setDate(target.getDate() + 1);
+        const delay = target - now;
+        window._notifTimer = setTimeout(() => {
+            if (Notification.permission === 'granted') {
+                new Notification('English Daily Practice', {
+                    body: 'Bugunun 5 kelimesi seni bekliyor! Hadi pratik yapalim.',
+                    icon: './icon-192.png',
+                    tag: 'daily-reminder'
+                });
+            }
+            // Reschedule
+            scheduleNotification();
+        }, delay);
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js').then(reg => {
+            console.log('SW registered:', reg.scope);
+            // Schedule notification after SW is ready
+            navigator.serviceWorker.ready.then(() => {
+                if (getNotifEnabled()) scheduleNotification();
+            });
+        }).catch(err => console.log('SW failed:', err));
+    }
+
+    // ==================== INIT ====================
+    // Clear old sentence cache without Turkish translations (one-time migration)
+    const CACHE_VERSION_KEY = 'english_cache_version';
+    if (localStorage.getItem(CACHE_VERSION_KEY) !== 'v2') {
+        localStorage.removeItem(SENTENCE_CACHE_KEY);
+        sentenceCache = {};
+        localStorage.setItem(CACHE_VERSION_KEY, 'v2');
+    }
+
+    selectDailyWords();
+    renderDashboard(document.getElementById('contentArea'));
+    updateStats();
+
+    // Show install banner on iOS (no beforeinstallprompt)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+    if (isIOS && !isStandalone && !localStorage.getItem('pwa_banner_dismissed')) {
+        const banner = document.getElementById('pwaBanner');
+        banner.classList.add('show');
+        document.getElementById('pwaInstallBtn').textContent = 'Nasil?';
+        document.getElementById('pwaInstallBtn').onclick = () => {
+            alert('Safari\'de alt menudeki Paylas butonuna bas, sonra "Ana Ekrana Ekle" secenegine tikla.');
+        };
+    }
+    </script>
+</body>
+</html>
