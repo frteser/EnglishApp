@@ -475,6 +475,113 @@
             font-size: 14px;
         }
 
+        /* TTS & Speaking */
+        .speak-btn {
+            background: none; border: none; cursor: pointer;
+            color: #38bdf8; font-size: 18px; padding: 4px 8px;
+            border-radius: 6px; transition: all 0.2s; vertical-align: middle;
+        }
+        .speak-btn:hover { background: #1e293b; transform: scale(1.2); }
+        .speak-btn.playing { color: #22c55e; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+        .speaking-card {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .speaking-word {
+            font-size: 32px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 8px;
+        }
+        .speaking-meaning {
+            color: #94a3b8;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        .mic-btn {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            border: 3px solid #38bdf8;
+            background: #1e293b;
+            color: #38bdf8;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mic-btn:hover { background: #334155; }
+        .mic-btn.recording {
+            border-color: #ef4444;
+            background: #350a0a;
+            color: #ef4444;
+            animation: pulse 0.8s infinite;
+        }
+        .mic-btn.success {
+            border-color: #22c55e;
+            background: #052e16;
+            color: #22c55e;
+        }
+        .speaking-result {
+            margin-top: 16px;
+            font-size: 16px;
+            min-height: 24px;
+        }
+        .speaking-heard {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+        .speaking-score {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        .speaking-score.good { background: #052e16; color: #4ade80; }
+        .speaking-score.ok { background: #451a03; color: #fb923c; }
+        .speaking-score.bad { background: #350a0a; color: #f87171; }
+        .speaking-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .speaking-progress {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+        .speaking-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: #334155;
+        }
+        .speaking-dot.active { background: #38bdf8; }
+        .speaking-dot.done { background: #22c55e; }
+        .speaking-dot.wrong { background: #ef4444; }
+        .dictation-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+        }
+        .dictation-input:focus { border-color: #38bdf8; }
+
         /* Responsive */
         @media (max-width: 600px) {
             .container { padding: 10px; }
@@ -531,6 +638,8 @@
             <button class="stage-btn" onclick="navigateStage('stage3b', this)" id="navStage3b">3B. Çeviri</button>
             <button class="stage-btn" onclick="navigateStage('stage4', this)" id="navStage4">4. Yazma</button>
             <button class="stage-btn" onclick="navigateStage('patterns', this)" id="navPatterns">Kalıplar</button>
+            <button class="stage-btn" onclick="navigateStage('speaking', this)" id="navSpeaking" style="border-color:#f59e0b; color:#f59e0b;">Konus</button>
+            <button class="stage-btn" onclick="navigateStage('dictation', this)" id="navDictation" style="border-color:#f59e0b; color:#f59e0b;">Dinle&Yaz</button>
             <button class="stage-btn" onclick="navigateStage('notebook', this)" id="navNotebook" style="border-color:#a78bfa; color:#a78bfa;">Defterim</button>
             <button class="stage-btn" onclick="navigateStage('addword', this)" id="navAddword" style="border-color:#22c55e; color:#22c55e;">+ Kelime Ekle</button>
         </div>
@@ -928,7 +1037,8 @@
         // Force re-select if switching from old 10-word system
         state.todayWords = [];
 
-        // Split words into: seen (practiced before / original 45) and unseen (never practiced)
+        // Leitner Spaced Repetition: Box 1=her gun, Box 2=2 gunde bir, Box 3=4 gunde bir, Box 4=7 gunde bir, Box 5=14 gunde bir
+        const BOX_INTERVALS = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 };
         const seenWords = [];
         const unseenWords = [];
         const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
@@ -939,18 +1049,21 @@
             const isOriginal = originalSet.has(w.en);
 
             if (hasStats || isOriginal) {
+                const box = (hasStats && stats.box) ? stats.box : 1;
+                const interval = BOX_INTERVALS[box] || 1;
+                const daysSince = (hasStats && stats.lastSeen) ? Math.floor((Date.now() - new Date(stats.lastSeen).getTime()) / 86400000) : 999;
+                const isDue = daysSince >= interval;
                 const total = hasStats ? (stats.correct + stats.wrong) : 0;
                 const ratio = total === 0 ? 0.5 : stats.correct / total;
-                const daysSince = (hasStats && stats.lastSeen) ? Math.floor((Date.now() - new Date(stats.lastSeen).getTime()) / 86400000) : 30;
-                const priority = ratio * 10 - daysSince * 2 - ((hasStats ? stats.wrong : 0) * 3) + ((hasStats ? stats.streak : 0) * 5);
-                seenWords.push({ key: w.en, priority });
+                // Lower priority = more urgent to review
+                const priority = isDue ? (box - 6 + ratio * 2) : (box + 10);
+                seenWords.push({ key: w.en, priority, isDue, box });
             } else {
                 unseenWords.push({ key: w.en });
             }
         }
 
-        // 7 words from seen (weakest first), 3 words from unseen (random new words)
-        // If not enough seen words, fill with unseen; if not enough unseen, fill with seen
+        // Due words first (sorted by priority), then non-due
         seenWords.sort((a, b) => a.priority - b.priority);
         shuffleArray(unseenWords);
 
@@ -959,11 +1072,13 @@
         const REVIEW_TARGET = 3;
         const NEW_TARGET = 2;
 
-        const reviewCount = Math.min(REVIEW_TARGET, seenWords.length);
+        // Pick due words first for review
+        const dueWords = seenWords.filter(w => w.isDue);
+        const reviewCount = Math.min(REVIEW_TARGET, dueWords.length);
         const newCount = Math.min(NEW_TARGET, unseenWords.length);
         const fillCount = DAILY_COUNT - reviewCount - newCount;
 
-        const reviewCandidates = seenWords.slice(0, reviewCount * 2);
+        const reviewCandidates = dueWords.slice(0, reviewCount * 2);
         shuffleArray(reviewCandidates);
         const reviewPick = reviewCandidates.slice(0, reviewCount).map(c => c.key);
 
@@ -1026,6 +1141,8 @@
             case 'stage3b': renderStage3b(content); break;
             case 'stage4': renderStage4(content); break;
             case 'patterns': renderPatterns(content); break;
+            case 'speaking': renderSpeaking(content); break;
+            case 'dictation': renderDictation(content); break;
             case 'notebook': renderNotebook(content); break;
             case 'addword': renderAddWord(content); break;
             case 'results': renderResults(content); break;
@@ -1183,7 +1300,7 @@
                                 ? '<span style="background:#1e3a5f;color:#38bdf8;padding:2px 6px;border-radius:4px;font-size:11px;">YENİ</span>'
                                 : '<span style="background:#052e16;color:#4ade80;padding:2px 6px;border-radius:4px;font-size:11px;">TEKRAR</span>'
                             }</td>
-                            <td class="word-en">${w.en}</td>
+                            <td class="word-en">${w.en} <button class="speak-btn" onclick="speakWord('${w.en}')" title="Dinle">&#128264;</button></td>
                             <td class="word-pron">${w.pron || ''}</td>
                             <td>${w.tr}</td>
                         </tr>`;
@@ -1240,7 +1357,7 @@
             }
 
             return `<tr>
-                <td class="word-en" style="white-space:nowrap;">${w.en}</td>
+                <td class="word-en" style="white-space:nowrap;">${w.en} <button class="speak-btn" onclick="speakWord('${w.en}')" title="Dinle">&#128264;</button></td>
                 <td class="word-pron" style="white-space:nowrap;">${phonetic}</td>
                 <td>${w.tr}</td>
                 <td style="font-size:13px;">${exEn || '<span style="color:#475569;">—</span>'}</td>
@@ -2000,18 +2117,289 @@
     // ==================== HELPERS ====================
     function updateWordStat(word, isCorrect) {
         if (!state.wordStats[word]) {
-            state.wordStats[word] = { correct: 0, wrong: 0, lastSeen: null, streak: 0 };
+            state.wordStats[word] = { correct: 0, wrong: 0, lastSeen: null, streak: 0, box: 1 };
         }
         const s = state.wordStats[word];
+        if (s.box === undefined) s.box = 1;
         if (isCorrect) {
             s.correct++;
             s.streak++;
+            // Leitner: promote to next box (max 5)
+            s.box = Math.min(5, s.box + 1);
         } else {
             s.wrong++;
             s.streak = 0;
+            // Leitner: demote back to box 1
+            s.box = 1;
         }
         s.lastSeen = getTodayStr();
         saveState();
+    }
+
+    // ==================== TTS & SPEECH ====================
+    function speakWord(text, lang = 'en-US') {
+        if (!('speechSynthesis' in window)) return;
+        speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang;
+        utter.rate = 0.85;
+        // Try to pick a good English voice
+        const voices = speechSynthesis.getVoices();
+        const enVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Google')) ||
+                        voices.find(v => v.lang.startsWith('en-US')) ||
+                        voices.find(v => v.lang.startsWith('en'));
+        if (enVoice) utter.voice = enVoice;
+        speechSynthesis.speak(utter);
+    }
+
+    function speakSentence(text) {
+        speakWord(text, 'en-US');
+    }
+
+    // Preload voices
+    if ('speechSynthesis' in window) {
+        speechSynthesis.getVoices();
+        speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    }
+
+    // ==================== SPEAKING MODE ====================
+    let speakingState = { index: 0, results: [] };
+
+    function renderSpeaking(el) {
+        const words = getTodayWords();
+        speakingState = { index: 0, results: new Array(words.length).fill(null) };
+        renderSpeakingCard(el, words);
+    }
+
+    function renderSpeakingCard(el, words) {
+        const i = speakingState.index;
+        if (i >= words.length) {
+            renderSpeakingResults(el, words);
+            return;
+        }
+        const w = words[i];
+        const dots = words.map((_, idx) => {
+            let cls = 'speaking-dot';
+            if (idx === i) cls += ' active';
+            else if (speakingState.results[idx] === true) cls += ' done';
+            else if (speakingState.results[idx] === false) cls += ' wrong';
+            return `<div class="${cls}"></div>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="stage-title">Konusma Pratigi</div>
+            <div class="stage-desc">Kelimeyi dinle, sonra mikrofona soyle</div>
+            <div class="speaking-progress">${dots}</div>
+            <div class="speaking-card">
+                <div class="speaking-word">${w.en}</div>
+                <div class="speaking-meaning">${w.tr}</div>
+                <button class="btn btn-secondary" onclick="speakWord('${w.en}')" style="margin-bottom:20px;">&#128264; Dinle</button>
+                <br>
+                <button class="mic-btn" id="micBtn" onclick="startListening('${w.en.replace(/'/g, "\\'")}')">&#127908;</button>
+                <div class="speaking-result" id="speakResult"></div>
+            </div>
+            <div class="speaking-nav">
+                ${i > 0 ? `<button class="btn btn-secondary" onclick="speakingPrev()">&#8592; Onceki</button>` : ''}
+                <button class="btn btn-secondary" onclick="speakingSkip()">Atla &#8594;</button>
+            </div>
+        `;
+        // Auto-play the word
+        setTimeout(() => speakWord(w.en), 300);
+    }
+
+    function startListening(expectedWord) {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            document.getElementById('speakResult').innerHTML = '<span style="color:#f87171;">Bu tarayici ses tanima desteklemiyor. Chrome kullan.</span>';
+            return;
+        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 3;
+
+        const micBtn = document.getElementById('micBtn');
+        micBtn.classList.add('recording');
+        micBtn.innerHTML = '&#9899;';
+
+        recognition.onresult = (event) => {
+            micBtn.classList.remove('recording');
+            micBtn.innerHTML = '&#127908;';
+            const results = [];
+            for (let i = 0; i < event.results[0].length; i++) {
+                results.push(event.results[0][i].transcript.toLowerCase().trim());
+            }
+            const heard = results[0];
+            const expected = expectedWord.toLowerCase().trim();
+            const isMatch = results.some(r => r === expected || r.includes(expected) || expected.includes(r));
+
+            const resultEl = document.getElementById('speakResult');
+            if (isMatch) {
+                micBtn.classList.add('success');
+                resultEl.innerHTML = `
+                    <div class="speaking-score good">Dogru!</div>
+                    <div class="speaking-heard">Duyulan: "${heard}"</div>
+                `;
+                speakingState.results[speakingState.index] = true;
+                setTimeout(() => speakingNext(), 1500);
+            } else {
+                resultEl.innerHTML = `
+                    <div class="speaking-score bad">Tekrar dene</div>
+                    <div class="speaking-heard">Duyulan: "${heard}" - Beklenen: "${expected}"</div>
+                `;
+                speakingState.results[speakingState.index] = false;
+            }
+        };
+
+        recognition.onerror = (event) => {
+            micBtn.classList.remove('recording');
+            micBtn.innerHTML = '&#127908;';
+            const resultEl = document.getElementById('speakResult');
+            if (event.error === 'no-speech') {
+                resultEl.innerHTML = '<span style="color:#f59e0b;">Ses duyulmadi, tekrar dene.</span>';
+            } else {
+                resultEl.innerHTML = `<span style="color:#f87171;">Hata: ${event.error}</span>`;
+            }
+        };
+
+        recognition.start();
+    }
+
+    function speakingNext() {
+        const words = getTodayWords();
+        speakingState.index++;
+        renderSpeakingCard(document.getElementById('contentArea'), words);
+    }
+
+    function speakingPrev() {
+        const words = getTodayWords();
+        speakingState.index = Math.max(0, speakingState.index - 1);
+        renderSpeakingCard(document.getElementById('contentArea'), words);
+    }
+
+    function speakingSkip() {
+        speakingNext();
+    }
+
+    function renderSpeakingResults(el, words) {
+        const correct = speakingState.results.filter(r => r === true).length;
+        const total = words.length;
+        const pct = Math.round(correct / total * 100);
+        const cls = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'bad';
+
+        el.innerHTML = `
+            <div class="result-card">
+                <div class="stage-title">Konusma Pratigi Sonucu</div>
+                <div class="result-score ${cls}">%${pct}</div>
+                <div class="result-message">${correct}/${total} kelimeyi dogru telaffuz ettin</div>
+                <div class="btn-center">
+                    <button class="btn btn-primary" onclick="renderSpeaking(document.getElementById('contentArea'))">Tekrar Dene</button>
+                    <button class="btn btn-secondary" onclick="document.querySelector('.stage-btn').click()">Ana Sayfa</button>
+                </div>
+            </div>
+        `;
+        completeStage('speaking');
+    }
+
+    // ==================== DICTATION MODE ====================
+    let dictationState = { index: 0, results: [] };
+
+    function renderDictation(el) {
+        const words = getTodayWords();
+        dictationState = { index: 0, results: new Array(words.length).fill(null) };
+        renderDictationCard(el, words);
+    }
+
+    function renderDictationCard(el, words) {
+        const i = dictationState.index;
+        if (i >= words.length) {
+            renderDictationResults(el, words);
+            return;
+        }
+        const w = words[i];
+        const dots = words.map((_, idx) => {
+            let cls = 'speaking-dot';
+            if (idx === i) cls += ' active';
+            else if (dictationState.results[idx] === true) cls += ' done';
+            else if (dictationState.results[idx] === false) cls += ' wrong';
+            return `<div class="${cls}"></div>`;
+        }).join('');
+
+        el.innerHTML = `
+            <div class="stage-title">Dinle & Yaz</div>
+            <div class="stage-desc">Kelimeyi dinle, dogru yazimini yaz</div>
+            <div class="speaking-progress">${dots}</div>
+            <div class="speaking-card">
+                <div style="font-size:14px; color:#94a3b8; margin-bottom:8px;">Ipucu: ${w.tr}</div>
+                <button class="btn btn-primary" onclick="speakWord('${w.en}')" style="margin-bottom:20px; font-size:20px;">&#128264; Dinle</button>
+                <div style="margin-top:16px;">
+                    <input type="text" class="dictation-input" id="dictInput" placeholder="Duydugun kelimeyi yaz..." autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')checkDictation('${w.en.replace(/'/g, "\\'")}')">
+                </div>
+                <div class="speaking-result" id="dictResult"></div>
+                <div style="margin-top:16px;">
+                    <button class="btn btn-primary" onclick="checkDictation('${w.en.replace(/'/g, "\\'")}')">Kontrol Et</button>
+                    <button class="btn btn-secondary" onclick="speakWord('${w.en}')" style="margin-left:8px;">Tekrar Dinle</button>
+                </div>
+            </div>
+        `;
+        // Auto-play
+        setTimeout(() => speakWord(w.en), 300);
+        setTimeout(() => {
+            const inp = document.getElementById('dictInput');
+            if (inp) inp.focus();
+        }, 500);
+    }
+
+    function checkDictation(expected) {
+        const input = document.getElementById('dictInput');
+        const resultEl = document.getElementById('dictResult');
+        const answer = input.value.trim().toLowerCase();
+        const correct = expected.toLowerCase();
+
+        if (!answer) {
+            resultEl.innerHTML = '<span style="color:#f59e0b;">Bir sey yaz!</span>';
+            return;
+        }
+
+        if (answer === correct) {
+            input.classList.add('correct');
+            resultEl.innerHTML = '<div class="speaking-score good">Dogru!</div>';
+            dictationState.results[dictationState.index] = true;
+            updateWordStat(expected, true);
+            setTimeout(() => dictationNext(), 1200);
+        } else {
+            input.classList.add('wrong');
+            resultEl.innerHTML = `<div class="speaking-score bad">Yanlis</div><div class="speaking-heard">Dogru yazim: <strong style="color:#38bdf8;">${expected}</strong></div>`;
+            dictationState.results[dictationState.index] = false;
+            updateWordStat(expected, false);
+            setTimeout(() => dictationNext(), 2500);
+        }
+    }
+
+    function dictationNext() {
+        const words = getTodayWords();
+        dictationState.index++;
+        renderDictationCard(document.getElementById('contentArea'), words);
+    }
+
+    function renderDictationResults(el, words) {
+        const correct = dictationState.results.filter(r => r === true).length;
+        const total = words.length;
+        const pct = Math.round(correct / total * 100);
+        const cls = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'bad';
+
+        el.innerHTML = `
+            <div class="result-card">
+                <div class="stage-title">Dinle & Yaz Sonucu</div>
+                <div class="result-score ${cls}">%${pct}</div>
+                <div class="result-message">${correct}/${total} kelimeyi dogru yazdin</div>
+                <div class="btn-center">
+                    <button class="btn btn-primary" onclick="renderDictation(document.getElementById('contentArea'))">Tekrar Dene</button>
+                    <button class="btn btn-secondary" onclick="document.querySelector('.stage-btn').click()">Ana Sayfa</button>
+                </div>
+            </div>
+        `;
+        completeStage('dictation');
     }
 
     function completeStage(stage) {
