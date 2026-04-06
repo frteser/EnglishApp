@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v1';
+const CACHE_NAME = 'english-app-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -42,34 +42,54 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// Daily notification check
+// Alarm system
+let alarmTimers = [];
+
 self.addEventListener('message', e => {
-  if (e.data && e.data.type === 'SCHEDULE_NOTIFICATION') {
-    scheduleDaily(e.data.hour, e.data.minute);
+  if (e.data && e.data.type === 'SCHEDULE_ALARMS') {
+    scheduleAlarms(e.data.alarms || []);
   }
 });
 
-function scheduleDaily(hour, minute) {
-  const now = new Date();
-  let target = new Date();
-  target.setHours(hour, minute, 0, 0);
-  if (target <= now) target.setDate(target.getDate() + 1);
+function scheduleAlarms(alarms) {
+  alarmTimers.forEach(t => clearTimeout(t));
+  alarmTimers = [];
 
-  const delay = target - now;
-  setTimeout(() => {
-    self.registration.showNotification('English Daily Practice', {
-      body: 'Bugunun 5 kelimesi seni bekliyor! Hadi pratik yapalim.',
-      icon: './icon-192.png',
-      badge: './icon-192.png',
-      tag: 'daily-reminder',
-      renotify: true,
-      actions: [
-        { action: 'open', title: 'Basla' }
-      ]
-    });
-    // Reschedule for next day
-    scheduleDaily(hour, minute);
-  }, delay);
+  const now = new Date();
+  const jsDay = now.getDay();
+  const today = jsDay === 0 ? 6 : jsDay - 1;
+
+  alarms.forEach(alarm => {
+    if (!alarm.enabled) return;
+    const [h, m] = alarm.time.split(':').map(Number);
+
+    for (let offset = 0; offset < 7; offset++) {
+      const checkDay = (today + offset) % 7;
+      if (!alarm.days.includes(checkDay)) continue;
+
+      let target = new Date();
+      target.setDate(target.getDate() + offset);
+      target.setHours(h, m, 0, 0);
+      if (target <= now && offset === 0) continue;
+
+      const delay = target - now;
+      if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
+        const timer = setTimeout(() => {
+          self.registration.showNotification('English Daily Practice', {
+            body: 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
+            icon: './icon-192.png',
+            badge: './icon-192.png',
+            tag: 'alarm-' + alarm.id,
+            renotify: true,
+            actions: [{ action: 'open', title: 'Basla' }]
+          });
+          scheduleAlarms(alarms);
+        }, delay);
+        alarmTimers.push(timer);
+      }
+      break;
+    }
+  });
 }
 
 // Notification click - open app

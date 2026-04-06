@@ -434,6 +434,14 @@
             padding: 18px;
             margin-bottom: 15px;
         }
+        .notif-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .notif-header .notif-title { font-size: 15px; font-weight: 600; }
+        .notif-header .notif-desc { font-size: 12px; color: #94a3b8; margin-top: 2px; }
         .notif-row {
             display: flex;
             align-items: center;
@@ -474,6 +482,83 @@
             color: #e2e8f0; padding: 6px 10px; border-radius: 6px;
             font-size: 14px;
         }
+        .alarm-list { display: flex; flex-direction: column; gap: 10px; }
+        .alarm-card {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .alarm-card-left { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .alarm-time-display { font-size: 22px; font-weight: 700; color: #e2e8f0; }
+        .alarm-days {
+            display: flex; gap: 4px; flex-wrap: wrap;
+        }
+        .alarm-day-badge {
+            font-size: 11px; padding: 2px 7px; border-radius: 10px;
+            background: #334155; color: #94a3b8; font-weight: 500;
+        }
+        .alarm-day-badge.active { background: #3b82f6; color: #fff; }
+        .alarm-card-actions { display: flex; align-items: center; gap: 8px; }
+        .alarm-delete-btn {
+            background: none; border: none; color: #ef4444; cursor: pointer;
+            font-size: 18px; padding: 4px; line-height: 1;
+        }
+        .add-alarm-btn {
+            width: 100%; padding: 10px; margin-top: 10px;
+            background: #1e293b; border: 2px dashed #334155;
+            border-radius: 10px; color: #64748b; font-size: 14px;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .add-alarm-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+        .alarm-edit-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7); z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .alarm-edit-box {
+            background: #1e293b; border-radius: 16px;
+            padding: 24px; width: 100%; max-width: 340px;
+        }
+        .alarm-edit-box h3 { margin: 0 0 16px; font-size: 16px; }
+        .alarm-edit-box input[type="time"] {
+            width: 100%; background: #0f172a; border: 1px solid #334155;
+            color: #e2e8f0; padding: 12px; border-radius: 8px;
+            font-size: 20px; text-align: center; margin-bottom: 16px;
+        }
+        .alarm-day-selector {
+            display: flex; gap: 6px; flex-wrap: wrap;
+            justify-content: center; margin-bottom: 12px;
+        }
+        .alarm-day-btn {
+            width: 38px; height: 38px; border-radius: 50%;
+            border: 2px solid #334155; background: none;
+            color: #94a3b8; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .alarm-day-btn.selected { border-color: #3b82f6; background: #3b82f6; color: #fff; }
+        .alarm-preset-btns {
+            display: flex; gap: 8px; justify-content: center; margin-bottom: 16px;
+        }
+        .alarm-preset-btn {
+            padding: 5px 12px; border-radius: 8px;
+            border: 1px solid #334155; background: none;
+            color: #94a3b8; font-size: 12px; cursor: pointer;
+        }
+        .alarm-preset-btn:hover { border-color: #3b82f6; color: #3b82f6; }
+        .alarm-edit-actions {
+            display: flex; gap: 10px; margin-top: 8px;
+        }
+        .alarm-edit-actions button {
+            flex: 1; padding: 10px; border-radius: 8px; border: none;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        .alarm-save-btn { background: #3b82f6; color: #fff; }
+        .alarm-cancel-btn { background: #334155; color: #e2e8f0; }
 
         /* TTS & Speaking */
         .speak-btn {
@@ -1255,18 +1340,16 @@
             </div>` : ''}
 
             <div class="notif-settings">
-                <div class="notif-row">
-                    <div class="notif-info">
-                        <div class="notif-title">Gunluk Hatirlatma</div>
-                        <div class="notif-desc">Her gun belirledigin saatte bildirim al</div>
+                <div class="notif-header">
+                    <div>
+                        <div class="notif-title">Hatirlatmalar</div>
+                        <div class="notif-desc">Gun icinde birden fazla alarm kur</div>
                     </div>
-                    <div class="toggle-switch ${getNotifEnabled() ? 'active' : ''}" id="notifToggle" onclick="toggleNotification()"></div>
                 </div>
-                <div class="time-picker" id="timePicker" style="${getNotifEnabled() ? '' : 'display:none'}">
-                    <label>Saat:</label>
-                    <input type="time" id="notifTime" value="${getNotifTime()}" onchange="updateNotifTime(this.value)">
-                    <span style="font-size:12px; color:#64748b;" id="notifStatus">${getNotifEnabled() ? 'Bildirim aktif' : ''}</span>
+                <div class="alarm-list" id="alarmList">
+                    ${renderAlarmList()}
                 </div>
+                <button class="add-alarm-btn" onclick="openAlarmEditor()">+ Yeni Alarm Ekle</button>
             </div>
 
             <div class="start-section">
@@ -2671,93 +2754,216 @@
         deferredInstallPrompt = null;
     });
 
-    // Notification helpers
-    function getNotifEnabled() {
-        return localStorage.getItem('notif_enabled') === '1';
+    // ==================== ALARM SYSTEM ====================
+    const DAY_NAMES = ['Pzt', 'Sal', 'Car', 'Per', 'Cum', 'Cmt', 'Paz'];
+
+    function getAlarms() {
+        // Migrate from old single-alarm system
+        if (localStorage.getItem('notif_enabled') === '1' && !localStorage.getItem('alarms')) {
+            const oldTime = localStorage.getItem('notif_time') || '09:00';
+            const migrated = [{ id: Date.now(), time: oldTime, days: [0,1,2,3,4,5,6], enabled: true }];
+            localStorage.setItem('alarms', JSON.stringify(migrated));
+            localStorage.removeItem('notif_enabled');
+            localStorage.removeItem('notif_time');
+        }
+        return JSON.parse(localStorage.getItem('alarms') || '[]');
     }
 
-    function getNotifTime() {
-        return localStorage.getItem('notif_time') || '09:00';
+    function saveAlarms(alarms) {
+        localStorage.setItem('alarms', JSON.stringify(alarms));
+        scheduleAllAlarms();
     }
 
-    async function toggleNotification() {
-        const toggle = document.getElementById('notifToggle');
-        const timePicker = document.getElementById('timePicker');
-        const status = document.getElementById('notifStatus');
+    function renderAlarmList() {
+        const alarms = getAlarms();
+        if (alarms.length === 0) {
+            return '<div style="text-align:center; color:#64748b; font-size:13px; padding:12px;">Henuz alarm yok. Ekle butonuna bas!</div>';
+        }
+        return alarms.map(a => {
+            const dayBadges = DAY_NAMES.map((d, i) =>
+                `<span class="alarm-day-badge ${a.days.includes(i) ? 'active' : ''}">${d}</span>`
+            ).join('');
+            const dayLabel = getDayLabel(a.days);
+            return `
+            <div class="alarm-card">
+                <div class="alarm-card-left" onclick="openAlarmEditor(${a.id})" style="cursor:pointer">
+                    <div class="alarm-time-display">${a.time}</div>
+                    <div class="alarm-days">${dayBadges}</div>
+                    <div style="font-size:11px; color:#64748b; margin-top:2px;">${dayLabel}</div>
+                </div>
+                <div class="alarm-card-actions">
+                    <div class="toggle-switch ${a.enabled ? 'active' : ''}" onclick="toggleAlarm(${a.id})"></div>
+                    <button class="alarm-delete-btn" onclick="deleteAlarm(${a.id})">&times;</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
 
-        if (!getNotifEnabled()) {
-            // Enable
-            if (!('Notification' in window)) {
-                alert('Bu tarayici bildirimleri desteklemiyor.');
-                return;
+    function getDayLabel(days) {
+        const sorted = [...days].sort();
+        if (sorted.length === 7) return 'Her gun';
+        if (sorted.length === 5 && sorted.join() === '0,1,2,3,4') return 'Hafta ici';
+        if (sorted.length === 2 && sorted.join() === '5,6') return 'Hafta sonu';
+        return sorted.map(d => DAY_NAMES[d]).join(', ');
+    }
+
+    function openAlarmEditor(editId) {
+        const alarms = getAlarms();
+        const existing = editId ? alarms.find(a => a.id === editId) : null;
+        const currentTime = existing ? existing.time : '09:00';
+        const currentDays = existing ? existing.days : [0,1,2,3,4];
+
+        const modal = document.createElement('div');
+        modal.className = 'alarm-edit-modal';
+        modal.id = 'alarmEditModal';
+        modal.innerHTML = `
+        <div class="alarm-edit-box">
+            <h3>${existing ? 'Alarmi Duzenle' : 'Yeni Alarm'}</h3>
+            <input type="time" id="alarmEditTime" value="${currentTime}">
+            <div class="alarm-day-selector" id="alarmDaySelector">
+                ${DAY_NAMES.map((d, i) =>
+                    `<button class="alarm-day-btn ${currentDays.includes(i) ? 'selected' : ''}" data-day="${i}" onclick="this.classList.toggle('selected')">${d}</button>`
+                ).join('')}
+            </div>
+            <div class="alarm-preset-btns">
+                <button class="alarm-preset-btn" onclick="selectAlarmPreset('weekdays')">Hafta ici</button>
+                <button class="alarm-preset-btn" onclick="selectAlarmPreset('weekends')">Hafta sonu</button>
+                <button class="alarm-preset-btn" onclick="selectAlarmPreset('everyday')">Her gun</button>
+            </div>
+            <div class="alarm-edit-actions">
+                <button class="alarm-cancel-btn" onclick="closeAlarmEditor()">Vazgec</button>
+                <button class="alarm-save-btn" onclick="saveAlarmFromEditor(${editId || 0})">Kaydet</button>
+            </div>
+        </div>`;
+        document.body.appendChild(modal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeAlarmEditor(); });
+    }
+
+    function selectAlarmPreset(preset) {
+        const btns = document.querySelectorAll('#alarmDaySelector .alarm-day-btn');
+        btns.forEach(btn => {
+            const day = parseInt(btn.dataset.day);
+            if (preset === 'weekdays') btn.classList.toggle('selected', day <= 4);
+            else if (preset === 'weekends') btn.classList.toggle('selected', day >= 5);
+            else if (preset === 'everyday') btn.classList.add('selected');
+        });
+    }
+
+    function closeAlarmEditor() {
+        const modal = document.getElementById('alarmEditModal');
+        if (modal) modal.remove();
+    }
+
+    async function saveAlarmFromEditor(editId) {
+        const time = document.getElementById('alarmEditTime').value;
+        const selectedDays = [...document.querySelectorAll('#alarmDaySelector .alarm-day-btn.selected')]
+            .map(btn => parseInt(btn.dataset.day));
+
+        if (selectedDays.length === 0) {
+            alert('En az bir gun secmelisin!');
+            return;
+        }
+
+        // Request notification permission on save
+        if ('Notification' in window && Notification.permission === 'default') {
+            await Notification.requestPermission();
+        }
+
+        let alarms = getAlarms();
+        if (editId) {
+            const idx = alarms.findIndex(a => a.id === editId);
+            if (idx >= 0) {
+                alarms[idx].time = time;
+                alarms[idx].days = selectedDays;
             }
-            const perm = await Notification.requestPermission();
-            if (perm !== 'granted') {
-                alert('Bildirim izni verilmedi. Tarayici ayarlarindan izin vermelisin.');
-                return;
-            }
-            localStorage.setItem('notif_enabled', '1');
-            toggle.classList.add('active');
-            timePicker.style.display = '';
-            status.textContent = 'Bildirim aktif';
-            scheduleNotification();
         } else {
-            // Disable
-            localStorage.setItem('notif_enabled', '0');
-            toggle.classList.remove('active');
-            timePicker.style.display = 'none';
-            status.textContent = '';
+            alarms.push({ id: Date.now(), time, days: selectedDays, enabled: true });
+        }
+
+        alarms.sort((a, b) => a.time.localeCompare(b.time));
+        saveAlarms(alarms);
+        closeAlarmEditor();
+        refreshAlarmUI();
+    }
+
+    function toggleAlarm(id) {
+        let alarms = getAlarms();
+        const alarm = alarms.find(a => a.id === id);
+        if (alarm) {
+            alarm.enabled = !alarm.enabled;
+            saveAlarms(alarms);
+            refreshAlarmUI();
         }
     }
 
-    function updateNotifTime(val) {
-        localStorage.setItem('notif_time', val);
-        const status = document.getElementById('notifStatus');
-        if (status) status.textContent = 'Saat guncellendi: ' + val;
-        scheduleNotification();
+    function deleteAlarm(id) {
+        let alarms = getAlarms().filter(a => a.id !== id);
+        saveAlarms(alarms);
+        refreshAlarmUI();
     }
 
-    function scheduleNotification() {
-        if (!getNotifEnabled()) return;
-        const time = getNotifTime();
-        const [h, m] = time.split(':').map(Number);
+    function refreshAlarmUI() {
+        const list = document.getElementById('alarmList');
+        if (list) list.innerHTML = renderAlarmList();
+    }
 
-        // Tell service worker to schedule
+    window._alarmTimers = [];
+    function scheduleAllAlarms() {
+        window._alarmTimers.forEach(t => clearTimeout(t));
+        window._alarmTimers = [];
+
+        const alarms = getAlarms().filter(a => a.enabled);
+        const now = new Date();
+        const jsDay = now.getDay();
+        const today = jsDay === 0 ? 6 : jsDay - 1; // 0=Mon, 6=Sun
+
+        alarms.forEach(alarm => {
+            const [h, m] = alarm.time.split(':').map(Number);
+
+            for (let offset = 0; offset < 7; offset++) {
+                const checkDay = (today + offset) % 7;
+                if (!alarm.days.includes(checkDay)) continue;
+
+                let target = new Date();
+                target.setDate(target.getDate() + offset);
+                target.setHours(h, m, 0, 0);
+
+                if (target <= now) {
+                    if (offset === 0) continue;
+                }
+
+                const delay = target - now;
+                if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
+                    const timer = setTimeout(() => {
+                        if (Notification.permission === 'granted') {
+                            new Notification('English Daily Practice', {
+                                body: 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
+                                icon: './icon-192.png',
+                                tag: 'alarm-' + alarm.id
+                            });
+                        }
+                        scheduleAllAlarms();
+                    }, delay);
+                    window._alarmTimers.push(timer);
+                }
+                break;
+            }
+        });
+
         if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
             navigator.serviceWorker.controller.postMessage({
-                type: 'SCHEDULE_NOTIFICATION',
-                hour: h,
-                minute: m
+                type: 'SCHEDULE_ALARMS',
+                alarms: alarms
             });
         }
-
-        // Also set a local fallback timer for current session
-        clearTimeout(window._notifTimer);
-        const now = new Date();
-        let target = new Date();
-        target.setHours(h, m, 0, 0);
-        if (target <= now) target.setDate(target.getDate() + 1);
-        const delay = target - now;
-        window._notifTimer = setTimeout(() => {
-            if (Notification.permission === 'granted') {
-                new Notification('English Daily Practice', {
-                    body: 'Bugunun 5 kelimesi seni bekliyor! Hadi pratik yapalim.',
-                    icon: './icon-192.png',
-                    tag: 'daily-reminder'
-                });
-            }
-            // Reschedule
-            scheduleNotification();
-        }, delay);
     }
 
     // Register Service Worker
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').then(reg => {
             console.log('SW registered:', reg.scope);
-            // Schedule notification after SW is ready
             navigator.serviceWorker.ready.then(() => {
-                if (getNotifEnabled()) scheduleNotification();
+                scheduleAllAlarms();
             });
         }).catch(err => console.log('SW failed:', err));
     }
