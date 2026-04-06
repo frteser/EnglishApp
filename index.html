@@ -560,6 +560,90 @@
         .alarm-save-btn { background: #3b82f6; color: #fff; }
         .alarm-cancel-btn { background: #334155; color: #e2e8f0; }
 
+        /* Flashcard */
+        .fc-container {
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 400px; padding: 20px 0;
+        }
+        .fc-progress {
+            font-size: 13px; color: #64748b; margin-bottom: 16px;
+        }
+        .fc-card-wrapper {
+            perspective: 800px;
+            width: 100%; max-width: 340px; height: 220px;
+            margin-bottom: 24px; cursor: pointer;
+        }
+        .fc-card {
+            width: 100%; height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        .fc-card.flipped { transform: rotateY(180deg); }
+        .fc-card-face {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 24px; text-align: center;
+        }
+        .fc-front {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border: 2px solid #475569;
+        }
+        .fc-back {
+            background: linear-gradient(135deg, #164e63, #1e3a5f);
+            border: 2px solid #38bdf8;
+            transform: rotateY(180deg);
+        }
+        .fc-word { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+        .fc-pron { font-size: 14px; color: #94a3b8; margin-bottom: 12px; }
+        .fc-meaning { font-size: 20px; font-weight: 600; color: #38bdf8; margin-bottom: 8px; }
+        .fc-sentence { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
+        .fc-hint { font-size: 12px; color: #64748b; margin-top: 8px; }
+        .fc-actions {
+            display: flex; gap: 12px; width: 100%; max-width: 340px;
+        }
+        .fc-btn {
+            flex: 1; padding: 14px; border: none; border-radius: 12px;
+            font-size: 15px; font-weight: 600; cursor: pointer;
+            transition: transform 0.15s, opacity 0.15s;
+        }
+        .fc-btn:active { transform: scale(0.96); }
+        .fc-btn-know { background: #22c55e; color: #fff; }
+        .fc-btn-dontknow { background: #ef4444; color: #fff; }
+        .fc-btn-skip { background: #334155; color: #94a3b8; }
+        .fc-stats-bar {
+            display: flex; gap: 16px; margin-top: 20px;
+            font-size: 13px; color: #94a3b8;
+        }
+        .fc-stats-bar span { display: flex; align-items: center; gap: 4px; }
+        .fc-dot-green { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
+        .fc-dot-red { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
+        .fc-dot-gray { width: 8px; height: 8px; border-radius: 50%; background: #64748b; }
+        .fc-result {
+            text-align: center; padding: 30px 0;
+        }
+        .fc-result h2 { font-size: 22px; margin-bottom: 12px; }
+        .fc-result-stats {
+            display: flex; justify-content: center; gap: 30px;
+            margin: 20px 0;
+        }
+        .fc-result-stat { text-align: center; }
+        .fc-result-stat .num { font-size: 28px; font-weight: 700; }
+        .fc-result-stat .label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        .fc-mode-btns {
+            display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+            justify-content: center;
+        }
+        .fc-mode-btn {
+            padding: 6px 14px; border-radius: 20px;
+            border: 1px solid #334155; background: none;
+            color: #94a3b8; font-size: 13px; cursor: pointer;
+        }
+        .fc-mode-btn.active { border-color: #ec4899; color: #ec4899; background: rgba(236,72,153,0.1); }
+
         /* TTS & Speaking */
         .speak-btn {
             background: none; border: none; cursor: pointer;
@@ -725,6 +809,7 @@
             <button class="stage-btn" onclick="navigateStage('patterns', this)" id="navPatterns">Kalıplar</button>
             <button class="stage-btn" onclick="navigateStage('speaking', this)" id="navSpeaking" style="border-color:#f59e0b; color:#f59e0b;">Konus</button>
             <button class="stage-btn" onclick="navigateStage('dictation', this)" id="navDictation" style="border-color:#f59e0b; color:#f59e0b;">Dinle&Yaz</button>
+            <button class="stage-btn" onclick="navigateStage('flashcard', this)" id="navFlashcard" style="border-color:#ec4899; color:#ec4899;">Kartlar</button>
             <button class="stage-btn" onclick="navigateStage('notebook', this)" id="navNotebook" style="border-color:#a78bfa; color:#a78bfa;">Defterim</button>
             <button class="stage-btn" onclick="navigateStage('addword', this)" id="navAddword" style="border-color:#22c55e; color:#22c55e;">+ Kelime Ekle</button>
         </div>
@@ -1228,6 +1313,7 @@
             case 'patterns': renderPatterns(content); break;
             case 'speaking': renderSpeaking(content); break;
             case 'dictation': renderDictation(content); break;
+            case 'flashcard': renderFlashcard(content); break;
             case 'notebook': renderNotebook(content); break;
             case 'addword': renderAddWord(content); break;
             case 'results': renderResults(content); break;
@@ -2570,6 +2656,211 @@
     }
 
     // ==================== ADD WORD ====================
+    // ==================== FLASHCARD ====================
+    let fcCards = [];
+    let fcIndex = 0;
+    let fcFlipped = false;
+    let fcResults = { know: 0, dontknow: 0, skip: 0 };
+    let fcMode = 'today'; // today, weak, all, mastered
+
+    function getFlashcardWords(mode) {
+        const allWords = getAllWords();
+        switch(mode) {
+            case 'today': return getTodayWords();
+            case 'weak': return allWords.filter(w => {
+                const s = state.wordStats[w.en];
+                return s && s.wrong > 0 && (!s.streak || s.streak < 3);
+            });
+            case 'mastered': return allWords.filter(w => {
+                const s = state.wordStats[w.en];
+                return s && s.streak >= 5;
+            });
+            case 'all': return [...allWords].sort(() => Math.random() - 0.5).slice(0, 30);
+            default: return getTodayWords();
+        }
+    }
+
+    function startFlashcards(mode) {
+        fcMode = mode || fcMode;
+        const words = getFlashcardWords(fcMode);
+        fcCards = [...words].sort(() => Math.random() - 0.5);
+        fcIndex = 0;
+        fcFlipped = false;
+        fcResults = { know: 0, dontknow: 0, skip: 0 };
+        renderFlashcard(document.getElementById('contentArea'));
+    }
+
+    function renderFlashcard(el) {
+        if (fcCards.length === 0) {
+            const words = getFlashcardWords(fcMode);
+            fcCards = [...words].sort(() => Math.random() - 0.5);
+        }
+
+        if (fcCards.length === 0) {
+            el.innerHTML = `
+                <div class="stage-title">Kelime Kartlari</div>
+                <div class="fc-container">
+                    <div style="text-align:center; color:#94a3b8; padding:40px 0;">
+                        <div style="font-size:48px; margin-bottom:16px;">&#128195;</div>
+                        <p>Bu modda gosterilecek kelime yok.</p>
+                        <p style="font-size:13px; margin-top:8px;">Baska bir mod sec veya once ders calis!</p>
+                    </div>
+                    <div class="fc-mode-btns">
+                        ${renderFcModeBtns()}
+                    </div>
+                </div>`;
+            return;
+        }
+
+        if (fcIndex >= fcCards.length) {
+            renderFlashcardResults(el);
+            return;
+        }
+
+        const w = fcCards[fcIndex];
+        const s = state.wordStats[w.en];
+        const sentence = w.sentences && w.sentences[0] ? w.sentences[0].en : '';
+
+        el.innerHTML = `
+            <div class="stage-title">Kelime Kartlari</div>
+            <div class="fc-container">
+                <div class="fc-mode-btns">
+                    ${renderFcModeBtns()}
+                </div>
+                <div class="fc-progress">${fcIndex + 1} / ${fcCards.length}</div>
+                <div class="fc-card-wrapper" onclick="flipCard()">
+                    <div class="fc-card ${fcFlipped ? 'flipped' : ''}" id="fcCard">
+                        <div class="fc-card-face fc-front">
+                            <div class="fc-word">${w.en}</div>
+                            <div class="fc-pron">${w.pron || ''}</div>
+                            <div class="fc-hint">Cevirmek icin dokun</div>
+                        </div>
+                        <div class="fc-card-face fc-back">
+                            <div class="fc-meaning">${w.tr}</div>
+                            ${sentence ? `<div class="fc-sentence">"${sentence}"</div>` : ''}
+                        </div>
+                    </div>
+                </div>
+                <div class="fc-actions">
+                    <button class="fc-btn fc-btn-dontknow" onclick="fcAnswer('dontknow')">Bilmiyorum</button>
+                    <button class="fc-btn fc-btn-skip" onclick="fcAnswer('skip')">Gec</button>
+                    <button class="fc-btn fc-btn-know" onclick="fcAnswer('know')">Biliyorum</button>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:12px; width:100%; max-width:340px;">
+                    <button class="fc-btn fc-btn-skip" style="flex:1; padding:10px; font-size:13px;" onclick="fcPrev()" ${fcIndex === 0 ? 'disabled style="flex:1;padding:10px;font-size:13px;opacity:0.4;cursor:default;"' : ''}>&#8592; Geri</button>
+                    <button class="fc-btn fc-btn-skip" style="flex:1; padding:10px; font-size:13px;" onclick="fcNext()">Ileri &#8594;</button>
+                </div>
+                <div class="fc-stats-bar">
+                    <span><div class="fc-dot-green"></div> ${fcResults.know}</span>
+                    <span><div class="fc-dot-red"></div> ${fcResults.dontknow}</span>
+                    <span><div class="fc-dot-gray"></div> ${fcResults.skip}</span>
+                </div>
+            </div>`;
+    }
+
+    function renderFcModeBtns() {
+        const modes = [
+            { key: 'today', label: 'Bugun' },
+            { key: 'weak', label: 'Zayif' },
+            { key: 'all', label: 'Karisik' },
+            { key: 'mastered', label: 'Ogrenilen' }
+        ];
+        return modes.map(m =>
+            `<button class="fc-mode-btn ${fcMode === m.key ? 'active' : ''}" onclick="startFlashcards('${m.key}')">${m.label}</button>`
+        ).join('');
+    }
+
+    function fcPrev() {
+        if (fcIndex > 0) {
+            fcIndex--;
+            fcFlipped = false;
+            renderFlashcard(document.getElementById('contentArea'));
+        }
+    }
+
+    function fcNext() {
+        if (fcIndex < fcCards.length - 1) {
+            fcIndex++;
+            fcFlipped = false;
+            renderFlashcard(document.getElementById('contentArea'));
+        }
+    }
+
+    function flipCard() {
+        fcFlipped = !fcFlipped;
+        const card = document.getElementById('fcCard');
+        if (card) card.classList.toggle('flipped', fcFlipped);
+    }
+
+    function fcAnswer(type) {
+        const w = fcCards[fcIndex];
+        fcResults[type]++;
+
+        // Update wordStats
+        if (type === 'know') {
+            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null };
+            state.wordStats[w.en].correct++;
+            state.wordStats[w.en].streak++;
+            state.wordStats[w.en].lastSeen = getTodayStr();
+        } else if (type === 'dontknow') {
+            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null };
+            state.wordStats[w.en].wrong++;
+            state.wordStats[w.en].streak = 0;
+            state.wordStats[w.en].lastSeen = getTodayStr();
+        }
+        saveState();
+
+        fcIndex++;
+        fcFlipped = false;
+        renderFlashcard(document.getElementById('contentArea'));
+    }
+
+    function renderFlashcardResults(el) {
+        const total = fcResults.know + fcResults.dontknow + fcResults.skip;
+        const pct = total > 0 ? Math.round((fcResults.know / total) * 100) : 0;
+
+        el.innerHTML = `
+            <div class="stage-title">Kelime Kartlari</div>
+            <div class="fc-result">
+                <div style="font-size:48px; margin-bottom:12px;">${pct >= 80 ? '&#127881;' : pct >= 50 ? '&#128170;' : '&#128218;'}</div>
+                <h2>${pct >= 80 ? 'Harika!' : pct >= 50 ? 'Iyi gidiyorsun!' : 'Pratik yapmaya devam!'}</h2>
+                <div class="fc-result-stats">
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#22c55e">${fcResults.know}</div>
+                        <div class="label">Biliyorum</div>
+                    </div>
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#ef4444">${fcResults.dontknow}</div>
+                        <div class="label">Bilmiyorum</div>
+                    </div>
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#64748b">${fcResults.skip}</div>
+                        <div class="label">Gecilen</div>
+                    </div>
+                </div>
+                <p style="color:#94a3b8; margin-bottom:20px;">Basari: %${pct}</p>
+                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                    <button class="btn btn-primary" onclick="startFlashcards()">Tekrar Oyna</button>
+                    ${fcResults.dontknow > 0 ? `<button class="btn btn-secondary" onclick="replayWrong()">Yanlislari Tekrarla</button>` : ''}
+                </div>
+            </div>`;
+    }
+
+    function replayWrong() {
+        const wrongWords = fcCards.filter((w, i) => {
+            // find words that were answered dontknow - we track by checking stats changed
+            const s = state.wordStats[w.en];
+            return s && s.wrong > 0 && s.streak === 0;
+        });
+        if (wrongWords.length > 0) {
+            fcCards = [...wrongWords].sort(() => Math.random() - 0.5);
+        }
+        fcIndex = 0;
+        fcFlipped = false;
+        fcResults = { know: 0, dontknow: 0, skip: 0 };
+        renderFlashcard(document.getElementById('contentArea'));
+    }
+
     let addWordTab = 'add';
     let sentenceCount = 1;
 
