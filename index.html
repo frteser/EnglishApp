@@ -1011,15 +1011,17 @@
     let PATTERNS = [];
     let PATTERN_CATEGORIES = [];
     let selectedPatternCategory = 'Tümü';
+    let patternsLoaded = false;
 
-    // Load patterns from JSON
-    fetch('patterns.json')
+    // Load patterns from JSON (network-first to avoid stale cache)
+    fetch('patterns.json', { cache: 'no-cache' })
         .then(r => r.json())
         .then(data => {
             PATTERNS = data;
             PATTERN_CATEGORIES = ['Tümü', ...new Set(data.map(p => p.category))];
+            patternsLoaded = true;
         })
-        .catch(() => { PATTERNS = []; PATTERN_CATEGORIES = ['Tümü']; });
+        .catch(() => { PATTERNS = []; PATTERN_CATEGORIES = ['Tümü']; patternsLoaded = true; });
 
     // ==================== SENTENCE CACHE (fetched from API) ====================
     const SENTENCE_CACHE_KEY = 'english_sentence_cache_v1';
@@ -2192,9 +2194,13 @@
     }
 
     function renderPatterns(el) {
-        if (PATTERNS.length === 0) {
+        if (!patternsLoaded) {
             el.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">Kalıplar yükleniyor...</div>';
-            setTimeout(() => renderPatterns(el), 300);
+            setTimeout(() => renderPatterns(el), 500);
+            return;
+        }
+        if (PATTERNS.length === 0) {
+            el.innerHTML = '<div style="text-align:center;padding:40px;color:#f87171;">Kalıplar yüklenemedi. Sayfayı yenile.</div>';
             return;
         }
 
