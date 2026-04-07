@@ -1,8 +1,9 @@
-const CACHE_NAME = 'english-app-v4';
+const CACHE_NAME = 'english-app-v5';
 const ASSETS = [
   './',
   './index.html',
   './wordlist_final.json',
+  './patterns.json',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
