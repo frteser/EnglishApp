@@ -1,156 +1,4002 @@
 [
-  {"category":"Selamlaşma & Vedalaşma","pattern":"How's it going?","meaning":"Nasıl gidiyor?","example":"Hey Mike, how's it going?","exampleTr":"Hey Mike, nasıl gidiyor?"},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"What have you been up to?","meaning":"Neler yapıyorsun?","example":"What have you been up to lately?","exampleTr":"Son zamanlarda neler yapıyorsun?"},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Long time no see!","meaning":"Uzun zamandır görüşmedik!","example":"Oh wow, long time no see! How are you?","exampleTr":"Aa, uzun zamandır görüşmedik! Nasılsın?"},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"See you later.","meaning":"Sonra görüşürüz.","example":"I have to go, see you later.","exampleTr":"Gitmem lazım, sonra görüşürüz."},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Take care!","meaning":"Kendine iyi bak!","example":"Bye! Take care!","exampleTr":"Hoşça kal! Kendine iyi bak!"},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Keep in touch","meaning":"İrtibatta kalalım","example":"Here is my number, let's keep in touch.","exampleTr":"İşte numaram, irtibatta kalalım."},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Say hi to...","meaning":"...selamımı söyle","example":"Say hi to your mom for me.","exampleTr":"Annene selamımı söyle."},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Nice to meet you.","meaning":"Tanıştığımıza memnun oldum.","example":"Hi, I'm Sarah. Nice to meet you.","exampleTr":"Merhaba, ben Sarah. Tanıştığımıza memnun oldum."},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"What's new?","meaning":"Ne var ne yok?","example":"Hey! What's new with you?","exampleTr":"Hey! Ne var ne yok?"},
-  {"category":"Selamlaşma & Vedalaşma","pattern":"Catch you later!","meaning":"Sonra görüşürüz!","example":"I gotta run, catch you later!","exampleTr":"Koşmam lazım, sonra görüşürüz!"},
-
-  {"category":"Günlük Sohbet","pattern":"I'm in a rush.","meaning":"Acelem var.","example":"Sorry, I'm in a rush right now.","exampleTr":"Özür dilerim, şu an acelem var."},
-  {"category":"Günlük Sohbet","pattern":"Take your time.","meaning":"Acele etme.","example":"No pressure, take your time.","exampleTr":"Baskı yok, acele etme."},
-  {"category":"Günlük Sohbet","pattern":"I'm not sure.","meaning":"Emin değilim.","example":"I'm not sure about the answer.","exampleTr":"Cevaptan emin değilim."},
-  {"category":"Günlük Sohbet","pattern":"To be honest...","meaning":"Dürüst olmak gerekirse...","example":"To be honest, I didn't like it.","exampleTr":"Dürüst olmak gerekirse, beğenmedim."},
-  {"category":"Günlük Sohbet","pattern":"It's worth a try.","meaning":"Denemeye değer.","example":"It might work, it's worth a try.","exampleTr":"İşe yarayabilir, denemeye değer."},
-  {"category":"Günlük Sohbet","pattern":"Never mind.","meaning":"Boşver / Önemi yok.","example":"Never mind, I found my keys.","exampleTr":"Boşver, anahtarlarımı buldum."},
-  {"category":"Günlük Sohbet","pattern":"So far so good.","meaning":"Şimdilik her şey yolunda.","example":"How is the project? So far so good.","exampleTr":"Proje nasıl? Şimdilik her şey yolunda."},
-  {"category":"Günlük Sohbet","pattern":"Sounds good!","meaning":"Kulağa hoş geliyor / Tamam!","example":"Let's meet at 5 PM. Sounds good!","exampleTr":"Saat 5'te buluşalım. Tamam!"},
-  {"category":"Günlük Sohbet","pattern":"It's up to you.","meaning":"Sana kalmış.","example":"Pizza or pasta? It's up to you.","exampleTr":"Pizza mı makarna mı? Sana kalmış."},
-  {"category":"Günlük Sohbet","pattern":"Long story short...","meaning":"Uzun lafın kısası...","example":"Long story short, we missed the bus.","exampleTr":"Uzun lafın kısası, otobüsü kaçırdık."},
-  {"category":"Günlük Sohbet","pattern":"I'll get back to you.","meaning":"Sana geri döneceğim.","example":"I will check and get back to you.","exampleTr":"Kontrol edip sana döneceğim."},
-  {"category":"Günlük Sohbet","pattern":"I'm on my way.","meaning":"Yoldayım.","example":"I'm on my way, see you in 5 minutes.","exampleTr":"Yoldayım, 5 dakikaya görüşürüz."},
-  {"category":"Günlük Sohbet","pattern":"No worries.","meaning":"Sorun değil / Dert etme.","example":"You forgot? No worries, it happens.","exampleTr":"Unuttun mu? Sorun değil, olur böyle şeyler."},
-  {"category":"Günlük Sohbet","pattern":"That makes sense.","meaning":"Mantıklı.","example":"Oh, that makes sense now.","exampleTr":"Ah, şimdi mantıklı geldi."},
-  {"category":"Günlük Sohbet","pattern":"I have no idea.","meaning":"Hiçbir fikrim yok.","example":"Where is the remote? I have no idea.","exampleTr":"Kumanda nerede? Hiçbir fikrim yok."},
-  {"category":"Günlük Sohbet","pattern":"It depends.","meaning":"Duruma göre değişir.","example":"Are you coming? It depends on the weather.","exampleTr":"Geliyor musun? Havaya bağlı."},
-  {"category":"Günlük Sohbet","pattern":"I can't help it.","meaning":"Elimde değil.","example":"I know it's late but I can't help it.","exampleTr":"Geç olduğunu biliyorum ama elimde değil."},
-  {"category":"Günlük Sohbet","pattern":"What's the point?","meaning":"Ne anlamı var?","example":"What's the point of arguing?","exampleTr":"Tartışmanın ne anlamı var?"},
-  {"category":"Günlük Sohbet","pattern":"By the way...","meaning":"Bu arada...","example":"By the way, did you call your mom?","exampleTr":"Bu arada, anneni aradın mı?"},
-  {"category":"Günlük Sohbet","pattern":"I'm sick of it.","meaning":"Bıktım bundan.","example":"I'm sick of this traffic.","exampleTr":"Bu trafikten bıktım."},
-
-  {"category":"Fikir & Duygu","pattern":"I'm looking forward to it.","meaning":"Dört gözle bekliyorum.","example":"The trip is next week, I'm looking forward to it!","exampleTr":"Gezi gelecek hafta, dört gözle bekliyorum!"},
-  {"category":"Fikir & Duygu","pattern":"I'm fed up with...","meaning":"...dan bıktım usandım.","example":"I'm fed up with this noise.","exampleTr":"Bu gürültüden bıktım usandım."},
-  {"category":"Fikir & Duygu","pattern":"I can't stand it.","meaning":"Dayanamıyorum / Tahammül edemiyorum.","example":"I can't stand the heat.","exampleTr":"Sıcağa dayanamıyorum."},
-  {"category":"Fikir & Duygu","pattern":"I'm so relieved.","meaning":"Çok rahatladım.","example":"The exam is over, I'm so relieved.","exampleTr":"Sınav bitti, çok rahatladım."},
-  {"category":"Fikir & Duygu","pattern":"I didn't mean to...","meaning":"...kastetmedim / istemeden oldu.","example":"I didn't mean to hurt you.","exampleTr":"Seni incitmek istemedim."},
-  {"category":"Fikir & Duygu","pattern":"I'm proud of you.","meaning":"Seninle gurur duyuyorum.","example":"You passed! I'm proud of you.","exampleTr":"Geçtin! Seninle gurur duyuyorum."},
-  {"category":"Fikir & Duygu","pattern":"I couldn't care less.","meaning":"Umurumda değil.","example":"What they think? I couldn't care less.","exampleTr":"Ne düşünüyorlar? Umurumda değil."},
-  {"category":"Fikir & Duygu","pattern":"It blew my mind.","meaning":"Aklımı başımdan aldı / Çok etkiledi.","example":"The movie was amazing, it blew my mind.","exampleTr":"Film harikaydı, aklımı başımdan aldı."},
-  {"category":"Fikir & Duygu","pattern":"I'm having second thoughts.","meaning":"Tereddüt ediyorum / Fikrimi değiştiriyorum.","example":"I'm having second thoughts about the job offer.","exampleTr":"İş teklifi hakkında tereddüt ediyorum."},
-  {"category":"Fikir & Duygu","pattern":"It's not a big deal.","meaning":"Büyük mesele değil.","example":"You spilled coffee? It's not a big deal.","exampleTr":"Kahve mi döktün? Büyük mesele değil."},
-  {"category":"Fikir & Duygu","pattern":"I'm grateful for...","meaning":"...için minnettarım.","example":"I'm grateful for your support.","exampleTr":"Desteğin için minnettarım."},
-  {"category":"Fikir & Duygu","pattern":"That's a relief.","meaning":"Oh be, rahatladım.","example":"The test was negative? That's a relief.","exampleTr":"Test negatif mi? Oh be, rahatladım."},
-  {"category":"Fikir & Duygu","pattern":"I feel like...","meaning":"...gibi hissediyorum / ...canım istiyor.","example":"I feel like staying home today.","exampleTr":"Bugün evde kalmak istiyorum."},
-
-  {"category":"Rica & Yardım","pattern":"Give me a hand.","meaning":"Bana yardım et.","example":"Can you give me a hand with this?","exampleTr":"Buna bir el atabilir misin?"},
-  {"category":"Rica & Yardım","pattern":"Could you do me a favor?","meaning":"Bir iyilik yapabilir misin?","example":"Could you do me a favor and close the window?","exampleTr":"Bir iyilik yapıp pencereyi kapatır mısın?"},
-  {"category":"Rica & Yardım","pattern":"Would you mind...?","meaning":"Sakıncası olur mu...?","example":"Would you mind turning down the music?","exampleTr":"Müziği kısar mısın, sakıncası olur mu?"},
-  {"category":"Rica & Yardım","pattern":"I'd appreciate it.","meaning":"Minnettar olurum.","example":"If you could help, I'd appreciate it.","exampleTr":"Yardım edebilirsen, minnettar olurum."},
-  {"category":"Rica & Yardım","pattern":"I owe you one.","meaning":"Sana bir borçluyum.","example":"Thanks for covering for me, I owe you one.","exampleTr":"Yerime geçtiğin için teşekkürler, sana borçluyum."},
-  {"category":"Rica & Yardım","pattern":"Don't bother.","meaning":"Zahmet etme.","example":"I'll handle it, don't bother.","exampleTr":"Hallederim, zahmet etme."},
-  {"category":"Rica & Yardım","pattern":"Go ahead.","meaning":"Buyur / Devam et.","example":"Can I sit here? Sure, go ahead.","exampleTr":"Buraya oturabilir miyim? Tabii, buyur."},
-  {"category":"Rica & Yardım","pattern":"Help yourself.","meaning":"Buyur, kendin al.","example":"There's food on the table, help yourself.","exampleTr":"Masada yemek var, buyur kendin al."},
-  {"category":"Rica & Yardım","pattern":"I didn't catch that.","meaning":"Anlayamadım / Duyamadım.","example":"Sorry, I didn't catch that. Can you repeat?","exampleTr":"Pardon, anlayamadım. Tekrar eder misin?"},
-  {"category":"Rica & Yardım","pattern":"Bear with me.","meaning":"Biraz sabret / Tahammül et.","example":"Bear with me, I'm almost done.","exampleTr":"Biraz sabret, neredeyse bitti."},
-
-  {"category":"Alışveriş & Restoran","pattern":"How much is this?","meaning":"Bu ne kadar?","example":"Excuse me, how much is this shirt?","exampleTr":"Pardon, bu gömlek ne kadar?"},
-  {"category":"Alışveriş & Restoran","pattern":"Can I pay by card?","meaning":"Kartla ödeyebilir miyim?","example":"I don't have cash, can I pay by card?","exampleTr":"Nakit yok, kartla ödeyebilir miyim?"},
-  {"category":"Alışveriş & Restoran","pattern":"I'd like to order...","meaning":"...sipariş etmek istiyorum.","example":"I'd like to order a coffee, please.","exampleTr":"Bir kahve sipariş etmek istiyorum, lütfen."},
-  {"category":"Alışveriş & Restoran","pattern":"Can I get the check?","meaning":"Hesabı alabilir miyim?","example":"We're done, can I get the check please?","exampleTr":"Biz bittik, hesabı alabilir miyim lütfen?"},
-  {"category":"Alışveriş & Restoran","pattern":"Is there a discount?","meaning":"İndirim var mı?","example":"Is there a discount for students?","exampleTr":"Öğrencilere indirim var mı?"},
-  {"category":"Alışveriş & Restoran","pattern":"I'm just browsing.","meaning":"Sadece bakıyorum.","example":"Can I help you? No thanks, I'm just browsing.","exampleTr":"Yardımcı olabilir miyim? Hayır teşekkürler, sadece bakıyorum."},
-  {"category":"Alışveriş & Restoran","pattern":"Do you have this in a different size?","meaning":"Bunun başka bedeni var mı?","example":"I like this dress. Do you have it in a smaller size?","exampleTr":"Bu elbiseyi beğendim. Daha küçük bedeni var mı?"},
-  {"category":"Alışveriş & Restoran","pattern":"Can I try this on?","meaning":"Bunu deneyebilir miyim?","example":"Can I try this jacket on?","exampleTr":"Bu ceketi deneyebilir miyim?"},
-  {"category":"Alışveriş & Restoran","pattern":"I'll take it.","meaning":"Bunu alacağım.","example":"It fits perfectly, I'll take it.","exampleTr":"Tam oturdu, bunu alacağım."},
-  {"category":"Alışveriş & Restoran","pattern":"What do you recommend?","meaning":"Ne önerirsiniz?","example":"What do you recommend from the menu?","exampleTr":"Menüden ne önerirsiniz?"},
-  {"category":"Alışveriş & Restoran","pattern":"Could I have the menu?","meaning":"Menüyü alabilir miyim?","example":"Hi, could I have the menu please?","exampleTr":"Merhaba, menüyü alabilir miyim lütfen?"},
-  {"category":"Alışveriş & Restoran","pattern":"Is this on sale?","meaning":"Bu indirimde mi?","example":"Is this jacket on sale?","exampleTr":"Bu ceket indirimde mi?"},
-  {"category":"Alışveriş & Restoran","pattern":"Keep the change.","meaning":"Üstü kalsın.","example":"Here you go, keep the change.","exampleTr":"Buyrun, üstü kalsın."},
-
-  {"category":"Yön & Ulaşım","pattern":"How do I get to...?","meaning":"...ya nasıl giderim?","example":"Excuse me, how do I get to the train station?","exampleTr":"Pardon, tren istasyonuna nasıl giderim?"},
-  {"category":"Yön & Ulaşım","pattern":"Is it far from here?","meaning":"Buradan uzak mı?","example":"Is the airport far from here?","exampleTr":"Havalimanı buradan uzak mı?"},
-  {"category":"Yön & Ulaşım","pattern":"Turn left/right at...","meaning":"...da sola/sağa dön.","example":"Turn right at the traffic light.","exampleTr":"Trafik ışığında sağa dön."},
-  {"category":"Yön & Ulaşım","pattern":"Go straight ahead.","meaning":"Düz ileri git.","example":"Go straight ahead for two blocks.","exampleTr":"İki blok düz ileri git."},
-  {"category":"Yön & Ulaşım","pattern":"I'm lost.","meaning":"Kayboldum.","example":"Excuse me, I'm lost. Can you help me?","exampleTr":"Pardon, kayboldum. Yardım edebilir misiniz?"},
-  {"category":"Yön & Ulaşım","pattern":"Where is the nearest...?","meaning":"En yakın ... nerede?","example":"Where is the nearest pharmacy?","exampleTr":"En yakın eczane nerede?"},
-  {"category":"Yön & Ulaşım","pattern":"Which platform?","meaning":"Hangi peron?","example":"Which platform does the train leave from?","exampleTr":"Tren hangi perondan kalkıyor?"},
-  {"category":"Yön & Ulaşım","pattern":"How long does it take?","meaning":"Ne kadar sürer?","example":"How long does it take to get there by bus?","exampleTr":"Otobüsle oraya gitmek ne kadar sürer?"},
-  {"category":"Yön & Ulaşım","pattern":"Can you drop me off at...?","meaning":"Beni ...da indirir misin?","example":"Can you drop me off at the next corner?","exampleTr":"Beni bir sonraki köşede indirir misin?"},
-  {"category":"Yön & Ulaşım","pattern":"I missed my stop.","meaning":"Durağımı kaçırdım.","example":"Oh no, I missed my stop!","exampleTr":"Hay aksi, durağımı kaçırdım!"},
-
-  {"category":"İş & Ofis","pattern":"I'm running late.","meaning":"Geç kalıyorum.","example":"Sorry, I'm running late for the meeting.","exampleTr":"Özür dilerim, toplantıya geç kalıyorum."},
-  {"category":"İş & Ofis","pattern":"Let's get down to business.","meaning":"İşe koyulalım / Konuya geçelim.","example":"Enough small talk, let's get down to business.","exampleTr":"Yeter muhabbet, konuya geçelim."},
-  {"category":"İş & Ofis","pattern":"I'll keep you posted.","meaning":"Seni bilgilendiririm.","example":"We're still waiting for approval, I'll keep you posted.","exampleTr":"Hâlâ onay bekliyoruz, seni bilgilendiririm."},
-  {"category":"İş & Ofis","pattern":"Can we reschedule?","meaning":"Yeniden planlayabilir miyiz?","example":"Something came up, can we reschedule the meeting?","exampleTr":"Bir şey çıktı, toplantıyı erteleyebilir miyiz?"},
-  {"category":"İş & Ofis","pattern":"I'm swamped.","meaning":"İşim başımdan aşkın.","example":"Can't join lunch today, I'm swamped.","exampleTr":"Bugün öğle yemeğine gelemem, işim başımdan aşkın."},
-  {"category":"İş & Ofis","pattern":"Let me get back to you on that.","meaning":"O konuda sana dönerim.","example":"Good question, let me get back to you on that.","exampleTr":"İyi soru, o konuda sana dönerim."},
-  {"category":"İş & Ofis","pattern":"We're on the same page.","meaning":"Aynı fikirde / anlayıştayız.","example":"Good, it seems we're on the same page.","exampleTr":"Güzel, aynı fikirde görünüyoruz."},
-  {"category":"İş & Ofis","pattern":"It slipped my mind.","meaning":"Aklımdan çıkmış.","example":"Sorry, the deadline slipped my mind.","exampleTr":"Özür dilerim, son tarih aklımdan çıkmış."},
-  {"category":"İş & Ofis","pattern":"I'll handle it.","meaning":"Hallederim.","example":"Don't worry about the report, I'll handle it.","exampleTr":"Rapor için endişelenme, hallederim."},
-  {"category":"İş & Ofis","pattern":"What's the deadline?","meaning":"Son tarih ne zaman?","example":"What's the deadline for this project?","exampleTr":"Bu projenin son tarihi ne zaman?"},
-  {"category":"İş & Ofis","pattern":"Let's wrap it up.","meaning":"Bitirelim / Toparlanelım.","example":"It's getting late, let's wrap it up.","exampleTr":"Geç oluyor, toparlanelım."},
-  {"category":"İş & Ofis","pattern":"I'll take care of it.","meaning":"Halledeceğim / İlgilenirim.","example":"Don't stress, I'll take care of it.","exampleTr":"Stres yapma, ilgilenirim."},
-
-  {"category":"Telefon & İletişim","pattern":"Can I call you back?","meaning":"Seni geri arayabilir miyim?","example":"I'm in a meeting, can I call you back?","exampleTr":"Toplantıdayım, seni geri arayabilir miyim?"},
-  {"category":"Telefon & İletişim","pattern":"You're breaking up.","meaning":"Sesin kesiliyor.","example":"Hello? You're breaking up, I can't hear you.","exampleTr":"Alo? Sesin kesiliyor, duyamıyorum."},
-  {"category":"Telefon & İletişim","pattern":"I'll text you.","meaning":"Sana mesaj atarım.","example":"I'll text you the address.","exampleTr":"Adresi sana mesaj atarım."},
-  {"category":"Telefon & İletişim","pattern":"Let me put you on speaker.","meaning":"Seni hoparlöre alayım.","example":"Hold on, let me put you on speaker.","exampleTr":"Bir saniye, seni hoparlöre alayım."},
-  {"category":"Telefon & İletişim","pattern":"I left you a message.","meaning":"Sana mesaj bıraktım.","example":"I called earlier and left you a message.","exampleTr":"Daha önce aradım ve sana mesaj bıraktım."},
-  {"category":"Telefon & İletişim","pattern":"Sorry, wrong number.","meaning":"Pardon, yanlış numara.","example":"Sorry, wrong number. Have a good day.","exampleTr":"Pardon, yanlış numara. İyi günler."},
-  {"category":"Telefon & İletişim","pattern":"Can you speak up?","meaning":"Biraz daha yüksek sesle konuşabilir misin?","example":"It's noisy here, can you speak up?","exampleTr":"Burası gürültülü, biraz daha yüksek sesle konuşabilir misin?"},
-  {"category":"Telefon & İletişim","pattern":"I'll drop you a line.","meaning":"Sana bir satır yazarım / Haber veririm.","example":"When I arrive, I'll drop you a line.","exampleTr":"Vardığımda sana haber veririm."},
-
-  {"category":"Seyahat & Otel","pattern":"I have a reservation.","meaning":"Rezervasyonum var.","example":"Hi, I have a reservation under the name Smith.","exampleTr":"Merhaba, Smith adına rezervasyonum var."},
-  {"category":"Seyahat & Otel","pattern":"What time is check-out?","meaning":"Çıkış saati kaçta?","example":"What time is check-out tomorrow?","exampleTr":"Yarın çıkış saati kaçta?"},
-  {"category":"Seyahat & Otel","pattern":"Is breakfast included?","meaning":"Kahvaltı dahil mi?","example":"Is breakfast included in the price?","exampleTr":"Kahvaltı fiyata dahil mi?"},
-  {"category":"Seyahat & Otel","pattern":"I'd like to book a room.","meaning":"Bir oda rezerve etmek istiyorum.","example":"I'd like to book a room for two nights.","exampleTr":"İki gecelik bir oda rezerve etmek istiyorum."},
-  {"category":"Seyahat & Otel","pattern":"Where can I exchange money?","meaning":"Nerede para bozdurabilirim?","example":"Excuse me, where can I exchange money?","exampleTr":"Pardon, nerede para bozdurabilirim?"},
-  {"category":"Seyahat & Otel","pattern":"My flight has been delayed.","meaning":"Uçuşum rötar yaptı.","example":"My flight has been delayed by two hours.","exampleTr":"Uçuşum iki saat rötar yaptı."},
-  {"category":"Seyahat & Otel","pattern":"Could you call me a taxi?","meaning":"Bana bir taksi çağırır mısınız?","example":"Could you call me a taxi to the airport?","exampleTr":"Havalimanına bir taksi çağırır mısınız?"},
-  {"category":"Seyahat & Otel","pattern":"Is there Wi-Fi?","meaning":"Wi-Fi var mı?","example":"Is there free Wi-Fi in the hotel?","exampleTr":"Otelde ücretsiz Wi-Fi var mı?"},
-
-  {"category":"Sağlık & Acil","pattern":"I don't feel well.","meaning":"İyi hissetmiyorum.","example":"I don't feel well, I need to sit down.","exampleTr":"İyi hissetmiyorum, oturmam lazım."},
-  {"category":"Sağlık & Acil","pattern":"Call an ambulance!","meaning":"Ambulans çağırın!","example":"Someone fainted, call an ambulance!","exampleTr":"Biri bayıldı, ambulans çağırın!"},
-  {"category":"Sağlık & Acil","pattern":"I'm allergic to...","meaning":"...ya alerjim var.","example":"I'm allergic to peanuts.","exampleTr":"Fıstığa alerjim var."},
-  {"category":"Sağlık & Acil","pattern":"Where is the hospital?","meaning":"Hastane nerede?","example":"Where is the nearest hospital?","exampleTr":"En yakın hastane nerede?"},
-  {"category":"Sağlık & Acil","pattern":"I need to see a doctor.","meaning":"Doktora görünmem lazım.","example":"I've been coughing all week, I need to see a doctor.","exampleTr":"Bütün hafta öksürüyorum, doktora görünmem lazım."},
-  {"category":"Sağlık & Acil","pattern":"It hurts here.","meaning":"Burası ağrıyor.","example":"Doctor, it hurts here when I press.","exampleTr":"Doktor, bastırınca burası ağrıyor."},
-  {"category":"Sağlık & Acil","pattern":"I have a headache.","meaning":"Başım ağrıyor.","example":"I have a terrible headache today.","exampleTr":"Bugün korkunç bir baş ağrım var."},
-  {"category":"Sağlık & Acil","pattern":"Can I get a prescription?","meaning":"Reçete alabilir miyim?","example":"Can I get a prescription for this?","exampleTr":"Bunun için reçete alabilir miyim?"},
-
-  {"category":"Zaman & Randevu","pattern":"Are you free tomorrow?","meaning":"Yarın müsait misin?","example":"Are you free tomorrow evening?","exampleTr":"Yarın akşam müsait misin?"},
-  {"category":"Zaman & Randevu","pattern":"Let's make it another time.","meaning":"Başka bir zamana erteleyelim.","example":"I can't tonight, let's make it another time.","exampleTr":"Bu gece olmaz, başka zamana erteleyelim."},
-  {"category":"Zaman & Randevu","pattern":"I'm running out of time.","meaning":"Zamanım daralıyor.","example":"I'm running out of time, hurry up!","exampleTr":"Zamanım daralıyor, acele et!"},
-  {"category":"Zaman & Randevu","pattern":"Just in time!","meaning":"Tam zamanında!","example":"The bus arrived just in time.","exampleTr":"Otobüs tam zamanında geldi."},
-  {"category":"Zaman & Randevu","pattern":"I'll be there in a minute.","meaning":"Bir dakikaya oradayım.","example":"Wait for me, I'll be there in a minute.","exampleTr":"Beni bekle, bir dakikaya oradayım."},
-  {"category":"Zaman & Randevu","pattern":"It's about time!","meaning":"Artık zamanı geldi! / Nihayet!","example":"You finally cleaned your room? It's about time!","exampleTr":"Sonunda odanı mı temizledin? Artık zamanı gelmişti!"},
-  {"category":"Zaman & Randevu","pattern":"I overslept.","meaning":"Uyuyakalmışım.","example":"Sorry I'm late, I overslept.","exampleTr":"Geç kaldığım için özür dilerim, uyuyakalmışım."},
-  {"category":"Zaman & Randevu","pattern":"Time flies!","meaning":"Zaman çok çabuk geçiyor!","example":"Is it already 6 PM? Time flies!","exampleTr":"Şimdiden akşam 6 mı oldu? Zaman çok çabuk geçiyor!"},
-
-  {"category":"Kabul & Red","pattern":"That would be great.","meaning":"Harika olur.","example":"Dinner at 7? That would be great!","exampleTr":"7'de akşam yemeği mi? Harika olur!"},
-  {"category":"Kabul & Red","pattern":"I'm afraid I can't.","meaning":"Korkarım yapamam.","example":"I'm afraid I can't make it tonight.","exampleTr":"Korkarım bu gece gelemem."},
-  {"category":"Kabul & Red","pattern":"I'll think about it.","meaning":"Düşüneceğim.","example":"Good offer, I'll think about it.","exampleTr":"İyi teklif, düşüneceğim."},
-  {"category":"Kabul & Red","pattern":"Count me in!","meaning":"Ben de varım!","example":"Road trip this weekend? Count me in!","exampleTr":"Bu hafta sonu yolculuk mu? Ben de varım!"},
-  {"category":"Kabul & Red","pattern":"Maybe next time.","meaning":"Belki bir dahaki sefere.","example":"I can't today, maybe next time.","exampleTr":"Bugün olmaz, belki bir dahaki sefere."},
-  {"category":"Kabul & Red","pattern":"I'll pass.","meaning":"Pas geçeyim / İstemiyorum.","example":"Karaoke tonight? I'll pass.","exampleTr":"Bu gece karaoke mi? Pas geçeyim."},
-  {"category":"Kabul & Red","pattern":"Why not?","meaning":"Neden olmasın?","example":"Want to try sushi? Why not?","exampleTr":"Suşi denemek ister misin? Neden olmasın?"},
-  {"category":"Kabul & Red","pattern":"You bet!","meaning":"Tabii ki! / Kesinlikle!","example":"Are you coming to the party? You bet!","exampleTr":"Partiye geliyor musun? Tabii ki!"},
-
-  {"category":"Deyimler & İfadeler","pattern":"Break a leg!","meaning":"Bol şans!","example":"Your exam is tomorrow? Break a leg!","exampleTr":"Sınavın yarın mı? Bol şans!"},
-  {"category":"Deyimler & İfadeler","pattern":"It's a piece of cake.","meaning":"Çocuk oyuncağı / Çok kolay.","example":"The test was a piece of cake.","exampleTr":"Sınav çocuk oyuncağıydı."},
-  {"category":"Deyimler & İfadeler","pattern":"Hit the road.","meaning":"Yola çıkmak / Gitmek.","example":"It's late, let's hit the road.","exampleTr":"Geç oldu, yola çıkalım."},
-  {"category":"Deyimler & İfadeler","pattern":"Under the weather.","meaning":"Biraz hasta / Keyifsiz.","example":"I'm feeling a bit under the weather today.","exampleTr":"Bugün biraz keyifsizim."},
-  {"category":"Deyimler & İfadeler","pattern":"Once in a blue moon.","meaning":"Kırk yılda bir.","example":"I eat fast food once in a blue moon.","exampleTr":"Kırk yılda bir fast food yerim."},
-  {"category":"Deyimler & İfadeler","pattern":"Hang in there!","meaning":"Dayanmaya devam et! / Pes etme!","example":"I know it's tough, but hang in there!","exampleTr":"Zor olduğunu biliyorum ama pes etme!"},
-  {"category":"Deyimler & İfadeler","pattern":"Bite the bullet.","meaning":"Gözünü karartmak / Cesaret edip yapmak.","example":"I hate dentists but I need to bite the bullet.","exampleTr":"Dişçilerden nefret ederim ama gözümü karartmam lazım."},
-  {"category":"Deyimler & İfadeler","pattern":"Better late than never.","meaning":"Geç olsun güç olmasın.","example":"You finally started exercising? Better late than never!","exampleTr":"Sonunda spora mı başladın? Geç olsun güç olmasın!"},
-  {"category":"Deyimler & İfadeler","pattern":"Let's call it a day.","meaning":"Bugünlük bu kadar yeter.","example":"I'm tired, let's call it a day.","exampleTr":"Yoruldum, bugünlük bu kadar yeter."},
-  {"category":"Deyimler & İfadeler","pattern":"The ball is in your court.","meaning":"Sıra sende / Karar sende.","example":"I made my offer, the ball is in your court.","exampleTr":"Teklifimi yaptım, sıra sende."},
-  {"category":"Deyimler & İfadeler","pattern":"Don't judge a book by its cover.","meaning":"Kitabı kapağına göre yargılama.","example":"He looks tough but he's kind. Don't judge a book by its cover.","exampleTr":"Sert görünüyor ama iyi biri. Dış görünüşe göre yargılama."},
-  {"category":"Deyimler & İfadeler","pattern":"Actions speak louder than words.","meaning":"Laf değil icraat.","example":"Stop promising and do it. Actions speak louder than words.","exampleTr":"Söz vermeyi bırak ve yap. Laf değil icraat."},
-  {"category":"Deyimler & İfadeler","pattern":"It's raining cats and dogs.","meaning":"Bardaktan boşalırcasına yağıyor.","example":"Take an umbrella, it's raining cats and dogs!","exampleTr":"Şemsiye al, bardaktan boşalırcasına yağıyor!"},
-  {"category":"Deyimler & İfadeler","pattern":"Speak of the devil!","meaning":"İyi saatte olsunlar! / Lafı geçenin...","example":"We were just talking about you! Speak of the devil!","exampleTr":"Seni konuşuyorduk az önce! İyi saatte olsunlar!"}
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "How's it going?",
+    "meaning": "Nasıl gidiyor?",
+    "example": "Hey Mike, how's it going?",
+    "exampleTr": "Hey Mike, nasıl gidiyor?",
+    "pron": "Havz it going?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "What have you been up to?",
+    "meaning": "Neler yapıyorsun?",
+    "example": "What have you been up to lately?",
+    "exampleTr": "Son zamanlarda neler yapıyorsun?",
+    "pron": "Vat hev yu bin ap tu?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Long time no see!",
+    "meaning": "Uzun zamandır görüşmedik!",
+    "example": "Oh wow, long time no see! How are you?",
+    "exampleTr": "Aa, uzun zamandır görüşmedik! Nasılsın?",
+    "pron": "Long taym no si!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "See you later.",
+    "meaning": "Sonra görüşürüz.",
+    "example": "I have to go, see you later.",
+    "exampleTr": "Gitmem lazım, sonra görüşürüz.",
+    "pron": "Si yu leytır."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Take care!",
+    "meaning": "Kendine iyi bak!",
+    "example": "Bye! Take care!",
+    "exampleTr": "Hoşça kal! Kendine iyi bak!",
+    "pron": "Teyk ker!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Keep in touch.",
+    "meaning": "İrtibatta kalalım.",
+    "example": "Here is my number, let's keep in touch.",
+    "exampleTr": "İşte numaram, irtibatta kalalım.",
+    "pron": "Kip in taç."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Say hi to...",
+    "meaning": "...selamımı söyle.",
+    "example": "Say hi to your mom for me.",
+    "exampleTr": "Annene selamımı söyle.",
+    "pron": "Sey hay tu..."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Nice to meet you.",
+    "meaning": "Tanıştığımıza memnun oldum.",
+    "example": "Hi, I'm Sarah. Nice to meet you.",
+    "exampleTr": "Merhaba, ben Sarah. Tanıştığımıza memnun oldum.",
+    "pron": "Nays tu mit yu."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "What's new?",
+    "meaning": "Ne var ne yok?",
+    "example": "Hey! What's new with you?",
+    "exampleTr": "Hey! Ne var ne yok?",
+    "pron": "Vats nyu?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Catch you later!",
+    "meaning": "Sonra görüşürüz!",
+    "example": "I gotta run, catch you later!",
+    "exampleTr": "Koşmam lazım, sonra görüşürüz!",
+    "pron": "Keç yu leytır!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "How are you holding up?",
+    "meaning": "Nasıl dayanıyorsun?",
+    "example": "I heard the news. How are you holding up?",
+    "exampleTr": "Haberi duydum. Nasıl dayanıyorsun?",
+    "pron": "Hav ar yu holding ap?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "It's been ages!",
+    "meaning": "Yıllar oldu! / Çok uzun zaman oldu!",
+    "example": "Wow, it's been ages since we last met!",
+    "exampleTr": "Vay, son görüşmemizden beri çok uzun zaman oldu!",
+    "pron": "İts bin eycız!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Have a good one!",
+    "meaning": "İyi günler! / Kendine iyi bak!",
+    "example": "See you tomorrow, have a good one!",
+    "exampleTr": "Yarın görüşürüz, iyi günler!",
+    "pron": "Hev e gud van!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "What's going on?",
+    "meaning": "Neler oluyor? / Ne var ne yok?",
+    "example": "Hey, what's going on?",
+    "exampleTr": "Hey, neler oluyor?",
+    "pron": "Vats going on?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "I'd better get going.",
+    "meaning": "Artık gitsem iyi olacak.",
+    "example": "It's late, I'd better get going.",
+    "exampleTr": "Geç oldu, artık gitsem iyi olacak.",
+    "pron": "Ayd betır get going."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Drop by anytime.",
+    "meaning": "İstediğin zaman uğra.",
+    "example": "You're always welcome, drop by anytime.",
+    "exampleTr": "Her zaman hoş gelirsin, istediğin zaman uğra.",
+    "pron": "Drop bay enitaym."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "I'll see myself out.",
+    "meaning": "Çıkışı bulurum / Kendi çıkarım.",
+    "example": "Don't get up, I'll see myself out.",
+    "exampleTr": "Kalkma, çıkışı kendim bulurum.",
+    "pron": "Ayl si mayself aut."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Good to see you again.",
+    "meaning": "Seni tekrar görmek güzel.",
+    "example": "Hey John! Good to see you again.",
+    "exampleTr": "Hey John! Seni tekrar görmek güzel.",
+    "pron": "Gud tu si yu ıgen."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm in a rush.",
+    "meaning": "Acelem var.",
+    "example": "Sorry, I'm in a rush right now.",
+    "exampleTr": "Özür dilerim, şu an acelem var.",
+    "pron": "Aym in e raş."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Take your time.",
+    "meaning": "Acele etme.",
+    "example": "No pressure, take your time.",
+    "exampleTr": "Baskı yok, acele etme.",
+    "pron": "Teyk yor taym."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm not sure.",
+    "meaning": "Emin değilim.",
+    "example": "I'm not sure about the answer.",
+    "exampleTr": "Cevaptan emin değilim.",
+    "pron": "Aym nat şur."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "To be honest...",
+    "meaning": "Dürüst olmak gerekirse...",
+    "example": "To be honest, I didn't like it.",
+    "exampleTr": "Dürüst olmak gerekirse, beğenmedim.",
+    "pron": "Tu bi onıst..."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "It's worth a try.",
+    "meaning": "Denemeye değer.",
+    "example": "It might work, it's worth a try.",
+    "exampleTr": "İşe yarayabilir, denemeye değer.",
+    "pron": "İts vört e tray."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Never mind.",
+    "meaning": "Boşver / Önemi yok.",
+    "example": "Never mind, I found my keys.",
+    "exampleTr": "Boşver, anahtarlarımı buldum.",
+    "pron": "Nevır maynd."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "So far so good.",
+    "meaning": "Şimdilik her şey yolunda.",
+    "example": "How is the project? So far so good.",
+    "exampleTr": "Proje nasıl? Şimdilik her şey yolunda.",
+    "pron": "So far so gud."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Sounds good!",
+    "meaning": "Kulağa hoş geliyor / Tamam!",
+    "example": "Let's meet at 5 PM. Sounds good!",
+    "exampleTr": "Saat 5'te buluşalım. Tamam!",
+    "pron": "Saundz gud!"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "It's up to you.",
+    "meaning": "Sana kalmış.",
+    "example": "Pizza or pasta? It's up to you.",
+    "exampleTr": "Pizza mı makarna mı? Sana kalmış.",
+    "pron": "İts ap tu yu."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Long story short...",
+    "meaning": "Uzun lafın kısası...",
+    "example": "Long story short, we missed the bus.",
+    "exampleTr": "Uzun lafın kısası, otobüsü kaçırdık.",
+    "pron": "Long stori şort..."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'll get back to you.",
+    "meaning": "Sana geri döneceğim.",
+    "example": "I will check and get back to you.",
+    "exampleTr": "Kontrol edip sana döneceğim.",
+    "pron": "Ayl get bek tu yu."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm on my way.",
+    "meaning": "Yoldayım.",
+    "example": "I'm on my way, see you in 5 minutes.",
+    "exampleTr": "Yoldayım, 5 dakikaya görüşürüz.",
+    "pron": "Aym on may vey."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "No worries.",
+    "meaning": "Sorun değil / Dert etme.",
+    "example": "You forgot? No worries, it happens.",
+    "exampleTr": "Unuttun mu? Sorun değil, olur böyle şeyler.",
+    "pron": "No vöriz."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "That makes sense.",
+    "meaning": "Mantıklı.",
+    "example": "Oh, that makes sense now.",
+    "exampleTr": "Ah, şimdi mantıklı geldi.",
+    "pron": "Det meyks sens."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I have no idea.",
+    "meaning": "Hiçbir fikrim yok.",
+    "example": "Where is the remote? I have no idea.",
+    "exampleTr": "Kumanda nerede? Hiçbir fikrim yok.",
+    "pron": "Ay hev no aydiya."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "It depends.",
+    "meaning": "Duruma göre değişir.",
+    "example": "Are you coming? It depends on the weather.",
+    "exampleTr": "Geliyor musun? Havaya bağlı.",
+    "pron": "İt dipendz."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I can't help it.",
+    "meaning": "Elimde değil.",
+    "example": "I know it's late but I can't help it.",
+    "exampleTr": "Geç olduğunu biliyorum ama elimde değil.",
+    "pron": "Ay kent help it."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "What's the point?",
+    "meaning": "Ne anlamı var?",
+    "example": "What's the point of arguing?",
+    "exampleTr": "Tartışmanın ne anlamı var?",
+    "pron": "Vats dı poynt?"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "By the way...",
+    "meaning": "Bu arada...",
+    "example": "By the way, did you call your mom?",
+    "exampleTr": "Bu arada, anneni aradın mı?",
+    "pron": "Bay dı vey..."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm sick of it.",
+    "meaning": "Bıktım bundan.",
+    "example": "I'm sick of this traffic.",
+    "exampleTr": "Bu trafikten bıktım.",
+    "pron": "Aym sik ov it."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Let me think about it.",
+    "meaning": "Bir düşüneyim.",
+    "example": "That's a big decision, let me think about it.",
+    "exampleTr": "Bu büyük bir karar, bir düşüneyim.",
+    "pron": "Let mi tink ıbaut it."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "You know what I mean?",
+    "meaning": "Ne demek istediğimi anlıyor musun?",
+    "example": "It's complicated, you know what I mean?",
+    "exampleTr": "Karmaşık, ne demek istediğimi anlıyor musun?",
+    "pron": "Yu no vat ay min?"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm just kidding.",
+    "meaning": "Şaka yapıyorum.",
+    "example": "Relax, I'm just kidding!",
+    "exampleTr": "Rahatla, şaka yapıyorum!",
+    "pron": "Aym cast kiding."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "That's the thing.",
+    "meaning": "Mesele de o / İşte sorun o.",
+    "example": "That's the thing, I don't have the money.",
+    "exampleTr": "İşte sorun o, param yok.",
+    "pron": "Dets dı ting."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm telling you.",
+    "meaning": "Sana söylüyorum / İnan bana.",
+    "example": "I'm telling you, this place is amazing.",
+    "exampleTr": "İnan bana, bu yer harika.",
+    "pron": "Aym teling yu."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Here's the thing.",
+    "meaning": "Mesele şu ki...",
+    "example": "Here's the thing, I already said yes.",
+    "exampleTr": "Mesele şu ki, ben zaten evet dedim.",
+    "pron": "Hirz dı ting."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Guess what!",
+    "meaning": "Bil bakalım ne oldu!",
+    "example": "Guess what! I got the job!",
+    "exampleTr": "Bil bakalım ne oldu! İşi aldım!",
+    "pron": "Ges vat!"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "As far as I know...",
+    "meaning": "Bildiğim kadarıyla...",
+    "example": "As far as I know, the meeting is at 3.",
+    "exampleTr": "Bildiğim kadarıyla, toplantı saat 3'te.",
+    "pron": "Ez far ez ay no..."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "For what it's worth...",
+    "meaning": "Ne kadar işe yararsa...",
+    "example": "For what it's worth, I think you're right.",
+    "exampleTr": "Ne kadar değeri varsa, bence haklısın.",
+    "pron": "For vat its vört..."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Fair enough.",
+    "meaning": "Haklısın / Kabul.",
+    "example": "I don't want to go out. Fair enough.",
+    "exampleTr": "Dışarı çıkmak istemiyorum. Kabul.",
+    "pron": "Fer inaf."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Not really.",
+    "meaning": "Pek sayılmaz / Aslında hayır.",
+    "example": "Did you like the movie? Not really.",
+    "exampleTr": "Filmi beğendin mi? Pek sayılmaz.",
+    "pron": "Nat rili."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Same here.",
+    "meaning": "Ben de / Bende de öyle.",
+    "example": "I'm so tired. Same here.",
+    "exampleTr": "Çok yorgunum. Ben de.",
+    "pron": "Seym hir."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "You have a point.",
+    "meaning": "Haklısın / Bir yere kadar doğru.",
+    "example": "You have a point, let's reconsider.",
+    "exampleTr": "Haklısın, tekrar düşünelim.",
+    "pron": "Yu hev e poynt."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I don't mind.",
+    "meaning": "Benim için fark etmez.",
+    "example": "Tea or coffee? I don't mind.",
+    "exampleTr": "Çay mı kahve mi? Fark etmez.",
+    "pron": "Ay dont maynd."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "What a relief!",
+    "meaning": "Ne büyük rahatlama!",
+    "example": "The exam is cancelled? What a relief!",
+    "exampleTr": "Sınav iptal mi? Ne büyük rahatlama!",
+    "pron": "Vat e rilif!"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I bet.",
+    "meaning": "Eminim / Öyle olmalı.",
+    "example": "The food was delicious. I bet!",
+    "exampleTr": "Yemek lezzetliydi. Eminim!",
+    "pron": "Ay bet."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Tell me about it.",
+    "meaning": "Bana mı anlatıyorsun / Bilmez miyim.",
+    "example": "Work has been stressful. Tell me about it.",
+    "exampleTr": "İş stresli oldu. Bana mı anlatıyorsun.",
+    "pron": "Tel mi ıbaut it."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I can relate.",
+    "meaning": "Seni anlıyorum / Ben de aynısını yaşadım.",
+    "example": "Mondays are tough. I can relate.",
+    "exampleTr": "Pazartesileri zor. Seni anlıyorum.",
+    "pron": "Ay ken rileyt."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "It is what it is.",
+    "meaning": "Olan oldu / Yapacak bir şey yok.",
+    "example": "We lost the game, it is what it is.",
+    "exampleTr": "Maçı kaybettik, yapacak bir şey yok.",
+    "pron": "İt iz vat it iz."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Let's get to the point.",
+    "meaning": "Konuya gelelim.",
+    "example": "We don't have much time, let's get to the point.",
+    "exampleTr": "Çok zamanımız yok, konuya gelelim.",
+    "pron": "Lets get tu dı poynt."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "That rings a bell.",
+    "meaning": "Kulağıma tanıdık geliyor.",
+    "example": "That name rings a bell.",
+    "exampleTr": "O isim kulağıma tanıdık geliyor.",
+    "pron": "Det ringz e bel."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm looking forward to it.",
+    "meaning": "Dört gözle bekliyorum.",
+    "example": "The trip is next week, I'm looking forward to it!",
+    "exampleTr": "Gezi gelecek hafta, dört gözle bekliyorum!",
+    "pron": "Aym luking forvırd tu it."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm fed up with...",
+    "meaning": "...dan bıktım usandım.",
+    "example": "I'm fed up with this noise.",
+    "exampleTr": "Bu gürültüden bıktım usandım.",
+    "pron": "Aym fed ap vit..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I can't stand it.",
+    "meaning": "Dayanamıyorum.",
+    "example": "I can't stand the heat.",
+    "exampleTr": "Sıcağa dayanamıyorum.",
+    "pron": "Ay kent stend it."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm so relieved.",
+    "meaning": "Çok rahatladım.",
+    "example": "The exam is over, I'm so relieved.",
+    "exampleTr": "Sınav bitti, çok rahatladım.",
+    "pron": "Aym so rilivd."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I didn't mean to...",
+    "meaning": "...kastetmedim.",
+    "example": "I didn't mean to hurt you.",
+    "exampleTr": "Seni incitmek istemedim.",
+    "pron": "Ay didınt min tu..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm proud of you.",
+    "meaning": "Seninle gurur duyuyorum.",
+    "example": "You passed! I'm proud of you.",
+    "exampleTr": "Geçtin! Seninle gurur duyuyorum.",
+    "pron": "Aym praud ov yu."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I couldn't care less.",
+    "meaning": "Umurumda değil.",
+    "example": "What they think? I couldn't care less.",
+    "exampleTr": "Ne düşünüyorlar? Umurumda değil.",
+    "pron": "Ay kudınt ker les."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It blew my mind.",
+    "meaning": "Aklımı başımdan aldı.",
+    "example": "The movie was amazing, it blew my mind.",
+    "exampleTr": "Film harikaydı, aklımı başımdan aldı.",
+    "pron": "İt blu may maynd."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm having second thoughts.",
+    "meaning": "Tereddüt ediyorum.",
+    "example": "I'm having second thoughts about the job offer.",
+    "exampleTr": "İş teklifi hakkında tereddüt ediyorum.",
+    "pron": "Aym heving sekınd tots."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It's not a big deal.",
+    "meaning": "Büyük mesele değil.",
+    "example": "You spilled coffee? It's not a big deal.",
+    "exampleTr": "Kahve mi döktün? Büyük mesele değil.",
+    "pron": "İts nat e big dil."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm grateful for...",
+    "meaning": "...için minnettarım.",
+    "example": "I'm grateful for your support.",
+    "exampleTr": "Desteğin için minnettarım.",
+    "pron": "Aym greytful for..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "That's a relief.",
+    "meaning": "Oh be, rahatladım.",
+    "example": "The test was negative? That's a relief.",
+    "exampleTr": "Test negatif mi? Oh be, rahatladım.",
+    "pron": "Dets e rilif."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I feel like...",
+    "meaning": "...gibi hissediyorum / canım istiyor.",
+    "example": "I feel like staying home today.",
+    "exampleTr": "Bugün evde kalmak istiyorum.",
+    "pron": "Ay fil layk..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm on the fence.",
+    "meaning": "Kararsızım.",
+    "example": "I'm on the fence about buying a new car.",
+    "exampleTr": "Yeni araba almak konusunda kararsızım.",
+    "pron": "Aym on dı fens."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I totally agree.",
+    "meaning": "Tamamen katılıyorum.",
+    "example": "That's unfair. I totally agree.",
+    "exampleTr": "Bu adaletsiz. Tamamen katılıyorum.",
+    "pron": "Ay totıli ıgri."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I beg to differ.",
+    "meaning": "Farklı düşünüyorum / Katılmıyorum.",
+    "example": "I beg to differ, I think it's a bad idea.",
+    "exampleTr": "Farklı düşünüyorum, bence kötü bir fikir.",
+    "pron": "Ay beg tu difır."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm overwhelmed.",
+    "meaning": "Bunalmış hissediyorum.",
+    "example": "I have so much work, I'm overwhelmed.",
+    "exampleTr": "Çok fazla işim var, bunalmış hissediyorum.",
+    "pron": "Aym ovırvhelmd."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It makes me happy.",
+    "meaning": "Bu beni mutlu ediyor.",
+    "example": "Seeing you smile makes me happy.",
+    "exampleTr": "Senin gülümsediğini görmek beni mutlu ediyor.",
+    "pron": "İt meyks mi hepi."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm not in the mood.",
+    "meaning": "Modumda değilim.",
+    "example": "I'm not in the mood for going out.",
+    "exampleTr": "Dışarı çıkacak modumda değilim.",
+    "pron": "Aym nat in dı mud."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I can't get over it.",
+    "meaning": "Üstünden gelemiyorum / Atlatamıyorum.",
+    "example": "That concert was amazing, I can't get over it.",
+    "exampleTr": "O konser harikaydı, üstünden gelemiyorum.",
+    "pron": "Ay kent get ovır it."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm sick and tired of...",
+    "meaning": "...dan bıktım usandım.",
+    "example": "I'm sick and tired of waiting.",
+    "exampleTr": "Beklemekten bıktım usandım.",
+    "pron": "Aym sik end tayırd ov..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It gets on my nerves.",
+    "meaning": "Sinirlerimi bozuyor.",
+    "example": "That noise gets on my nerves.",
+    "exampleTr": "O gürültü sinirlerimi bozuyor.",
+    "pron": "İt gets on may nörvz."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm touched.",
+    "meaning": "Çok duygulandım.",
+    "example": "Thank you for the gift, I'm so touched.",
+    "exampleTr": "Hediye için teşekkürler, çok duygulandım.",
+    "pron": "Aym taçd."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I was blown away.",
+    "meaning": "Çok etkilendim / Hayran kaldım.",
+    "example": "I was blown away by the performance.",
+    "exampleTr": "Performanstan çok etkilendim.",
+    "pron": "Ay vaz blon ıvey."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm thrilled.",
+    "meaning": "Çok heyecanlıyım / Mutluyum.",
+    "example": "I got the promotion, I'm thrilled!",
+    "exampleTr": "Terfi aldım, çok mutluyum!",
+    "pron": "Aym trild."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm torn between...",
+    "meaning": "...arasında kararsız kaldım.",
+    "example": "I'm torn between the two options.",
+    "exampleTr": "İki seçenek arasında kararsız kaldım.",
+    "pron": "Aym torn bitvin..."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It means a lot to me.",
+    "meaning": "Bu benim için çok değerli.",
+    "example": "Your support means a lot to me.",
+    "exampleTr": "Desteğin benim için çok değerli.",
+    "pron": "İt minz e lat tu mi."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I couldn't be happier.",
+    "meaning": "Daha mutlu olamazdım.",
+    "example": "I got married, I couldn't be happier!",
+    "exampleTr": "Evlendim, daha mutlu olamazdım!",
+    "pron": "Ay kudınt bi hepier."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Give me a hand.",
+    "meaning": "Bana yardım et.",
+    "example": "Can you give me a hand with this?",
+    "exampleTr": "Buna bir el atabilir misin?",
+    "pron": "Giv mi e hend."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Could you do me a favor?",
+    "meaning": "Bir iyilik yapabilir misin?",
+    "example": "Could you do me a favor and close the window?",
+    "exampleTr": "Bir iyilik yapıp pencereyi kapatır mısın?",
+    "pron": "Kud yu du mi e feyvır?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Would you mind...?",
+    "meaning": "Sakıncası olur mu...?",
+    "example": "Would you mind turning down the music?",
+    "exampleTr": "Müziği kısar mısın, sakıncası olur mu?",
+    "pron": "Vud yu maynd...?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I'd appreciate it.",
+    "meaning": "Minnettar olurum.",
+    "example": "If you could help, I'd appreciate it.",
+    "exampleTr": "Yardım edebilirsen, minnettar olurum.",
+    "pron": "Ayd ıprişieyt it."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I owe you one.",
+    "meaning": "Sana bir borçluyum.",
+    "example": "Thanks for covering for me, I owe you one.",
+    "exampleTr": "Yerime geçtiğin için teşekkürler, sana borçluyum.",
+    "pron": "Ay ov yu van."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Don't bother.",
+    "meaning": "Zahmet etme.",
+    "example": "I'll handle it, don't bother.",
+    "exampleTr": "Hallederim, zahmet etme.",
+    "pron": "Dont bodır."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Go ahead.",
+    "meaning": "Buyur / Devam et.",
+    "example": "Can I sit here? Sure, go ahead.",
+    "exampleTr": "Buraya oturabilir miyim? Tabii, buyur.",
+    "pron": "Go ıhed."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Help yourself.",
+    "meaning": "Buyur, kendin al.",
+    "example": "There's food on the table, help yourself.",
+    "exampleTr": "Masada yemek var, buyur kendin al.",
+    "pron": "Help yorself."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I didn't catch that.",
+    "meaning": "Anlayamadım / Duyamadım.",
+    "example": "Sorry, I didn't catch that. Can you repeat?",
+    "exampleTr": "Pardon, anlayamadım. Tekrar eder misin?",
+    "pron": "Ay didınt keç det."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Bear with me.",
+    "meaning": "Biraz sabret.",
+    "example": "Bear with me, I'm almost done.",
+    "exampleTr": "Biraz sabret, neredeyse bitti.",
+    "pron": "Ber vit mi."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Do you have a minute?",
+    "meaning": "Bir dakikan var mı?",
+    "example": "Do you have a minute? I need to talk.",
+    "exampleTr": "Bir dakikan var mı? Konuşmam lazım.",
+    "pron": "Du yu hev e minıt?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Can you keep an eye on...?",
+    "meaning": "...ya göz kulak olur musun?",
+    "example": "Can you keep an eye on my bag?",
+    "exampleTr": "Çantama göz kulak olur musun?",
+    "pron": "Ken yu kip en ay on...?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I need a favor.",
+    "meaning": "Bir iyiliğe ihtiyacım var.",
+    "example": "Hey, I need a favor. Can you pick me up?",
+    "exampleTr": "Hey, bir iyiliğe ihtiyacım var. Beni alabilir misin?",
+    "pron": "Ay nid e feyvır."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Could you hold this for me?",
+    "meaning": "Bunu tutar mısın?",
+    "example": "Could you hold this for me for a second?",
+    "exampleTr": "Bunu bir saniye tutar mısın?",
+    "pron": "Kud yu hold dis for mi?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Sorry to bother you.",
+    "meaning": "Rahatsız ettiğim için özür dilerim.",
+    "example": "Sorry to bother you, but can I ask something?",
+    "exampleTr": "Rahatsız ettiğim için özür dilerim, bir şey sorabilir miyim?",
+    "pron": "Sori tu bodır yu."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I could use some help.",
+    "meaning": "Biraz yardım iyi olur.",
+    "example": "I could use some help with the boxes.",
+    "exampleTr": "Kutularla biraz yardım iyi olur.",
+    "pron": "Ay kud yuz sam help."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Would you be so kind as to...?",
+    "meaning": "...yapar mısınız lütfen?",
+    "example": "Would you be so kind as to open the door?",
+    "exampleTr": "Kapıyı açar mısınız lütfen?",
+    "pron": "Vud yu bi so kaynd ez tu...?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I was wondering if...",
+    "meaning": "Acaba... mümkün mü?",
+    "example": "I was wondering if you could help me.",
+    "exampleTr": "Acaba bana yardım edebilir misin?",
+    "pron": "Ay vaz vandıring if..."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Can you spare a minute?",
+    "meaning": "Bir dakika ayırabilir misin?",
+    "example": "Can you spare a minute? I need advice.",
+    "exampleTr": "Bir dakika ayırabilir misin? Tavsiye lazım.",
+    "pron": "Ken yu sper e minıt?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "How much is this?",
+    "meaning": "Bu ne kadar?",
+    "example": "Excuse me, how much is this shirt?",
+    "exampleTr": "Pardon, bu gömlek ne kadar?",
+    "pron": "Hav maç iz dis?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I pay by card?",
+    "meaning": "Kartla ödeyebilir miyim?",
+    "example": "I don't have cash, can I pay by card?",
+    "exampleTr": "Nakit yok, kartla ödeyebilir miyim?",
+    "pron": "Ken ay pey bay kard?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'd like to order...",
+    "meaning": "...sipariş etmek istiyorum.",
+    "example": "I'd like to order a coffee, please.",
+    "exampleTr": "Bir kahve sipariş etmek istiyorum, lütfen.",
+    "pron": "Ayd layk tu ordır..."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I get the check?",
+    "meaning": "Hesabı alabilir miyim?",
+    "example": "We're done, can I get the check please?",
+    "exampleTr": "Biz bittik, hesabı alabilir miyim lütfen?",
+    "pron": "Ken ay get dı çek?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Is there a discount?",
+    "meaning": "İndirim var mı?",
+    "example": "Is there a discount for students?",
+    "exampleTr": "Öğrencilere indirim var mı?",
+    "pron": "İz der e diskaynt?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'm just browsing.",
+    "meaning": "Sadece bakıyorum.",
+    "example": "Can I help you? No thanks, I'm just browsing.",
+    "exampleTr": "Yardımcı olabilir miyim? Hayır teşekkürler, sadece bakıyorum.",
+    "pron": "Aym cast bravzing."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Do you have this in a different size?",
+    "meaning": "Bunun başka bedeni var mı?",
+    "example": "I like this dress. Do you have it in a smaller size?",
+    "exampleTr": "Bu elbiseyi beğendim. Daha küçük bedeni var mı?",
+    "pron": "Du yu hev dis in e difırınt sayz?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I try this on?",
+    "meaning": "Bunu deneyebilir miyim?",
+    "example": "Can I try this jacket on?",
+    "exampleTr": "Bu ceketi deneyebilir miyim?",
+    "pron": "Ken ay tray dis on?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'll take it.",
+    "meaning": "Bunu alacağım.",
+    "example": "It fits perfectly, I'll take it.",
+    "exampleTr": "Tam oturdu, bunu alacağım.",
+    "pron": "Ayl teyk it."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "What do you recommend?",
+    "meaning": "Ne önerirsiniz?",
+    "example": "What do you recommend from the menu?",
+    "exampleTr": "Menüden ne önerirsiniz?",
+    "pron": "Vat du yu rekımend?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Could I have the menu?",
+    "meaning": "Menüyü alabilir miyim?",
+    "example": "Hi, could I have the menu please?",
+    "exampleTr": "Merhaba, menüyü alabilir miyim lütfen?",
+    "pron": "Kud ay hev dı menyu?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Is this on sale?",
+    "meaning": "Bu indirimde mi?",
+    "example": "Is this jacket on sale?",
+    "exampleTr": "Bu ceket indirimde mi?",
+    "pron": "İz dis on seyl?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Keep the change.",
+    "meaning": "Üstü kalsın.",
+    "example": "Here you go, keep the change.",
+    "exampleTr": "Buyrun, üstü kalsın.",
+    "pron": "Kip dı çeync."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'll have what she's having.",
+    "meaning": "Onunla aynısından alayım.",
+    "example": "That looks delicious, I'll have what she's having.",
+    "exampleTr": "Lezzetli görünüyor, onunla aynısından alayım.",
+    "pron": "Ayl hev vat şiz heving."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Could we get a table for two?",
+    "meaning": "İki kişilik masa alabilir miyiz?",
+    "example": "Good evening, could we get a table for two?",
+    "exampleTr": "İyi akşamlar, iki kişilik masa alabilir miyiz?",
+    "pron": "Kud vi get e teybıl for tu?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'm allergic to...",
+    "meaning": "...ya alerjim var.",
+    "example": "I'm allergic to nuts, is this safe?",
+    "exampleTr": "Fıstığa alerjim var, bu güvenli mi?",
+    "pron": "Aym ılörcik tu..."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I see the wine list?",
+    "meaning": "Şarap listesini görebilir miyim?",
+    "example": "Can I see the wine list, please?",
+    "exampleTr": "Şarap listesini görebilir miyim lütfen?",
+    "pron": "Ken ay si dı vayn list?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "This is not what I ordered.",
+    "meaning": "Sipariş ettiğim bu değildi.",
+    "example": "Excuse me, this is not what I ordered.",
+    "exampleTr": "Pardon, sipariş ettiğim bu değildi.",
+    "pron": "Dis iz nat vat ay ordırd."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I get a refund?",
+    "meaning": "İade alabilir miyim?",
+    "example": "This doesn't work, can I get a refund?",
+    "exampleTr": "Bu çalışmıyor, iade alabilir miyim?",
+    "pron": "Ken ay get e rifand?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Do you take cash?",
+    "meaning": "Nakit kabul ediyor musunuz?",
+    "example": "Do you take cash or only cards?",
+    "exampleTr": "Nakit mi kabul ediyorsunuz yoksa sadece kart mı?",
+    "pron": "Du yu teyk keş?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Where's the fitting room?",
+    "meaning": "Giyinme kabini nerede?",
+    "example": "Where's the fitting room, please?",
+    "exampleTr": "Giyinme kabini nerede lütfen?",
+    "pron": "Verz dı fiting rum?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "I'd like a receipt, please.",
+    "meaning": "Fiş istiyorum, lütfen.",
+    "example": "I'd like a receipt for this purchase, please.",
+    "exampleTr": "Bu alışveriş için fiş istiyorum lütfen.",
+    "pron": "Ayd layk e risit, pliz."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Is the tip included?",
+    "meaning": "Bahşiş dahil mi?",
+    "example": "Is the tip included in the bill?",
+    "exampleTr": "Bahşiş hesaba dahil mi?",
+    "pron": "İz dı tip inklüdid?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can I get this to go?",
+    "meaning": "Bunu paket yapabilir misiniz?",
+    "example": "Can I get this coffee to go?",
+    "exampleTr": "Bu kahveyi paket yapabilir misiniz?",
+    "pron": "Ken ay get dis tu go?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "How do I get to...?",
+    "meaning": "...ya nasıl giderim?",
+    "example": "Excuse me, how do I get to the train station?",
+    "exampleTr": "Pardon, tren istasyonuna nasıl giderim?",
+    "pron": "Hav du ay get tu...?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Is it far from here?",
+    "meaning": "Buradan uzak mı?",
+    "example": "Is the airport far from here?",
+    "exampleTr": "Havalimanı buradan uzak mı?",
+    "pron": "İz it far from hir?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Turn left/right at...",
+    "meaning": "...da sola/sağa dön.",
+    "example": "Turn right at the traffic light.",
+    "exampleTr": "Trafik ışığında sağa dön.",
+    "pron": "Törn left/rayt et..."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Go straight ahead.",
+    "meaning": "Düz ileri git.",
+    "example": "Go straight ahead for two blocks.",
+    "exampleTr": "İki blok düz ileri git.",
+    "pron": "Go streyt ıhed."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "I'm lost.",
+    "meaning": "Kayboldum.",
+    "example": "Excuse me, I'm lost. Can you help me?",
+    "exampleTr": "Pardon, kayboldum. Yardım edebilir misiniz?",
+    "pron": "Aym lost."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Where is the nearest...?",
+    "meaning": "En yakın ... nerede?",
+    "example": "Where is the nearest pharmacy?",
+    "exampleTr": "En yakın eczane nerede?",
+    "pron": "Ver iz dı nirist...?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Which platform?",
+    "meaning": "Hangi peron?",
+    "example": "Which platform does the train leave from?",
+    "exampleTr": "Tren hangi perondan kalkıyor?",
+    "pron": "Viç pletform?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "How long does it take?",
+    "meaning": "Ne kadar sürer?",
+    "example": "How long does it take to get there by bus?",
+    "exampleTr": "Otobüsle oraya gitmek ne kadar sürer?",
+    "pron": "Hav long daz it teyk?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Can you drop me off at...?",
+    "meaning": "Beni ...da indirir misin?",
+    "example": "Can you drop me off at the next corner?",
+    "exampleTr": "Beni bir sonraki köşede indirir misin?",
+    "pron": "Ken yu drop mi of et...?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "I missed my stop.",
+    "meaning": "Durağımı kaçırdım.",
+    "example": "Oh no, I missed my stop!",
+    "exampleTr": "Hay aksi, durağımı kaçırdım!",
+    "pron": "Ay misd may stop."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Is this the right way to...?",
+    "meaning": "...ya giden yol bu mu?",
+    "example": "Excuse me, is this the right way to the museum?",
+    "exampleTr": "Pardon, müzeye giden yol bu mu?",
+    "pron": "İz dis dı rayt vey tu...?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "It's just around the corner.",
+    "meaning": "Hemen köşeyi dönünce.",
+    "example": "The bank? It's just around the corner.",
+    "exampleTr": "Banka mı? Hemen köşeyi dönünce.",
+    "pron": "İts cast ıravnd dı kornır."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "You can't miss it.",
+    "meaning": "Gözünden kaçmaz / Kolayca bulursun.",
+    "example": "It's the big red building, you can't miss it.",
+    "exampleTr": "Büyük kırmızı bina, gözünden kaçmaz.",
+    "pron": "Yu kent mis it."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "I need to catch the next bus.",
+    "meaning": "Bir sonraki otobüsü yakalamam lazım.",
+    "example": "Hurry, I need to catch the next bus!",
+    "exampleTr": "Acele et, bir sonraki otobüsü yakalamam lazım!",
+    "pron": "Ay nid tu keç dı nekst bas."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Does this bus go to...?",
+    "meaning": "Bu otobüs ...ya gidiyor mu?",
+    "example": "Does this bus go to the city center?",
+    "exampleTr": "Bu otobüs şehir merkezine gidiyor mu?",
+    "pron": "Daz dis bas go tu...?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Where can I get a taxi?",
+    "meaning": "Nereden taksi bulabilirim?",
+    "example": "Excuse me, where can I get a taxi?",
+    "exampleTr": "Pardon, nereden taksi bulabilirim?",
+    "pron": "Ver ken ay get e teksi?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Is there a shortcut?",
+    "meaning": "Kestirme yol var mı?",
+    "example": "Is there a shortcut to the station?",
+    "exampleTr": "İstasyona kestirme yol var mı?",
+    "pron": "İz der e şortkat?"
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'm running late.",
+    "meaning": "Geç kalıyorum.",
+    "example": "Sorry, I'm running late for the meeting.",
+    "exampleTr": "Özür dilerim, toplantıya geç kalıyorum.",
+    "pron": "Aym raning leyt."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's get down to business.",
+    "meaning": "İşe koyulalım / Konuya geçelim.",
+    "example": "Enough small talk, let's get down to business.",
+    "exampleTr": "Yeter muhabbet, konuya geçelim.",
+    "pron": "Lets get davun tu biznıs."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll keep you posted.",
+    "meaning": "Seni bilgilendiririm.",
+    "example": "We're still waiting, I'll keep you posted.",
+    "exampleTr": "Hâlâ bekliyoruz, seni bilgilendiririm.",
+    "pron": "Ayl kip yu postıd."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Can we reschedule?",
+    "meaning": "Yeniden planlayabilir miyiz?",
+    "example": "Something came up, can we reschedule?",
+    "exampleTr": "Bir şey çıktı, erteleyebilir miyiz?",
+    "pron": "Ken vi riskedyul?"
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'm swamped.",
+    "meaning": "İşim başımdan aşkın.",
+    "example": "Can't join lunch today, I'm swamped.",
+    "exampleTr": "Bugün öğle yemeğine gelemem, işim başımdan aşkın.",
+    "pron": "Aym svampt."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let me get back to you on that.",
+    "meaning": "O konuda sana dönerim.",
+    "example": "Good question, let me get back to you on that.",
+    "exampleTr": "İyi soru, o konuda sana dönerim.",
+    "pron": "Let mi get bek tu yu on det."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "We're on the same page.",
+    "meaning": "Aynı fikirde / anlayıştayız.",
+    "example": "Good, it seems we're on the same page.",
+    "exampleTr": "Güzel, aynı fikirde görünüyoruz.",
+    "pron": "Vir on dı seym peyc."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "It slipped my mind.",
+    "meaning": "Aklımdan çıkmış.",
+    "example": "Sorry, the deadline slipped my mind.",
+    "exampleTr": "Özür dilerim, son tarih aklımdan çıkmış.",
+    "pron": "İt slipt may maynd."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll handle it.",
+    "meaning": "Hallederim.",
+    "example": "Don't worry about the report, I'll handle it.",
+    "exampleTr": "Rapor için endişelenme, hallederim.",
+    "pron": "Ayl hendıl it."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "What's the deadline?",
+    "meaning": "Son tarih ne zaman?",
+    "example": "What's the deadline for this project?",
+    "exampleTr": "Bu projenin son tarihi ne zaman?",
+    "pron": "Vats dı dedlayn?"
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's wrap it up.",
+    "meaning": "Bitirelim / Toplayalım.",
+    "example": "It's getting late, let's wrap it up.",
+    "exampleTr": "Geç oluyor, toplayalım.",
+    "pron": "Lets rep it ap."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll take care of it.",
+    "meaning": "İlgilenirim.",
+    "example": "Don't stress, I'll take care of it.",
+    "exampleTr": "Stres yapma, ilgilenirim.",
+    "pron": "Ayl teyk ker ov it."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's touch base later.",
+    "meaning": "Sonra konuşalım / Bağlantıda kalalım.",
+    "example": "I'm busy now, let's touch base later.",
+    "exampleTr": "Şimdi meşgulüm, sonra konuşalım.",
+    "pron": "Lets taç beys leytır."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll follow up on that.",
+    "meaning": "Onu takip edeceğim.",
+    "example": "Good idea, I'll follow up on that.",
+    "exampleTr": "İyi fikir, onu takip edeceğim.",
+    "pron": "Ayl folou ap on det."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's brainstorm.",
+    "meaning": "Beyin fırtınası yapalım.",
+    "example": "We need ideas, let's brainstorm.",
+    "exampleTr": "Fikirlere ihtiyacımız var, beyin fırtınası yapalım.",
+    "pron": "Lets breynstorm."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'm working on it.",
+    "meaning": "Üzerinde çalışıyorum.",
+    "example": "Is the report ready? I'm working on it.",
+    "exampleTr": "Rapor hazır mı? Üzerinde çalışıyorum.",
+    "pron": "Aym vörking on it."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Can you fill me in?",
+    "meaning": "Beni bilgilendirir misin?",
+    "example": "I missed the meeting, can you fill me in?",
+    "exampleTr": "Toplantıyı kaçırdım, beni bilgilendirir misin?",
+    "pron": "Ken yu fil mi in?"
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "That's above my pay grade.",
+    "meaning": "Bu benim yetki alanımın üstünde.",
+    "example": "That decision? That's above my pay grade.",
+    "exampleTr": "O karar mı? Bu benim yetki alanımın üstünde.",
+    "pron": "Dets ıbav may pey greyd."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's circle back to that.",
+    "meaning": "Buna sonra dönelim.",
+    "example": "Good point, let's circle back to that later.",
+    "exampleTr": "İyi nokta, buna sonra dönelim.",
+    "pron": "Lets sörkıl bek tu det."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll pencil you in.",
+    "meaning": "Seni programa yazayım.",
+    "example": "Free on Thursday? I'll pencil you in.",
+    "exampleTr": "Perşembe müsait misin? Seni programa yazayım.",
+    "pron": "Ayl pensıl yu in."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "We need to step up our game.",
+    "meaning": "Kendimizi geliştirmemiz lazım.",
+    "example": "The competitors are strong, we need to step up our game.",
+    "exampleTr": "Rakipler güçlü, kendimizi geliştirmemiz lazım.",
+    "pron": "Vi nid tu step ap avr geym."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's put a pin in that.",
+    "meaning": "Bunu şimdilik kenara koyalım.",
+    "example": "Interesting idea, let's put a pin in that for now.",
+    "exampleTr": "İlginç fikir, şimdilik kenara koyalım.",
+    "pron": "Lets put e pin in det."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Can I call you back?",
+    "meaning": "Seni geri arayabilir miyim?",
+    "example": "I'm in a meeting, can I call you back?",
+    "exampleTr": "Toplantıdayım, seni geri arayabilir miyim?",
+    "pron": "Ken ay kol yu bek?"
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "You're breaking up.",
+    "meaning": "Sesin kesiliyor.",
+    "example": "Hello? You're breaking up, I can't hear you.",
+    "exampleTr": "Alo? Sesin kesiliyor, duyamıyorum.",
+    "pron": "Yur breyking ap."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I'll text you.",
+    "meaning": "Sana mesaj atarım.",
+    "example": "I'll text you the address.",
+    "exampleTr": "Adresi sana mesaj atarım.",
+    "pron": "Ayl tekst yu."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Let me put you on speaker.",
+    "meaning": "Seni hoparlöre alayım.",
+    "example": "Hold on, let me put you on speaker.",
+    "exampleTr": "Bir saniye, seni hoparlöre alayım.",
+    "pron": "Let mi put yu on spikır."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I left you a message.",
+    "meaning": "Sana mesaj bıraktım.",
+    "example": "I called earlier and left you a message.",
+    "exampleTr": "Daha önce aradım ve sana mesaj bıraktım.",
+    "pron": "Ay left yu e mesic."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Sorry, wrong number.",
+    "meaning": "Pardon, yanlış numara.",
+    "example": "Sorry, wrong number. Have a good day.",
+    "exampleTr": "Pardon, yanlış numara. İyi günler.",
+    "pron": "Sori, rong nambır."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Can you speak up?",
+    "meaning": "Daha yüksek sesle konuşabilir misin?",
+    "example": "It's noisy here, can you speak up?",
+    "exampleTr": "Burası gürültülü, daha yüksek sesle konuşabilir misin?",
+    "pron": "Ken yu spik ap?"
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I'll drop you a line.",
+    "meaning": "Sana haber veririm.",
+    "example": "When I arrive, I'll drop you a line.",
+    "exampleTr": "Vardığımda sana haber veririm.",
+    "pron": "Ayl drop yu e layn."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Hang on a second.",
+    "meaning": "Bir saniye bekle.",
+    "example": "Hang on a second, I'll check.",
+    "exampleTr": "Bir saniye, kontrol edeyim.",
+    "pron": "Heng on e sekınd."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I'll give you a ring.",
+    "meaning": "Seni ararım.",
+    "example": "I'll give you a ring when I'm free.",
+    "exampleTr": "Müsait olunca seni ararım.",
+    "pron": "Ayl giv yu e ring."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Who's calling, please?",
+    "meaning": "Kim arıyor, lütfen?",
+    "example": "Who's calling, please? Let me transfer you.",
+    "exampleTr": "Kim arıyor lütfen? Sizi aktarayım.",
+    "pron": "Huz koling, pliz?"
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "The line is busy.",
+    "meaning": "Hat meşgul.",
+    "example": "I tried calling but the line is busy.",
+    "exampleTr": "Aramayı denedim ama hat meşgul.",
+    "pron": "Dı layn iz bizi."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I'll get back to you ASAP.",
+    "meaning": "En kısa sürede sana dönerim.",
+    "example": "Let me check and I'll get back to you ASAP.",
+    "exampleTr": "Kontrol edeyim, en kısa sürede dönerim.",
+    "pron": "Ayl get bek tu yu ey-es-ey-pi."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I have a reservation.",
+    "meaning": "Rezervasyonum var.",
+    "example": "Hi, I have a reservation under the name Smith.",
+    "exampleTr": "Merhaba, Smith adına rezervasyonum var.",
+    "pron": "Ay hev e rezırveyşın."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "What time is check-out?",
+    "meaning": "Çıkış saati kaçta?",
+    "example": "What time is check-out tomorrow?",
+    "exampleTr": "Yarın çıkış saati kaçta?",
+    "pron": "Vat taym iz çek-aut?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Is breakfast included?",
+    "meaning": "Kahvaltı dahil mi?",
+    "example": "Is breakfast included in the price?",
+    "exampleTr": "Kahvaltı fiyata dahil mi?",
+    "pron": "İz brekfıst inklüdid?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I'd like to book a room.",
+    "meaning": "Bir oda rezerve etmek istiyorum.",
+    "example": "I'd like to book a room for two nights.",
+    "exampleTr": "İki gecelik bir oda rezerve etmek istiyorum.",
+    "pron": "Ayd layk tu buk e rum."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Where can I exchange money?",
+    "meaning": "Nerede para bozdurabilirim?",
+    "example": "Excuse me, where can I exchange money?",
+    "exampleTr": "Pardon, nerede para bozdurabilirim?",
+    "pron": "Ver ken ay iksçeync mani?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "My flight has been delayed.",
+    "meaning": "Uçuşum rötar yaptı.",
+    "example": "My flight has been delayed by two hours.",
+    "exampleTr": "Uçuşum iki saat rötar yaptı.",
+    "pron": "May flayt hez bin dileyd."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Could you call me a taxi?",
+    "meaning": "Bana bir taksi çağırır mısınız?",
+    "example": "Could you call me a taxi to the airport?",
+    "exampleTr": "Havalimanına bir taksi çağırır mısınız?",
+    "pron": "Kud yu kol mi e teksi?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Is there Wi-Fi?",
+    "meaning": "Wi-Fi var mı?",
+    "example": "Is there free Wi-Fi in the hotel?",
+    "exampleTr": "Otelde ücretsiz Wi-Fi var mı?",
+    "pron": "İz der vay-fay?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I'd like to extend my stay.",
+    "meaning": "Kalışımı uzatmak istiyorum.",
+    "example": "I'd like to extend my stay for one more night.",
+    "exampleTr": "Bir gece daha kalmak istiyorum.",
+    "pron": "Ayd layk tu ikstend may stey."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Where is the boarding gate?",
+    "meaning": "Biniş kapısı nerede?",
+    "example": "Excuse me, where is the boarding gate for flight 302?",
+    "exampleTr": "Pardon, 302 sefer sayılı uçuşun biniş kapısı nerede?",
+    "pron": "Ver iz dı bording geyt?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I'd like a window seat.",
+    "meaning": "Cam kenarı istiyorum.",
+    "example": "I'd like a window seat, please.",
+    "exampleTr": "Cam kenarı istiyorum lütfen.",
+    "pron": "Ayd layk e vindov sit."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "How much is a one-way ticket?",
+    "meaning": "Tek yön bilet ne kadar?",
+    "example": "How much is a one-way ticket to London?",
+    "exampleTr": "Londra'ya tek yön bilet ne kadar?",
+    "pron": "Hav maç iz e van-vey tikıt?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Is there a shuttle service?",
+    "meaning": "Servis var mı?",
+    "example": "Is there a shuttle service to the airport?",
+    "exampleTr": "Havalimanına servis var mı?",
+    "pron": "İz der e şatıl sörvıs?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I'd like to check in.",
+    "meaning": "Giriş yapmak istiyorum.",
+    "example": "Hello, I'd like to check in. My name is...",
+    "exampleTr": "Merhaba, giriş yapmak istiyorum. İsmim...",
+    "pron": "Ayd layk tu çek in."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Can I have a wake-up call?",
+    "meaning": "Uyandırma servisi alabilir miyim?",
+    "example": "Can I have a wake-up call at 7 AM?",
+    "exampleTr": "Sabah 7'de uyandırma servisi alabilir miyim?",
+    "pron": "Ken ay hev e veyk-ap kol?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Where is the luggage carousel?",
+    "meaning": "Bagaj bandı nerede?",
+    "example": "Where is the luggage carousel for international flights?",
+    "exampleTr": "Uluslararası uçuşlar için bagaj bandı nerede?",
+    "pron": "Ver iz dı lagıc kerısel?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "My luggage is missing.",
+    "meaning": "Bagajım kayıp.",
+    "example": "I've been waiting but my luggage is missing.",
+    "exampleTr": "Bekliyorum ama bagajım kayıp.",
+    "pron": "May lagıc iz mising."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I don't feel well.",
+    "meaning": "İyi hissetmiyorum.",
+    "example": "I don't feel well, I need to sit down.",
+    "exampleTr": "İyi hissetmiyorum, oturmam lazım.",
+    "pron": "Ay dont fil vel."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Call an ambulance!",
+    "meaning": "Ambulans çağırın!",
+    "example": "Someone fainted, call an ambulance!",
+    "exampleTr": "Biri bayıldı, ambulans çağırın!",
+    "pron": "Kol en embyulıns!"
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Where is the hospital?",
+    "meaning": "Hastane nerede?",
+    "example": "Where is the nearest hospital?",
+    "exampleTr": "En yakın hastane nerede?",
+    "pron": "Ver iz dı hospitıl?"
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I need to see a doctor.",
+    "meaning": "Doktora görünmem lazım.",
+    "example": "I've been coughing all week, I need to see a doctor.",
+    "exampleTr": "Bütün hafta öksürüyorum, doktora görünmem lazım.",
+    "pron": "Ay nid tu si e doktır."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "It hurts here.",
+    "meaning": "Burası ağrıyor.",
+    "example": "Doctor, it hurts here when I press.",
+    "exampleTr": "Doktor, bastırınca burası ağrıyor.",
+    "pron": "İt hörts hir."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I have a headache.",
+    "meaning": "Başım ağrıyor.",
+    "example": "I have a terrible headache today.",
+    "exampleTr": "Bugün korkunç bir baş ağrım var.",
+    "pron": "Ay hev e hedeyk."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Can I get a prescription?",
+    "meaning": "Reçete alabilir miyim?",
+    "example": "Can I get a prescription for this?",
+    "exampleTr": "Bunun için reçete alabilir miyim?",
+    "pron": "Ken ay get e priskripşın?"
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I have a fever.",
+    "meaning": "Ateşim var.",
+    "example": "I have a fever and a sore throat.",
+    "exampleTr": "Ateşim var ve boğazım ağrıyor.",
+    "pron": "Ay hev e fivır."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I'm feeling dizzy.",
+    "meaning": "Başım dönüyor.",
+    "example": "I'm feeling dizzy, I need to sit down.",
+    "exampleTr": "Başım dönüyor, oturmam lazım.",
+    "pron": "Aym filing dizi."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I twisted my ankle.",
+    "meaning": "Ayak bileğimi burktum.",
+    "example": "I twisted my ankle while running.",
+    "exampleTr": "Koşarken ayak bileğimi burktum.",
+    "pron": "Ay tvistıd may enkıl."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I need a painkiller.",
+    "meaning": "Ağrı kesiciye ihtiyacım var.",
+    "example": "My back hurts, I need a painkiller.",
+    "exampleTr": "Sırtım ağrıyor, ağrı kesiciye ihtiyacım var.",
+    "pron": "Ay nid e peynkilır."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Is it contagious?",
+    "meaning": "Bulaşıcı mı?",
+    "example": "Is this illness contagious?",
+    "exampleTr": "Bu hastalık bulaşıcı mı?",
+    "pron": "İz it kınteycıs?"
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I'm having trouble breathing.",
+    "meaning": "Nefes almakta zorlanıyorum.",
+    "example": "I'm having trouble breathing, please help.",
+    "exampleTr": "Nefes almakta zorlanıyorum, lütfen yardım edin.",
+    "pron": "Aym heving trabıl briding."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Please call for help!",
+    "meaning": "Lütfen yardım çağırın!",
+    "example": "There's been an accident, please call for help!",
+    "exampleTr": "Bir kaza oldu, lütfen yardım çağırın!",
+    "pron": "Pliz kol for help!"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Are you free tomorrow?",
+    "meaning": "Yarın müsait misin?",
+    "example": "Are you free tomorrow evening?",
+    "exampleTr": "Yarın akşam müsait misin?",
+    "pron": "Ar yu fri tumoro?"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Let's make it another time.",
+    "meaning": "Başka zamana erteleyelim.",
+    "example": "I can't tonight, let's make it another time.",
+    "exampleTr": "Bu gece olmaz, başka zamana erteleyelim.",
+    "pron": "Lets meyk it ınadır taym."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'm running out of time.",
+    "meaning": "Zamanım daralıyor.",
+    "example": "I'm running out of time, hurry up!",
+    "exampleTr": "Zamanım daralıyor, acele et!",
+    "pron": "Aym raning aut ov taym."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Just in time!",
+    "meaning": "Tam zamanında!",
+    "example": "The bus arrived just in time.",
+    "exampleTr": "Otobüs tam zamanında geldi.",
+    "pron": "Cast in taym!"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'll be there in a minute.",
+    "meaning": "Bir dakikaya oradayım.",
+    "example": "Wait for me, I'll be there in a minute.",
+    "exampleTr": "Beni bekle, bir dakikaya oradayım.",
+    "pron": "Ayl bi der in e minıt."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "It's about time!",
+    "meaning": "Artık zamanı geldi! / Nihayet!",
+    "example": "You finally cleaned your room? It's about time!",
+    "exampleTr": "Sonunda odanı mı temizledin? Artık zamanı gelmişti!",
+    "pron": "İts ıbaut taym!"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I overslept.",
+    "meaning": "Uyuyakalmışım.",
+    "example": "Sorry I'm late, I overslept.",
+    "exampleTr": "Geç kaldığım için özür dilerim, uyuyakalmışım.",
+    "pron": "Ay ovırslept."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Time flies!",
+    "meaning": "Zaman çok çabuk geçiyor!",
+    "example": "Is it already 6 PM? Time flies!",
+    "exampleTr": "Şimdiden akşam 6 mı oldu? Zaman çok çabuk geçiyor!",
+    "pron": "Taym flayz!"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Let's set a date.",
+    "meaning": "Bir tarih belirleyelim.",
+    "example": "We should meet, let's set a date.",
+    "exampleTr": "Buluşmalıyız, bir tarih belirleyelim.",
+    "pron": "Lets set e deyt."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'll be right back.",
+    "meaning": "Hemen döneceğim.",
+    "example": "Hold on, I'll be right back.",
+    "exampleTr": "Bekle, hemen döneceğim.",
+    "pron": "Ayl bi rayt bek."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Better late than never.",
+    "meaning": "Geç olsun güç olmasın.",
+    "example": "You finally started? Better late than never!",
+    "exampleTr": "Sonunda mı başladın? Geç olsun güç olmasın!",
+    "pron": "Betır leyt den nevır."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "Can we push it back?",
+    "meaning": "Erteleyebilir miyiz?",
+    "example": "Can we push the meeting back to 3 PM?",
+    "exampleTr": "Toplantıyı saat 3'e erteleyebilir miyiz?",
+    "pron": "Ken vi puş it bek?"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'm ahead of schedule.",
+    "meaning": "Programın önündeyim.",
+    "example": "Good news, I'm ahead of schedule.",
+    "exampleTr": "İyi haber, programın önündeyim.",
+    "pron": "Aym ıhed ov skedyul."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "We're behind schedule.",
+    "meaning": "Programa geride kaldık.",
+    "example": "We need to hurry, we're behind schedule.",
+    "exampleTr": "Acele etmemiz lazım, programa geride kaldık.",
+    "pron": "Vir bihaynd skedyul."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I lost track of time.",
+    "meaning": "Zamanı unuttum / Vakit nasıl geçti anlamadım.",
+    "example": "Sorry, I lost track of time.",
+    "exampleTr": "Özür dilerim, zamanı unuttum.",
+    "pron": "Ay lost trek ov taym."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "It's getting late.",
+    "meaning": "Geç oluyor.",
+    "example": "It's getting late, I should go.",
+    "exampleTr": "Geç oluyor, gitmem lazım.",
+    "pron": "İts geting leyt."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "That would be great.",
+    "meaning": "Harika olur.",
+    "example": "Dinner at 7? That would be great!",
+    "exampleTr": "7'de akşam yemeği mi? Harika olur!",
+    "pron": "Det vud bi greyt."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'm afraid I can't.",
+    "meaning": "Korkarım yapamam.",
+    "example": "I'm afraid I can't make it tonight.",
+    "exampleTr": "Korkarım bu gece gelemem.",
+    "pron": "Aym ıfreyd ay kent."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'll think about it.",
+    "meaning": "Düşüneceğim.",
+    "example": "Good offer, I'll think about it.",
+    "exampleTr": "İyi teklif, düşüneceğim.",
+    "pron": "Ayl tink ıbaut it."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Count me in!",
+    "meaning": "Ben de varım!",
+    "example": "Road trip this weekend? Count me in!",
+    "exampleTr": "Bu hafta sonu yolculuk mu? Ben de varım!",
+    "pron": "Kavnt mi in!"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Maybe next time.",
+    "meaning": "Belki bir dahaki sefere.",
+    "example": "I can't today, maybe next time.",
+    "exampleTr": "Bugün olmaz, belki bir dahaki sefere.",
+    "pron": "Meybi nekst taym."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'll pass.",
+    "meaning": "Pas geçeyim.",
+    "example": "Karaoke tonight? I'll pass.",
+    "exampleTr": "Bu gece karaoke mi? Pas geçeyim.",
+    "pron": "Ayl pes."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Why not?",
+    "meaning": "Neden olmasın?",
+    "example": "Want to try sushi? Why not?",
+    "exampleTr": "Suşi denemek ister misin? Neden olmasın?",
+    "pron": "Vay nat?"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "You bet!",
+    "meaning": "Tabii ki! / Kesinlikle!",
+    "example": "Are you coming to the party? You bet!",
+    "exampleTr": "Partiye geliyor musun? Tabii ki!",
+    "pron": "Yu bet!"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'd love to!",
+    "meaning": "Çok isterim!",
+    "example": "Want to come over? I'd love to!",
+    "exampleTr": "Bize gelir misin? Çok isterim!",
+    "pron": "Ayd lav tu!"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I wish I could.",
+    "meaning": "Keşke yapabilsem.",
+    "example": "I wish I could, but I'm busy.",
+    "exampleTr": "Keşke yapabilsem ama meşgulüm.",
+    "pron": "Ay viş ay kud."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Absolutely!",
+    "meaning": "Kesinlikle!",
+    "example": "Do you agree? Absolutely!",
+    "exampleTr": "Katılıyor musun? Kesinlikle!",
+    "pron": "Ebsılutli!"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "No way!",
+    "meaning": "Olmaz! / Yok artık!",
+    "example": "You want me to jump? No way!",
+    "exampleTr": "Atamamı mı istiyorsun? Olmaz!",
+    "pron": "No vey!"
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'm down for that.",
+    "meaning": "Ben varım / Tamam bana uyar.",
+    "example": "Pizza night? I'm down for that.",
+    "exampleTr": "Pizza gecesi mi? Ben varım.",
+    "pron": "Aym davun for det."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "That works for me.",
+    "meaning": "Bana uyar.",
+    "example": "Meeting at 2? That works for me.",
+    "exampleTr": "Toplantı saat 2'de mi? Bana uyar.",
+    "pron": "Det vörks for mi."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'll have to take a rain check.",
+    "meaning": "Başka sefere artık.",
+    "example": "I'm swamped today, I'll have to take a rain check.",
+    "exampleTr": "Bugün çok yoğunum, başka sefere artık.",
+    "pron": "Ayl hev tu teyk e reyn çek."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Not a chance.",
+    "meaning": "İmkansız / Asla.",
+    "example": "Will you lend me your car? Not a chance!",
+    "exampleTr": "Arabanı ödünç verir misin? Asla!",
+    "pron": "Nat e çens."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Let me sleep on it.",
+    "meaning": "Bir gece düşüneyim.",
+    "example": "Big decision, let me sleep on it.",
+    "exampleTr": "Büyük karar, bir gece düşüneyim.",
+    "pron": "Let mi slip on it."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Break a leg!",
+    "meaning": "Bol şans!",
+    "example": "Your exam is tomorrow? Break a leg!",
+    "exampleTr": "Sınavın yarın mı? Bol şans!",
+    "pron": "Breyk e leg!"
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "It's a piece of cake.",
+    "meaning": "Çocuk oyuncağı / Çok kolay.",
+    "example": "The test was a piece of cake.",
+    "exampleTr": "Sınav çocuk oyuncağıydı.",
+    "pron": "İts e pis ov keyk."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Hit the road.",
+    "meaning": "Yola çıkmak.",
+    "example": "It's late, let's hit the road.",
+    "exampleTr": "Geç oldu, yola çıkalım.",
+    "pron": "Hit dı rod."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Under the weather.",
+    "meaning": "Biraz hasta / Keyifsiz.",
+    "example": "I'm feeling a bit under the weather today.",
+    "exampleTr": "Bugün biraz keyifsizim.",
+    "pron": "Andır dı vedır."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Once in a blue moon.",
+    "meaning": "Kırk yılda bir.",
+    "example": "I eat fast food once in a blue moon.",
+    "exampleTr": "Kırk yılda bir fast food yerim.",
+    "pron": "Vans in e blu mun."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Hang in there!",
+    "meaning": "Pes etme! / Dayan!",
+    "example": "I know it's tough, but hang in there!",
+    "exampleTr": "Zor olduğunu biliyorum ama pes etme!",
+    "pron": "Heng in der!"
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Bite the bullet.",
+    "meaning": "Gözünü karartmak.",
+    "example": "I hate dentists but I need to bite the bullet.",
+    "exampleTr": "Dişçilerden nefret ederim ama gözümü karartmam lazım.",
+    "pron": "Bayt dı bulit."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Let's call it a day.",
+    "meaning": "Bugünlük bu kadar yeter.",
+    "example": "I'm tired, let's call it a day.",
+    "exampleTr": "Yoruldum, bugünlük bu kadar yeter.",
+    "pron": "Lets kol it e dey."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "The ball is in your court.",
+    "meaning": "Sıra sende / Karar sende.",
+    "example": "I made my offer, the ball is in your court.",
+    "exampleTr": "Teklifimi yaptım, sıra sende.",
+    "pron": "Dı bol iz in yor kort."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Don't judge a book by its cover.",
+    "meaning": "Dış görünüşe göre yargılama.",
+    "example": "He looks tough but he's kind. Don't judge a book by its cover.",
+    "exampleTr": "Sert görünüyor ama iyi biri. Dış görünüşe göre yargılama.",
+    "pron": "Dont cac e buk bay its kavır."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Actions speak louder than words.",
+    "meaning": "Laf değil icraat.",
+    "example": "Stop promising and do it. Actions speak louder than words.",
+    "exampleTr": "Söz vermeyi bırak ve yap. Laf değil icraat.",
+    "pron": "Ekşınz spik laudır den vördz."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "It's raining cats and dogs.",
+    "meaning": "Bardaktan boşalırcasına yağıyor.",
+    "example": "Take an umbrella, it's raining cats and dogs!",
+    "exampleTr": "Şemsiye al, bardaktan boşalırcasına yağıyor!",
+    "pron": "İts reyning kets end dogz."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Speak of the devil!",
+    "meaning": "İyi saatte olsunlar! / Lafı geçen gelir.",
+    "example": "We were just talking about you! Speak of the devil!",
+    "exampleTr": "Seni konuşuyorduk! İyi saatte olsunlar!",
+    "pron": "Spik ov dı devıl!"
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Kill two birds with one stone.",
+    "meaning": "Bir taşla iki kuş vurmak.",
+    "example": "Let's shop and eat there, kill two birds with one stone.",
+    "exampleTr": "Orada hem alışveriş yapalım hem yiyelim, bir taşla iki kuş.",
+    "pron": "Kil tu bördz vit van ston."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "A blessing in disguise.",
+    "meaning": "Kötü gibi görünen iyi şey.",
+    "example": "Losing that job was a blessing in disguise.",
+    "exampleTr": "O işi kaybetmek hayırlıymış.",
+    "pron": "E blesing in disgayz."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Hit the nail on the head.",
+    "meaning": "Tam isabet / Tam tutturdu.",
+    "example": "You hit the nail on the head with that comment.",
+    "exampleTr": "O yorumla tam isabet ettin.",
+    "pron": "Hit dı neyl on dı hed."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Don't cry over spilt milk.",
+    "meaning": "Olan oldu, ağlamakla olmaz.",
+    "example": "You failed, but don't cry over spilt milk.",
+    "exampleTr": "Başaramadın ama olan oldu.",
+    "pron": "Dont kray ovır spilt milk."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Every cloud has a silver lining.",
+    "meaning": "Her şerde bir hayır vardır.",
+    "example": "You'll find a better job. Every cloud has a silver lining.",
+    "exampleTr": "Daha iyi bir iş bulursun. Her şerde bir hayır vardır.",
+    "pron": "Evri klaud hez e silvır layning."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Burning the midnight oil.",
+    "meaning": "Gece yarılarına kadar çalışmak.",
+    "example": "I was burning the midnight oil to finish the project.",
+    "exampleTr": "Projeyi bitirmek için gece yarılarına kadar çalıştım.",
+    "pron": "Börning dı midnayt oyl."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "The early bird catches the worm.",
+    "meaning": "Erken kalkan yol alır.",
+    "example": "Wake up early! The early bird catches the worm.",
+    "exampleTr": "Erken kalk! Erken kalkan yol alır.",
+    "pron": "Dı örli börd keçız dı vörm."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "When pigs fly.",
+    "meaning": "Kırk yılda bir / İmkansız.",
+    "example": "He'll clean his room? When pigs fly!",
+    "exampleTr": "Odasını mı temizleyecek? İmkansız!",
+    "pron": "Ven pigz flay."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Cost an arm and a leg.",
+    "meaning": "Çok pahalı / Bir servet.",
+    "example": "That car costs an arm and a leg.",
+    "exampleTr": "O araba bir servete mal oluyor.",
+    "pron": "Kost en arm end e leg."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Get out of hand.",
+    "meaning": "Kontrolden çıkmak.",
+    "example": "The party got out of hand.",
+    "exampleTr": "Parti kontrolden çıktı.",
+    "pron": "Get aut ov hend."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "A penny for your thoughts.",
+    "meaning": "Ne düşünüyorsun? / Bir kuruşa düşüncelerini alayım.",
+    "example": "You look quiet, a penny for your thoughts?",
+    "exampleTr": "Sessiz duruyorsun, ne düşünüyorsun?",
+    "pron": "E peni for yor tots."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "It's not rocket science.",
+    "meaning": "O kadar da zor değil / Uzay bilimi değil.",
+    "example": "Just follow the instructions, it's not rocket science.",
+    "exampleTr": "Talimatları takip et, o kadar da zor değil.",
+    "pron": "İts nat rakıt sayıns."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Back to square one.",
+    "meaning": "Başa dönmek.",
+    "example": "The plan failed, we're back to square one.",
+    "exampleTr": "Plan başarısız oldu, başa döndük.",
+    "pron": "Bek tu skver van."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Wrap your head around it.",
+    "meaning": "Kafana oturtmak / Anlamaya çalışmak.",
+    "example": "I can't wrap my head around this math problem.",
+    "exampleTr": "Bu matematik problemini kafama oturtamıyorum.",
+    "pron": "Rep yor hed ıravnd it."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Pull yourself together.",
+    "meaning": "Kendini topla.",
+    "example": "Stop crying and pull yourself together.",
+    "exampleTr": "Ağlamayı bırak ve kendini topla.",
+    "pron": "Pul yorself tıgedır."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Let's hang out.",
+    "meaning": "Takılalım / Buluşalım.",
+    "example": "I'm bored, let's hang out.",
+    "exampleTr": "Sıkıldım, takılalım.",
+    "pron": "Lets heng aut."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I'm throwing a party.",
+    "meaning": "Parti veriyorum.",
+    "example": "I'm throwing a party on Saturday, you should come!",
+    "exampleTr": "Cumartesi parti veriyorum, gelmelisin!",
+    "pron": "Aym troving e parti."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Do you want to grab a coffee?",
+    "meaning": "Kahve içmeye gidelim mi?",
+    "example": "Do you want to grab a coffee after work?",
+    "exampleTr": "İşten sonra kahve içmeye gidelim mi?",
+    "pron": "Du yu vant tu greb e kofi?"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I had a blast!",
+    "meaning": "Çok eğlendim!",
+    "example": "The concert was amazing, I had a blast!",
+    "exampleTr": "Konser harikaydı, çok eğlendim!",
+    "pron": "Ay hed e blast!"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Let's split the bill.",
+    "meaning": "Hesabı bölüşelim.",
+    "example": "It's fair, let's split the bill.",
+    "exampleTr": "Adil olsun, hesabı bölüşelim.",
+    "pron": "Lets split dı bil."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "It's on me.",
+    "meaning": "Benden / Ben ısmarlıyorum.",
+    "example": "Don't worry, dinner is on me tonight.",
+    "exampleTr": "Merak etme, bu gece akşam yemeği benden.",
+    "pron": "İts on mi."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Make yourself at home.",
+    "meaning": "Kendinizi evinizde gibi hissedin.",
+    "example": "Come in! Make yourself at home.",
+    "exampleTr": "İçeri gel! Kendini evinde gibi hisset.",
+    "pron": "Meyk yorself et hom."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I'm not in the mood.",
+    "meaning": "Modumda değilim.",
+    "example": "I'm not in the mood for going out.",
+    "exampleTr": "Dışarı çıkacak modumda değilim.",
+    "pron": "Aym nat in dı mud."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "That was a lot of fun!",
+    "meaning": "Çok eğlenceliydi!",
+    "example": "Thanks for inviting me, that was a lot of fun!",
+    "exampleTr": "Davet ettiğin için teşekkürler, çok eğlenceliydi!",
+    "pron": "Det vaz e lat ov fan!"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "We should do this more often.",
+    "meaning": "Bunu daha sık yapmalıyız.",
+    "example": "I missed this, we should do this more often.",
+    "exampleTr": "Bunu özlemişim, daha sık yapmalıyız.",
+    "pron": "Vi şud du dis mor ofın."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I'll pick you up.",
+    "meaning": "Seni alırım / Seni alıp gelirim.",
+    "example": "I'll pick you up at 7.",
+    "exampleTr": "Seni saat 7'de alırım.",
+    "pron": "Ayl pik yu ap."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "What are you up to tonight?",
+    "meaning": "Bu gece ne yapıyorsun?",
+    "example": "Hey, what are you up to tonight?",
+    "exampleTr": "Hey, bu gece ne yapıyorsun?",
+    "pron": "Vat ar yu ap tu tınayt?"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I'm game!",
+    "meaning": "Ben varım! / Tamam!",
+    "example": "Beach tomorrow? I'm game!",
+    "exampleTr": "Yarın plaj mı? Ben varım!",
+    "pron": "Aym geym!"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Let's call it a night.",
+    "meaning": "Bu gecelik yeter / Gidelim artık.",
+    "example": "I'm getting tired, let's call it a night.",
+    "exampleTr": "Yorulmaya başladım, bu gecelik yeter.",
+    "pron": "Lets kol it e nayt."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "My treat!",
+    "meaning": "Ben ısmarlıyorum!",
+    "example": "You paid last time, my treat today!",
+    "exampleTr": "Geçen sefer sen ödedin, bugün benden!",
+    "pron": "May trit!"
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Sorry, something came up.",
+    "meaning": "Kusura bakma, bir şey çıktı.",
+    "example": "Sorry, something came up, I can't make it.",
+    "exampleTr": "Kusura bakma, bir şey çıktı, gelemiyorum.",
+    "pron": "Sori, samtink keym ap."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "I'll bring a plus one.",
+    "meaning": "Yanımda birini getireceğim.",
+    "example": "Can I bring a plus one to the party?",
+    "exampleTr": "Partiye yanımda birini getirebilir miyim?",
+    "pron": "Ayl bring e plas van."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "That's so thoughtful of you.",
+    "meaning": "Ne kadar düşüncelisin.",
+    "example": "You remembered my birthday? That's so thoughtful of you!",
+    "exampleTr": "Doğum günümü hatırladın mı? Ne kadar düşüncelisin!",
+    "pron": "Dets so totful ov yu."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "What's the weather like?",
+    "meaning": "Hava nasıl?",
+    "example": "What's the weather like outside?",
+    "exampleTr": "Dışarıda hava nasıl?",
+    "pron": "Vats dı vedır layk?"
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's boiling hot.",
+    "meaning": "Çok sıcak / Kaynıyor.",
+    "example": "I can't go out, it's boiling hot.",
+    "exampleTr": "Dışarı çıkamam, çok sıcak.",
+    "pron": "İts boyling hat."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's freezing cold.",
+    "meaning": "Dondurucu soğuk.",
+    "example": "Wear a jacket, it's freezing cold outside.",
+    "exampleTr": "Ceket giy, dışarıda dondurucu soğuk.",
+    "pron": "İts frizing kold."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It looks like it's going to rain.",
+    "meaning": "Yağmur yağacak gibi görünüyor.",
+    "example": "Take an umbrella, it looks like it's going to rain.",
+    "exampleTr": "Şemsiye al, yağmur yağacak gibi görünüyor.",
+    "pron": "İt luks layk its going tu reyn."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "What a beautiful day!",
+    "meaning": "Ne güzel bir gün!",
+    "example": "The sun is out, what a beautiful day!",
+    "exampleTr": "Güneş çıkmış, ne güzel bir gün!",
+    "pron": "Vat e byutiful dey!"
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "The weather is unpredictable.",
+    "meaning": "Hava tahmin edilemez.",
+    "example": "Pack layers, the weather is unpredictable.",
+    "exampleTr": "Kat kat giy, hava tahmin edilemez.",
+    "pron": "Dı vedır iz anpridiktıbıl."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's pouring outside.",
+    "meaning": "Dışarıda sağanak yağıyor.",
+    "example": "Don't go out, it's pouring outside.",
+    "exampleTr": "Dışarı çıkma, sağanak yağıyor.",
+    "pron": "İts poring autsayd."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "I'm soaking wet.",
+    "meaning": "Sırılsıklam oldum.",
+    "example": "I forgot my umbrella, I'm soaking wet.",
+    "exampleTr": "Şemsiyemi unuttum, sırılsıklam oldum.",
+    "pron": "Aym soking vet."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I need to do the laundry.",
+    "meaning": "Çamaşır yıkamam lazım.",
+    "example": "I'm out of clean clothes, I need to do the laundry.",
+    "exampleTr": "Temiz kıyafetim kalmadı, çamaşır yıkamam lazım.",
+    "pron": "Ay nid tu du dı londri."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "Can you do the dishes?",
+    "meaning": "Bulaşıkları yıkar mısın?",
+    "example": "I cooked, can you do the dishes?",
+    "exampleTr": "Ben yemek yaptım, bulaşıkları yıkar mısın?",
+    "pron": "Ken yu du dı dişiz?"
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "Let's tidy up.",
+    "meaning": "Toplayalım / Düzenleyelim.",
+    "example": "Guests are coming, let's tidy up.",
+    "exampleTr": "Misafirler geliyor, toplayalım.",
+    "pron": "Lets taydi ap."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'm starving.",
+    "meaning": "Açlıktan ölüyorum.",
+    "example": "Is dinner ready? I'm starving!",
+    "exampleTr": "Akşam yemeği hazır mı? Açlıktan ölüyorum!",
+    "pron": "Aym starving."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "What's for dinner?",
+    "meaning": "Akşam yemeğinde ne var?",
+    "example": "I'm hungry, what's for dinner?",
+    "exampleTr": "Acıktım, akşam yemeğinde ne var?",
+    "pron": "Vats for dinır?"
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'll take out the trash.",
+    "meaning": "Çöpü çıkaracağım.",
+    "example": "Don't worry, I'll take out the trash.",
+    "exampleTr": "Merak etme, çöpü ben çıkaracağım.",
+    "pron": "Ayl teyk aut dı treş."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "Lock the door.",
+    "meaning": "Kapıyı kilitle.",
+    "example": "Don't forget to lock the door when you leave.",
+    "exampleTr": "Çıkarken kapıyı kilitlemeyi unutma.",
+    "pron": "Lok dı dor."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "Turn off the lights.",
+    "meaning": "Işıkları kapat.",
+    "example": "Turn off the lights before you go to bed.",
+    "exampleTr": "Yatmadan önce ışıkları kapat.",
+    "pron": "Törn of dı layts."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'll do the groceries.",
+    "meaning": "Markete gideceğim.",
+    "example": "We're out of milk, I'll do the groceries.",
+    "exampleTr": "Süt bitti, markete gideceğim.",
+    "pron": "Ayl du dı grosıriz."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "Make yourself comfortable.",
+    "meaning": "Rahatına bak.",
+    "example": "Sit down, make yourself comfortable.",
+    "exampleTr": "Otur, rahatına bak.",
+    "pron": "Meyk yorself kamfırtıbıl."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I need a break.",
+    "meaning": "Biraz mola lazım.",
+    "example": "I've been working all day, I need a break.",
+    "exampleTr": "Bütün gün çalıştım, biraz mola lazım.",
+    "pron": "Ay nid e breyk."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I slept like a log.",
+    "meaning": "Kütük gibi uyudum.",
+    "example": "I was so tired, I slept like a log.",
+    "exampleTr": "Çok yorgundum, kütük gibi uyudum.",
+    "pron": "Ay slept layk e log."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'm a morning person.",
+    "meaning": "Sabah insanıyım / Sabahları enerjik olurum.",
+    "example": "I wake up at 6 AM, I'm a morning person.",
+    "exampleTr": "Sabah 6'da kalkarım, sabah insanıyım.",
+    "pron": "Aym e morning pörsın."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'm a night owl.",
+    "meaning": "Gece kuşuyum.",
+    "example": "I work best at night, I'm a night owl.",
+    "exampleTr": "En iyi gece çalışırım, gece kuşuyum.",
+    "pron": "Aym e nayt avl."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "The Wi-Fi is down.",
+    "meaning": "Wi-Fi çökmüş / çalışmıyor.",
+    "example": "I can't connect, the Wi-Fi is down.",
+    "exampleTr": "Bağlanamıyorum, Wi-Fi çalışmıyor.",
+    "pron": "Dı vay-fay iz davun."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'm running low on...",
+    "meaning": "...azalıyor / bitmek üzere.",
+    "example": "I'm running low on coffee.",
+    "exampleTr": "Kahvem azalıyor.",
+    "pron": "Aym raning lov on..."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I'm beat.",
+    "meaning": "Çok yorgunum / Bitkinim.",
+    "example": "What a long day, I'm beat.",
+    "exampleTr": "Ne uzun bir gündü, bitkinim.",
+    "pron": "Aym bit."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I'm taking a course.",
+    "meaning": "Bir kursa gidiyorum.",
+    "example": "I'm taking a course in web development.",
+    "exampleTr": "Web geliştirme kursu alıyorum.",
+    "pron": "Aym teyking e kors."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I need to study for the exam.",
+    "meaning": "Sınava çalışmam lazım.",
+    "example": "Can't go out, I need to study for the exam.",
+    "exampleTr": "Dışarı çıkamam, sınava çalışmam lazım.",
+    "pron": "Ay nid tu stadi for dı igzem."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I'm struggling with...",
+    "meaning": "...da zorlanıyorum.",
+    "example": "I'm struggling with grammar.",
+    "exampleTr": "Gramer konusunda zorlanıyorum.",
+    "pron": "Aym stragling vit..."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "Can you explain that again?",
+    "meaning": "Tekrar açıklar mısın?",
+    "example": "Sorry, can you explain that again?",
+    "exampleTr": "Pardon, tekrar açıklar mısın?",
+    "pron": "Ken yu ikspyleyn det ıgen?"
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I'm getting the hang of it.",
+    "meaning": "Alışmaya başlıyorum / El alışkanlığı kazanıyorum.",
+    "example": "It was hard at first, but I'm getting the hang of it.",
+    "exampleTr": "Başta zordu ama alışmaya başlıyorum.",
+    "pron": "Aym geting dı heng ov it."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "It went over my head.",
+    "meaning": "Hiçbir şey anlamadım / Kafamın üstünden geçti.",
+    "example": "The lecture was so complex, it went over my head.",
+    "exampleTr": "Ders çok karmaşıktı, hiçbir şey anlamadım.",
+    "pron": "İt vent ovır may hed."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I passed the exam!",
+    "meaning": "Sınavı geçtim!",
+    "example": "Great news, I passed the exam!",
+    "exampleTr": "Güzel haber, sınavı geçtim!",
+    "pron": "Ay pasd dı igzem!"
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I flunked the test.",
+    "meaning": "Sınavdan kaldım.",
+    "example": "I didn't study enough, I flunked the test.",
+    "exampleTr": "Yeterince çalışmadım, sınavdan kaldım.",
+    "pron": "Ay flankt dı test."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "Practice makes perfect.",
+    "meaning": "Tekrar mükemmelleştirir.",
+    "example": "Keep trying, practice makes perfect.",
+    "exampleTr": "Denemeye devam et, tekrar mükemmelleştirir.",
+    "pron": "Prektis meyks pörfekt."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I'm a quick learner.",
+    "meaning": "Çabuk öğrenirim.",
+    "example": "Don't worry, I'm a quick learner.",
+    "exampleTr": "Endişelenme, çabuk öğrenirim.",
+    "pron": "Aym e kvik lörnır."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "Can I borrow your notes?",
+    "meaning": "Notlarını ödünç alabilir miyim?",
+    "example": "I missed the class, can I borrow your notes?",
+    "exampleTr": "Dersi kaçırdım, notlarını ödünç alabilir miyim?",
+    "pron": "Ken ay borov yor nots?"
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I learned it the hard way.",
+    "meaning": "Zor yoldan öğrendim.",
+    "example": "I learned it the hard way, always save your work.",
+    "exampleTr": "Zor yoldan öğrendim, her zaman çalışmanı kaydet.",
+    "pron": "Ay lörnd it dı hard vey."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I'm broke.",
+    "meaning": "Meteliksizim / Param yok.",
+    "example": "I can't go out, I'm broke.",
+    "exampleTr": "Dışarı çıkamam, param yok.",
+    "pron": "Aym brok."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I'm saving up for...",
+    "meaning": "...için biriktiriyorum.",
+    "example": "I'm saving up for a new laptop.",
+    "exampleTr": "Yeni bir laptop için biriktiriyorum.",
+    "pron": "Aym seyving ap for..."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "That's a rip-off!",
+    "meaning": "Bu kazıklama! / Bu soygun!",
+    "example": "$50 for a t-shirt? That's a rip-off!",
+    "exampleTr": "Bir tişört için 50 dolar mı? Bu soygun!",
+    "pron": "Dets e rip-of!"
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I'm on a tight budget.",
+    "meaning": "Bütçem kısıtlı.",
+    "example": "I'm on a tight budget this month.",
+    "exampleTr": "Bu ay bütçem kısıtlı.",
+    "pron": "Aym on e tayt bacıt."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "It's a bargain!",
+    "meaning": "Bu kelepir! / Çok uygun!",
+    "example": "Only $10? It's a bargain!",
+    "exampleTr": "Sadece 10 dolar mı? Bu kelepir!",
+    "pron": "İts e bargin!"
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "Can I pay in installments?",
+    "meaning": "Taksitle ödeyebilir miyim?",
+    "example": "Can I pay in installments for this TV?",
+    "exampleTr": "Bu TV'yi taksitle ödeyebilir miyim?",
+    "pron": "Ken ay pey in instolmınts?"
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I need to cut back on spending.",
+    "meaning": "Harcamaları kısmam lazım.",
+    "example": "I've been spending too much, I need to cut back.",
+    "exampleTr": "Çok harcıyorum, harcamaları kısmam lazım.",
+    "pron": "Ay nid tu kat bek on spending."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "It's not worth the price.",
+    "meaning": "Fiyatına değmez.",
+    "example": "The quality is bad, it's not worth the price.",
+    "exampleTr": "Kalitesi kötü, fiyatına değmez.",
+    "pron": "İts nat vört dı prays."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I'm living paycheck to paycheck.",
+    "meaning": "Maaştan maaşa yaşıyorum.",
+    "example": "It's tough, I'm living paycheck to paycheck.",
+    "exampleTr": "Zor, maaştan maaşa yaşıyorum.",
+    "pron": "Aym living peyçek tu peyçek."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "Money doesn't grow on trees.",
+    "meaning": "Para ağaçta yetişmiyor.",
+    "example": "Be careful with money, it doesn't grow on trees.",
+    "exampleTr": "Parayla dikkatli ol, ağaçta yetişmiyor.",
+    "pron": "Mani dazınt grov on triz."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I need to work out.",
+    "meaning": "Egzersiz yapmam lazım.",
+    "example": "I've been lazy, I need to work out.",
+    "exampleTr": "Tembel davrandım, egzersiz yapmam lazım.",
+    "pron": "Ay nid tu vörk aut."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I'm out of shape.",
+    "meaning": "Formum bozuldu.",
+    "example": "I can't even run 5 minutes, I'm out of shape.",
+    "exampleTr": "5 dakika bile koşamıyorum, formum bozuldu.",
+    "pron": "Aym aut ov şeyp."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "Let's go for a walk.",
+    "meaning": "Yürüyüşe çıkalım.",
+    "example": "The weather is nice, let's go for a walk.",
+    "exampleTr": "Hava güzel, yürüyüşe çıkalım.",
+    "pron": "Lets go for e vok."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I pulled a muscle.",
+    "meaning": "Kas çektim.",
+    "example": "I pulled a muscle during the game.",
+    "exampleTr": "Maç sırasında kas çektim.",
+    "pron": "Ay puld e masıl."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "No pain, no gain.",
+    "meaning": "Acı yoksa kazanç da yok.",
+    "example": "Keep pushing, no pain, no gain!",
+    "exampleTr": "Devam et, acı yoksa kazanç da yok!",
+    "pron": "No peyn, no geyn."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I'm cutting back on sugar.",
+    "meaning": "Şekeri azaltıyorum.",
+    "example": "I'm trying to be healthier, I'm cutting back on sugar.",
+    "exampleTr": "Daha sağlıklı olmaya çalışıyorum, şekeri azaltıyorum.",
+    "pron": "Aym kating bek on şugır."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I should eat healthier.",
+    "meaning": "Daha sağlıklı beslenmem lazım.",
+    "example": "I eat too much junk food, I should eat healthier.",
+    "exampleTr": "Çok fazla abur cubur yiyorum, daha sağlıklı beslenmem lazım.",
+    "pron": "Ay şud it heldiyır."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "Let's hit the gym.",
+    "meaning": "Spor salonuna gidelim.",
+    "example": "I feel energized, let's hit the gym!",
+    "exampleTr": "Enerjik hissediyorum, spor salonuna gidelim!",
+    "pron": "Lets hit dı cim."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "My phone died.",
+    "meaning": "Telefonum öldü / Şarjı bitti.",
+    "example": "I can't call, my phone died.",
+    "exampleTr": "Arayamam, telefonumun şarjı bitti.",
+    "pron": "May fon dayd."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I'm charging my phone.",
+    "meaning": "Telefonumu şarj ediyorum.",
+    "example": "Wait, I'm charging my phone.",
+    "exampleTr": "Bekle, telefonumu şarj ediyorum.",
+    "pron": "Aym çarcing may fon."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "The internet is slow.",
+    "meaning": "İnternet yavaş.",
+    "example": "I can't load anything, the internet is slow.",
+    "exampleTr": "Hiçbir şey yüklenmiyor, internet yavaş.",
+    "pron": "Dı intırnet iz slov."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "Can you send me the link?",
+    "meaning": "Bana linki gönderir misin?",
+    "example": "That looks cool, can you send me the link?",
+    "exampleTr": "Güzel görünüyor, bana linki gönderir misin?",
+    "pron": "Ken yu send mi dı link?"
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "Let me Google it.",
+    "meaning": "Google'dan bakayım.",
+    "example": "I'm not sure, let me Google it.",
+    "exampleTr": "Emin değilim, Google'dan bakayım.",
+    "pron": "Let mi gugıl it."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "My computer crashed.",
+    "meaning": "Bilgisayarım çöktü.",
+    "example": "I lost all my work, my computer crashed.",
+    "exampleTr": "Tüm çalışmamı kaybettim, bilgisayarım çöktü.",
+    "pron": "May kımpyutır kreşt."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I need to update my software.",
+    "meaning": "Yazılımımı güncellemem lazım.",
+    "example": "It's not working, I need to update my software.",
+    "exampleTr": "Çalışmıyor, yazılımımı güncellemem lazım.",
+    "pron": "Ay nid tu apdeyt may softvir."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "Did you see what went viral?",
+    "meaning": "Viral olan şeyi gördün mü?",
+    "example": "Did you see what went viral on Twitter?",
+    "exampleTr": "Twitter'da viral olan şeyi gördün mü?",
+    "pron": "Did yu si vat vent vayrıl?"
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I'll DM you.",
+    "meaning": "Sana özel mesaj atarım.",
+    "example": "Let me DM you the details.",
+    "exampleTr": "Detayları sana özel mesajla atayım.",
+    "pron": "Ayl di-em yu."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "Can you take a screenshot?",
+    "meaning": "Ekran görüntüsü alabilir misin?",
+    "example": "Can you take a screenshot and send it to me?",
+    "exampleTr": "Ekran görüntüsü alıp bana gönderir misin?",
+    "pron": "Ken yu teyk e skriinşat?"
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I'm sorry about that.",
+    "meaning": "Bunun için özür dilerim.",
+    "example": "I'm sorry about the mess.",
+    "exampleTr": "Dağınıklık için özür dilerim.",
+    "pron": "Aym sori ıbaut det."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "My bad.",
+    "meaning": "Benim hatam.",
+    "example": "Oh, my bad! I forgot to tell you.",
+    "exampleTr": "Ah, benim hatam! Sana söylemeyi unuttum.",
+    "pron": "May bed."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I apologize for...",
+    "meaning": "...için özür dilerim.",
+    "example": "I apologize for the delay.",
+    "exampleTr": "Gecikme için özür dilerim.",
+    "pron": "Ay ıpolıcayz for..."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "It won't happen again.",
+    "meaning": "Bir daha olmayacak.",
+    "example": "I'm sorry, it won't happen again.",
+    "exampleTr": "Özür dilerim, bir daha olmayacak.",
+    "pron": "İt vont hepın ıgen."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "Don't worry about it.",
+    "meaning": "Boşver / Sorun değil.",
+    "example": "You broke a glass? Don't worry about it.",
+    "exampleTr": "Bardak mı kırdın? Boşver.",
+    "pron": "Dont vöri ıbaut it."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "No hard feelings.",
+    "meaning": "Gönül koyma / Kırgınlık yok.",
+    "example": "It's okay, no hard feelings.",
+    "exampleTr": "Sorun yok, kırgınlık yok.",
+    "pron": "No hard filingz."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I forgive you.",
+    "meaning": "Seni affediyorum.",
+    "example": "I know you didn't mean it, I forgive you.",
+    "exampleTr": "Kasıtlı olmadığını biliyorum, seni affediyorum.",
+    "pron": "Ay forgiv yu."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "Let's put it behind us.",
+    "meaning": "Bunu geride bırakalım.",
+    "example": "We both made mistakes, let's put it behind us.",
+    "exampleTr": "İkimiz de hata yaptık, bunu geride bırakalım.",
+    "pron": "Lets put it bihaynd as."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I owe you an apology.",
+    "meaning": "Sana bir özür borçluyum.",
+    "example": "I was wrong, I owe you an apology.",
+    "exampleTr": "Haksızdım, sana bir özür borçluyum.",
+    "pron": "Ay ov yu en ıpolıci."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "Water under the bridge.",
+    "meaning": "Geçti gitti / Olan oldu.",
+    "example": "We argued, but that's water under the bridge now.",
+    "exampleTr": "Tartıştık ama artık geçti gitti.",
+    "pron": "Votır andır dı bric."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Go for it!",
+    "meaning": "Hadi yap! / Cesaret et!",
+    "example": "You want to start a business? Go for it!",
+    "exampleTr": "İş mi kurmak istiyorsun? Hadi yap!",
+    "pron": "Go for it!"
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "You've got this!",
+    "meaning": "Yapabilirsin! / Başarırsın!",
+    "example": "Don't be nervous, you've got this!",
+    "exampleTr": "Gergin olma, yapabilirsin!",
+    "pron": "Yuv gat dis!"
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Don't give up.",
+    "meaning": "Pes etme.",
+    "example": "It's hard now but don't give up.",
+    "exampleTr": "Şimdi zor ama pes etme.",
+    "pron": "Dont giv ap."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Keep it up!",
+    "meaning": "Böyle devam et!",
+    "example": "Great work, keep it up!",
+    "exampleTr": "Harika iş, böyle devam et!",
+    "pron": "Kip it ap!"
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Take it easy.",
+    "meaning": "Sakin ol / Rahat ol.",
+    "example": "Don't stress too much, take it easy.",
+    "exampleTr": "Çok stres yapma, rahat ol.",
+    "pron": "Teyk it izi."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Follow your heart.",
+    "meaning": "Kalbinin sesini dinle.",
+    "example": "I don't know which job to pick. Follow your heart.",
+    "exampleTr": "Hangi işi seçeceğimi bilmiyorum. Kalbinin sesini dinle.",
+    "pron": "Folou yor hart."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "You only live once.",
+    "meaning": "Bir kere yaşarsın.",
+    "example": "Try bungee jumping, you only live once!",
+    "exampleTr": "Bungee jumping dene, bir kere yaşarsın!",
+    "pron": "Yu onli liv vans."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Look on the bright side.",
+    "meaning": "Olayın iyi tarafına bak.",
+    "example": "You didn't get the job, but look on the bright side.",
+    "exampleTr": "İşi alamadın ama iyi tarafından bak.",
+    "pron": "Luk on dı brayt sayd."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "It's now or never.",
+    "meaning": "Ya şimdi ya hiç.",
+    "example": "Are you going to ask her? It's now or never!",
+    "exampleTr": "Ona soracak mısın? Ya şimdi ya hiç!",
+    "pron": "İts nav or nevır."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Stay focused.",
+    "meaning": "Odaklan / Dikkatini ver.",
+    "example": "The deadline is close, stay focused.",
+    "exampleTr": "Son tarih yakın, odaklan.",
+    "pron": "Stey fokıst."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Believe in yourself.",
+    "meaning": "Kendine inan.",
+    "example": "You can do it, believe in yourself!",
+    "exampleTr": "Yapabilirsin, kendine inan!",
+    "pron": "Biliv in yorself."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Don't be so hard on yourself.",
+    "meaning": "Kendine bu kadar sert olma.",
+    "example": "You tried your best, don't be so hard on yourself.",
+    "exampleTr": "Elinden geleni yaptın, kendine bu kadar sert olma.",
+    "pron": "Dont bi so hard on yorself."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Think outside the box.",
+    "meaning": "Kalıpların dışında düşün.",
+    "example": "We need creative solutions, think outside the box.",
+    "exampleTr": "Yaratıcı çözümler lazım, kalıpların dışında düşün.",
+    "pron": "Tink autsayd dı boks."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Where there's a will, there's a way.",
+    "meaning": "İsteyen yolunu bulur.",
+    "example": "Don't quit, where there's a will, there's a way.",
+    "exampleTr": "Bırakma, isteyen yolunu bulur.",
+    "pron": "Ver derz e vil, derz e vey."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Step out of your comfort zone.",
+    "meaning": "Konfor alanından çık.",
+    "example": "Try new things, step out of your comfort zone.",
+    "exampleTr": "Yeni şeyler dene, konfor alanından çık.",
+    "pron": "Step aut ov yor kamfırt zon."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Make the most of it.",
+    "meaning": "En iyi şekilde değerlendir.",
+    "example": "You're on vacation, make the most of it!",
+    "exampleTr": "Tatildesin, en iyi şekilde değerlendir!",
+    "pron": "Meyk dı most ov it."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I need to warm up first.",
+    "meaning": "Önce ısınmam lazım.",
+    "example": "Wait, I need to warm up first before we start.",
+    "exampleTr": "Dur, başlamadan önce ısınmam lazım.",
+    "pron": "Ay niid tu varm ap först."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "Let's go for a run.",
+    "meaning": "Koşuya çıkalım.",
+    "example": "It's a nice day, let's go for a run.",
+    "exampleTr": "Hava güzel, koşuya çıkalım.",
+    "pron": "Lets go for e ran."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I work out every day.",
+    "meaning": "Her gün spor yapıyorum.",
+    "example": "I work out every day to stay fit.",
+    "exampleTr": "Formda kalmak için her gün spor yapıyorum.",
+    "pron": "Ay vörk aut evri dey."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "What's the score?",
+    "meaning": "Skor ne?",
+    "example": "I just turned on the TV. What's the score?",
+    "exampleTr": "Televizyonu yeni açtım. Skor ne?",
+    "pron": "Vats dı skor?"
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "He scored a goal!",
+    "meaning": "Gol attı!",
+    "example": "Did you see that? He scored a goal!",
+    "exampleTr": "Gördün mü? Gol attı!",
+    "pron": "Hi skord e gol!"
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I've been hitting the gym.",
+    "meaning": "Spor salonuna gidiyorum.",
+    "example": "I've been hitting the gym three times a week.",
+    "exampleTr": "Haftada üç kez spor salonuna gidiyorum.",
+    "pron": "Ayv bin hiting dı cim."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "Let's stretch before we start.",
+    "meaning": "Başlamadan önce esneme yapalım.",
+    "example": "Let's stretch before we start the hike.",
+    "exampleTr": "Yürüyüşe başlamadan önce esneme yapalım.",
+    "pron": "Lets streç bifor vi start."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I'm training for a marathon.",
+    "meaning": "Maratona hazırlanıyorum.",
+    "example": "I'm training for a marathon next month.",
+    "exampleTr": "Gelecek ayki maratona hazırlanıyorum.",
+    "pron": "Aym treyning for e meretın."
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "Do you want to play basketball?",
+    "meaning": "Basketbol oynamak ister misin?",
+    "example": "Do you want to play basketball after work?",
+    "exampleTr": "İşten sonra basketbol oynamak ister misin?",
+    "pron": "Du yu vant tu pley baskit bol?"
+  },
+  {
+    "category": "Spor & Sağlık",
+    "pattern": "I need to cool down.",
+    "meaning": "Soğuma yapmam lazım.",
+    "example": "Great workout! I need to cool down now.",
+    "exampleTr": "Harika antrenman! Şimdi soğuma yapmam lazım.",
+    "pron": "Ay niid tu kuul daun."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's freezing outside.",
+    "meaning": "Dışarısı buz gibi.",
+    "example": "Don't go out, it's freezing outside.",
+    "exampleTr": "Dışarı çıkma, buz gibi.",
+    "pron": "İts friizing autsayd."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "The sun is shining.",
+    "meaning": "Güneş parlıyor.",
+    "example": "The sun is shining, let's go to the park.",
+    "exampleTr": "Güneş parlıyor, parka gidelim.",
+    "pron": "Dı san iz şayning."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "We're expecting a storm.",
+    "meaning": "Fırtına bekleniyor.",
+    "example": "Stay home, we're expecting a storm tonight.",
+    "exampleTr": "Evde kal, bu gece fırtına bekleniyor.",
+    "pron": "Viir ekspekting e storm."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's pouring!",
+    "meaning": "Bardaktan boşanırcasına yağıyor!",
+    "example": "Don't go out now, it's pouring!",
+    "exampleTr": "Şimdi çıkma, bardaktan boşanırcasına yağıyor!",
+    "pron": "İts poring!"
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "The wind is picking up.",
+    "meaning": "Rüzgar güçleniyor.",
+    "example": "Let's go inside, the wind is picking up.",
+    "exampleTr": "İçeri girelim, rüzgar güçleniyor.",
+    "pron": "Dı vind iz piking ap."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's humid today.",
+    "meaning": "Bugün nemli.",
+    "example": "It's so humid today, I can barely breathe.",
+    "exampleTr": "Bugün çok nemli, nefes alamıyorum.",
+    "pron": "İts hyuumid tudey."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "Spring is in the air.",
+    "meaning": "Bahar havası var.",
+    "example": "The flowers are blooming, spring is in the air.",
+    "exampleTr": "Çiçekler açıyor, bahar havası var.",
+    "pron": "Spring iz in dı er."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "I love autumn leaves.",
+    "meaning": "Sonbahar yapraklarını seviyorum.",
+    "example": "I love autumn leaves, they're so colorful.",
+    "exampleTr": "Sonbahar yapraklarını seviyorum, çok renkli.",
+    "pron": "Ay lav otım liivz."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "It's a bit chilly.",
+    "meaning": "Biraz serin.",
+    "example": "Take a jacket, it's a bit chilly outside.",
+    "exampleTr": "Ceket al, dışarısı biraz serin.",
+    "pron": "İts e bit çili."
+  },
+  {
+    "category": "Hava & Mevsim",
+    "pattern": "We had a heatwave last week.",
+    "meaning": "Geçen hafta sıcak dalgası vardı.",
+    "example": "We had a heatwave last week, it was unbearable.",
+    "exampleTr": "Geçen hafta sıcak dalgası vardı, dayanılmazdı.",
+    "pron": "Vi hed e hiitgveyv last viik."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "That was my bad.",
+    "meaning": "Benim hatam.",
+    "example": "That was my bad, I should have checked first.",
+    "exampleTr": "Benim hatam, önce kontrol etmeliydim.",
+    "pron": "Det vaz may bed."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I hope you can forgive me.",
+    "meaning": "Umarım beni affedersin.",
+    "example": "I'm truly sorry, I hope you can forgive me.",
+    "exampleTr": "Gerçekten üzgünüm, umarım beni affedersin.",
+    "pron": "Ay hop yu ken forgiv mi."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I won't let it happen again.",
+    "meaning": "Bir daha olmayacak.",
+    "example": "I'm sorry I was late. I won't let it happen again.",
+    "exampleTr": "Geç kaldığım için özür dilerim. Bir daha olmayacak.",
+    "pron": "Ay vont let it hepın egeyn."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "I feel terrible about it.",
+    "meaning": "Çok kötü hissediyorum.",
+    "example": "I feel terrible about missing your birthday.",
+    "exampleTr": "Doğum gününü kaçırdığım için çok kötü hissediyorum.",
+    "pron": "Ay fiil teribıl ebaunt it."
+  },
+  {
+    "category": "Özür & Affetme",
+    "pattern": "Apology accepted.",
+    "meaning": "Özür kabul edildi.",
+    "example": "You said sorry? Apology accepted.",
+    "exampleTr": "Özür mü diledin? Özür kabul edildi.",
+    "pron": "Epoloci ekseptid."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "It's a rip-off!",
+    "meaning": "Kazıklama bu!",
+    "example": "Twenty dollars for a coffee? It's a rip-off!",
+    "exampleTr": "Bir kahveye yirmi dolar mı? Kazıklama bu!",
+    "pron": "İts e rip of!"
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I need to save up.",
+    "meaning": "Biriktirmem lazım.",
+    "example": "I need to save up for a new laptop.",
+    "exampleTr": "Yeni bir laptop için biriktirmem lazım.",
+    "pron": "Ay niid tu seyv ap."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "That's a bargain!",
+    "meaning": "Bu çok ucuz!",
+    "example": "Only five dollars? That's a bargain!",
+    "exampleTr": "Sadece beş dolar mı? Bu çok ucuz!",
+    "pron": "Dets e bargin!"
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "I got ripped off.",
+    "meaning": "Kazıklandım.",
+    "example": "I paid too much, I got ripped off.",
+    "exampleTr": "Çok fazla ödedim, kazıklandım.",
+    "pron": "Ay got ript of."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "My phone is acting up.",
+    "meaning": "Telefonum sorun çıkarıyor.",
+    "example": "I need to restart it, my phone is acting up.",
+    "exampleTr": "Yeniden başlatmam lazım, telefonum sorun çıkarıyor.",
+    "pron": "May fon iz ekting ap."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "The app crashed.",
+    "meaning": "Uygulama çöktü.",
+    "example": "I lost my work because the app crashed.",
+    "exampleTr": "Çalışmamı kaybettim çünkü uygulama çöktü.",
+    "pron": "Dı ep kreşt."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I ran out of storage.",
+    "meaning": "Depolama alanım doldu.",
+    "example": "I can't take photos, I ran out of storage.",
+    "exampleTr": "Fotoğraf çekemiyorum, depolama alanım doldu.",
+    "pron": "Ay ren aut ov storic."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I need to charge my phone.",
+    "meaning": "Telefonumu şarj etmem lazım.",
+    "example": "My battery is at 5%. I need to charge my phone.",
+    "exampleTr": "Şarjım yüzde beşte. Telefonumu şarj etmem lazım.",
+    "pron": "Ay niid tu çarc may fon."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "The website is down.",
+    "meaning": "Site çökmüş.",
+    "example": "I can't log in, the website is down.",
+    "exampleTr": "Giriş yapamıyorum, site çökmüş.",
+    "pron": "Dı vebsayt iz daun."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I'll Google it.",
+    "meaning": "Google'da ararım.",
+    "example": "I'm not sure, let me Google it.",
+    "exampleTr": "Emin değilim, Google'da arayım.",
+    "pron": "Ayl guugıl it."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "My internet is laggy.",
+    "meaning": "İnternetim çok yavaş.",
+    "example": "I can't stream, my internet is laggy.",
+    "exampleTr": "İzleyemiyorum, internetim çok yavaş.",
+    "pron": "May intırnet iz legi."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I'm a fast learner.",
+    "meaning": "Çabuk öğrenirim.",
+    "example": "Don't worry, I'm a fast learner.",
+    "exampleTr": "Merak etme, çabuk öğrenirim.",
+    "pron": "Aym e fast lörnır."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "I need to brush up on my English.",
+    "meaning": "İngilizcemi tazelemem lazım.",
+    "example": "I have an interview, I need to brush up on my English.",
+    "exampleTr": "Mülakatım var, İngilizcemi tazelemem lazım.",
+    "pron": "Ay niid tu braş ap on may İngliş."
+  },
+  {
+    "category": "Eğitim & Öğrenme",
+    "pattern": "Can you explain it in simple terms?",
+    "meaning": "Basitçe açıklar mısın?",
+    "example": "I didn't get it. Can you explain it in simple terms?",
+    "exampleTr": "Anlamadım. Basitçe açıklar mısın?",
+    "pron": "Ken yu ekspleyn it in simpıl törmz?"
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "You're on mute.",
+    "meaning": "Sesin kapalı.",
+    "example": "We can't hear you, you're on mute.",
+    "exampleTr": "Seni duyamıyoruz, sesin kapalı.",
+    "pron": "Yor on myuut."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Can you hear me now?",
+    "meaning": "Şimdi duyabiliyor musun?",
+    "example": "I moved to a better spot. Can you hear me now?",
+    "exampleTr": "Daha iyi bir yere geçtim. Şimdi duyabiliyor musun?",
+    "pron": "Ken yu hiir mi nau?"
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "I'll text you the details.",
+    "meaning": "Detayları mesaj atarım.",
+    "example": "I'll text you the details later tonight.",
+    "exampleTr": "Bu gece detayları mesaj atarım.",
+    "pron": "Ayl tekst yu dı diteylz."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "My signal is weak.",
+    "meaning": "Çekim zayıf.",
+    "example": "I can't load anything, my signal is weak.",
+    "exampleTr": "Hiçbir şey açılmıyor, çekim zayıf.",
+    "pron": "May signıl iz viik."
+  },
+  {
+    "category": "Telefon & İletişim",
+    "pattern": "Let's jump on a call.",
+    "meaning": "Hadi bir arayalım.",
+    "example": "This is too complicated to text. Let's jump on a call.",
+    "exampleTr": "Yazarak çok karışık. Hadi bir arayalım.",
+    "pron": "Lets camp on e kol."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I have a splitting headache.",
+    "meaning": "Başım çok fena ağrıyor.",
+    "example": "I can't focus, I have a splitting headache.",
+    "exampleTr": "Odaklanamıyorum, başım çok fena ağrıyor.",
+    "pron": "Ay hev e splitting hedeyk."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I'm allergic to peanuts.",
+    "meaning": "Fıstığa alerjim var.",
+    "example": "Be careful, I'm allergic to peanuts.",
+    "exampleTr": "Dikkatli ol, fıstığa alerjim var.",
+    "pron": "Aym elörcik tu piinats."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I'm feeling under the weather.",
+    "meaning": "Biraz rahatsızım.",
+    "example": "I'm not coming to work, I'm feeling under the weather.",
+    "exampleTr": "İşe gelmiyorum, biraz rahatsızım.",
+    "pron": "Aym fiiling andır dı vedır."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Get well soon!",
+    "meaning": "Geçmiş olsun!",
+    "example": "I heard you're sick. Get well soon!",
+    "exampleTr": "Hasta olduğunu duydum. Geçmiş olsun!",
+    "pron": "Get vel suun!"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm just killing time.",
+    "meaning": "Sadece vakit öldürüyorum.",
+    "example": "I'm not busy, I'm just killing time.",
+    "exampleTr": "Meşgul değilim, sadece vakit öldürüyorum.",
+    "pron": "Aym cast kiling taym."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm fed up with this.",
+    "meaning": "Bundan bıktım.",
+    "example": "I'm fed up with this traffic.",
+    "exampleTr": "Bu trafikten bıktım.",
+    "pron": "Aym fed ap vit dis."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "What's the catch?",
+    "meaning": "İşin puanı ne?",
+    "example": "Free vacation? What's the catch?",
+    "exampleTr": "Bedava tatil mi? İşin puanı ne?",
+    "pron": "Vats dı keç?"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "That's a no-brainer.",
+    "meaning": "Çok kolay bir karar.",
+    "example": "Free money? That's a no-brainer!",
+    "exampleTr": "Bedava para mı? Çok kolay bir karar!",
+    "pron": "Dets e no breynır."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "You nailed it!",
+    "meaning": "Çok iyi yaptın!",
+    "example": "Great presentation, you nailed it!",
+    "exampleTr": "Harika sunum, çok iyi yaptın!",
+    "pron": "Yu neyld it!"
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Don't beat around the bush.",
+    "meaning": "Lafı dolandırma.",
+    "example": "Just tell me, don't beat around the bush.",
+    "exampleTr": "Söyle bana, lafı dolandırma.",
+    "pron": "Dont biit eraund dı buş."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "I'm sitting on the fence.",
+    "meaning": "Kararsızım.",
+    "example": "I like both options, I'm sitting on the fence.",
+    "exampleTr": "İkisini de seviyorum, kararsızım.",
+    "pron": "Aym siting on dı fens."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "That ship has sailed.",
+    "meaning": "O iş çoktan geçti.",
+    "example": "You can't change it now, that ship has sailed.",
+    "exampleTr": "Artık değiştiremezsin, o iş çoktan geçti.",
+    "pron": "Det şip hez seyld."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll keep you in the loop.",
+    "meaning": "Seni bilgilendiririm.",
+    "example": "I'll keep you in the loop about the project.",
+    "exampleTr": "Proje hakkında seni bilgilendiririm.",
+    "pron": "Ayl kiip yu in dı luup."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'm swamped with work.",
+    "meaning": "İşe boğuldum.",
+    "example": "I can't make it, I'm swamped with work.",
+    "exampleTr": "Gelemem, işe boğuldum.",
+    "pron": "Aym svampt vit vörk."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "We need to meet the deadline.",
+    "meaning": "Son teslim tarihine yetişmemiz lazım.",
+    "example": "Hurry up, we need to meet the deadline.",
+    "exampleTr": "Acele et, son teslim tarihine yetişmemiz lazım.",
+    "pron": "Vi niid tu miit dı dedlayn."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'll get back to you on that.",
+    "meaning": "O konuda sana döneceğim.",
+    "example": "Good question. I'll get back to you on that.",
+    "exampleTr": "İyi soru. O konuda sana döneceğim.",
+    "pron": "Ayl get bek tu yu on det."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "Let's wrap this up.",
+    "meaning": "Bunu bitirelim.",
+    "example": "We've been here for hours. Let's wrap this up.",
+    "exampleTr": "Saatlerdir buradayız. Bunu bitirelim.",
+    "pron": "Lets rep dis ap."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I need a day off.",
+    "meaning": "Bir gün izne ihtiyacım var.",
+    "example": "I'm exhausted. I need a day off.",
+    "exampleTr": "Bitkinim. Bir gün izne ihtiyacım var.",
+    "pron": "Ay niid e dey of."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm over the moon!",
+    "meaning": "Çok mutluyum!",
+    "example": "I got the job! I'm over the moon!",
+    "exampleTr": "İşe alındım! Çok mutluyum!",
+    "pron": "Aym ovır dı muun!"
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It drives me crazy.",
+    "meaning": "Beni deli ediyor.",
+    "example": "That noise drives me crazy.",
+    "exampleTr": "O gürültü beni deli ediyor.",
+    "pron": "İt drayvz mi kreyzi."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm torn between the two.",
+    "meaning": "İkisi arasında kalıyorum.",
+    "example": "I'm torn between the two options.",
+    "exampleTr": "İki seçenek arasında kalıyorum.",
+    "pron": "Aym torn bitviin dı tuu."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "That blew my mind.",
+    "meaning": "Aklımı başımdan aldı.",
+    "example": "The ending of that movie blew my mind.",
+    "exampleTr": "O filmin sonu aklımı başımdan aldı.",
+    "pron": "Det bluu may maynd."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I couldn't agree more.",
+    "meaning": "Kesinlikle katılıyorum.",
+    "example": "You're right, I couldn't agree more.",
+    "exampleTr": "Haklısın, kesinlikle katılıyorum.",
+    "pron": "Ay kudınt egrii mor."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "It's not worth it.",
+    "meaning": "Değmez.",
+    "example": "Don't argue with him, it's not worth it.",
+    "exampleTr": "Onunla tartışma, değmez.",
+    "pron": "İts nat vört it."
+  },
+  {
+    "category": "Fikir & Duygu",
+    "pattern": "I'm on the fence about it.",
+    "meaning": "Kararsızım.",
+    "example": "I'm on the fence about buying a new car.",
+    "exampleTr": "Yeni araba alma konusunda kararsızım.",
+    "pron": "Aym on dı fens ebaunt it."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Where's the nearest ATM?",
+    "meaning": "En yakın ATM nerede?",
+    "example": "I need cash. Where's the nearest ATM?",
+    "exampleTr": "Nakit lazım. En yakın ATM nerede?",
+    "pron": "Verz dı niirest ey tii em?"
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "The room has a nice view.",
+    "meaning": "Odanın güzel manzarası var.",
+    "example": "Come look, the room has a nice view of the sea.",
+    "exampleTr": "Gel bak, odanın deniz manzarası çok güzel.",
+    "pron": "Dı ruum hez e nays vyuu."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "I lost my luggage.",
+    "meaning": "Bavulumu kaybettim.",
+    "example": "I just landed and I lost my luggage.",
+    "exampleTr": "Yeni indim ve bavulumu kaybettim.",
+    "pron": "Ay lost may lagic."
+  },
+  {
+    "category": "Seyahat & Otel",
+    "pattern": "Can you recommend a good restaurant?",
+    "meaning": "İyi bir restoran önerebilir misiniz?",
+    "example": "We're new here. Can you recommend a good restaurant?",
+    "exampleTr": "Burada yeniyiz. İyi bir restoran önerebilir misiniz?",
+    "pron": "Ken yu rekomend e gud restorant?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Would you mind closing the door?",
+    "meaning": "Kapıyı kapatır mısın?",
+    "example": "It's cold. Would you mind closing the door?",
+    "exampleTr": "Soğuk. Kapıyı kapatır mısın?",
+    "pron": "Vud yu maynd klozing dı dor?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I'd appreciate your help.",
+    "meaning": "Yardımını takdir ederim.",
+    "example": "This is hard. I'd appreciate your help.",
+    "exampleTr": "Bu zor. Yardımını takdir ederim.",
+    "pron": "Ayd eprişieyt yor help."
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Can you do me a favor?",
+    "meaning": "Bana bir iyilik yapar mısın?",
+    "example": "Hey, can you do me a favor?",
+    "exampleTr": "Hey, bana bir iyilik yapar mısın?",
+    "pron": "Ken yu du mi e feyvır?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "Is it okay if I sit here?",
+    "meaning": "Buraya otursam olur mu?",
+    "example": "Excuse me, is it okay if I sit here?",
+    "exampleTr": "Pardon, buraya otursam olur mu?",
+    "pron": "İz it okey if ay sit hiir?"
+  },
+  {
+    "category": "Rica & Yardım",
+    "pattern": "I hate to bother you, but...",
+    "meaning": "Rahatsız etmek istemem ama...",
+    "example": "I hate to bother you, but can I ask a question?",
+    "exampleTr": "Rahatsız etmek istemem ama bir soru sorabilir miyim?",
+    "pron": "Ay heyt tu badır yu bat..."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "We go way back.",
+    "meaning": "Çok eskiye dayanır aramız.",
+    "example": "Me and Tom go way back, since high school.",
+    "exampleTr": "Ben ve Tom çok eskiye dayanırız, liseden beri.",
+    "pron": "Vi go vey bek."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "Let's catch up over coffee.",
+    "meaning": "Kahve içip sohbet edelim.",
+    "example": "I missed you. Let's catch up over coffee.",
+    "exampleTr": "Seni özledim. Kahve içip sohbet edelim.",
+    "pron": "Lets keç ap ovır kofi."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "He's a people person.",
+    "meaning": "Sosyal biri.",
+    "example": "Everyone likes him, he's a people person.",
+    "exampleTr": "Herkes onu sever, sosyal biri.",
+    "pron": "Hiiz e piipıl pörsın."
+  },
+  {
+    "category": "Sosyal & Arkadaşlık",
+    "pattern": "We hit it off right away.",
+    "meaning": "Hemen kaynaştık.",
+    "example": "We met at a party and hit it off right away.",
+    "exampleTr": "Bir partide tanıştık ve hemen kaynaştık.",
+    "pron": "Vi hit it of rayt evey."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Do you have this in a larger size?",
+    "meaning": "Bunun daha büyük bedeni var mı?",
+    "example": "This is too small. Do you have this in a larger size?",
+    "exampleTr": "Bu çok küçük. Bunun daha büyük bedeni var mı?",
+    "pron": "Du yu hev dis in e larcır sayz?"
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "The food was amazing.",
+    "meaning": "Yemek harikaydı.",
+    "example": "Compliments to the chef, the food was amazing.",
+    "exampleTr": "Şefe selamlar, yemek harikaydı.",
+    "pron": "Dı fuud vaz emeyzing."
+  },
+  {
+    "category": "Alışveriş & Restoran",
+    "pattern": "Can we split the bill?",
+    "meaning": "Hesabı bölüşelim mi?",
+    "example": "Let's be fair. Can we split the bill?",
+    "exampleTr": "Adil olalım. Hesabı bölüşelim mi?",
+    "pron": "Ken vi split dı bil?"
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "The fridge is empty.",
+    "meaning": "Buzdolabı boş.",
+    "example": "We need to go shopping, the fridge is empty.",
+    "exampleTr": "Alışverişe gitmemiz lazım, buzdolabı boş.",
+    "pron": "Dı fric iz empti."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I locked myself out.",
+    "meaning": "Kapıyı üzerime kilitledim.",
+    "example": "I left my keys inside, I locked myself out.",
+    "exampleTr": "Anahtarlarımı içeride unuttum, kapıyı üzerime kilitledim.",
+    "pron": "Ay lokt maysılf aut."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'll pass on that.",
+    "meaning": "Ben pas geçeyim.",
+    "example": "Thanks for the offer, but I'll pass on that.",
+    "exampleTr": "Teklif için teşekkürler ama ben pas geçeyim.",
+    "pron": "Ayl pas on det."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Count me out.",
+    "meaning": "Bensiz yapın.",
+    "example": "Hiking in the rain? Count me out.",
+    "exampleTr": "Yağmurda yürüyüş mü? Bensiz yapın.",
+    "pron": "Kaunt mi aut."
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'm running behind.",
+    "meaning": "Geç kalıyorum.",
+    "example": "Don't wait for me, I'm running behind.",
+    "exampleTr": "Beni bekleme, geç kalıyorum.",
+    "pron": "Aym raning bihaynd."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Are we going the right way?",
+    "meaning": "Doğru yoldan mı gidiyoruz?",
+    "example": "I don't recognize this area. Are we going the right way?",
+    "exampleTr": "Bu bölgeyi tanımıyorum. Doğru yoldan mı gidiyoruz?",
+    "pron": "Ar vi going dı rayt vey?"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "It was nice meeting you.",
+    "meaning": "Tanıştığıma memnun oldum.",
+    "example": "I have to go now. It was nice meeting you.",
+    "exampleTr": "Şimdi gitmem lazım. Tanıştığıma memnun oldum.",
+    "pron": "İt vaz nays miiting yu."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Say hi to your family for me.",
+    "meaning": "Ailene benden selam söyle.",
+    "example": "I'm leaving now. Say hi to your family for me.",
+    "exampleTr": "Ben gidiyorum. Ailene benden selam söyle.",
+    "pron": "Sey hay tu yor femili for mi."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I'm not in the mood for that.",
+    "meaning": "Onun için modumda değilim.",
+    "example": "Let's do something else, I'm not in the mood for that.",
+    "exampleTr": "Başka bir şey yapalım, onun için modumda değilim.",
+    "pron": "Aym nat in dı muud for det."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "Tell me about it!",
+    "meaning": "Bana mı anlatıyorsun! / Bilmez miyim!",
+    "example": "Work is so stressful. - Tell me about it!",
+    "exampleTr": "İş çok stresli. - Bana mı anlatıyorsun!",
+    "pron": "Tel mi ebaunt it!"
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Easier said than done.",
+    "meaning": "Söylemesi kolay.",
+    "example": "Just be confident! - Easier said than done.",
+    "exampleTr": "Özgüvenli ol yeter! - Söylemesi kolay.",
+    "pron": "Iiziır sed den dan."
+  },
+  {
+    "category": "İş & Ofis",
+    "pattern": "I'm calling in sick today.",
+    "meaning": "Bugün hastalık izni alıyorum.",
+    "example": "I have a fever, I'm calling in sick today.",
+    "exampleTr": "Ateşim var, bugün hastalık izni alıyorum.",
+    "pron": "Aym koling in sik tudey."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "I sprained my ankle.",
+    "meaning": "Ayak bileğimi burktum.",
+    "example": "I fell down the stairs and sprained my ankle.",
+    "exampleTr": "Merdivenlerden düştüm ve ayak bileğimi burktum.",
+    "pron": "Ay spreynd may enkıl."
+  },
+  {
+    "category": "Sağlık & Acil",
+    "pattern": "Where's the nearest pharmacy?",
+    "meaning": "En yakın eczane nerede?",
+    "example": "I need medicine. Where's the nearest pharmacy?",
+    "exampleTr": "İlaca ihtiyacım var. En yakın eczane nerede?",
+    "pron": "Verz dı niirest farmısi?"
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I overslept this morning.",
+    "meaning": "Bu sabah uyuyakaldım.",
+    "example": "Sorry I'm late, I overslept this morning.",
+    "exampleTr": "Geç kaldığım için özür dilerim, bu sabah uyuyakaldım.",
+    "pron": "Ay ovırslept dis morning."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "I'm afraid I can't make it.",
+    "meaning": "Maalesef gelemem.",
+    "example": "I'm afraid I can't make it to the party.",
+    "exampleTr": "Maalesef partiye gelemem.",
+    "pron": "Aym efreyd ay kent meyk it."
+  },
+  {
+    "category": "Kabul & Red",
+    "pattern": "Sounds like a plan!",
+    "meaning": "Kulağa iyi geliyor!",
+    "example": "Dinner at 7? Sounds like a plan!",
+    "exampleTr": "Saat 7'de akşam yemeği mi? Kulağa iyi geliyor!",
+    "pron": "Saundz layk e plen!"
+  },
+  {
+    "category": "Zaman & Randevu",
+    "pattern": "I'll be there in a jiffy.",
+    "meaning": "Bir saniyede oradayım.",
+    "example": "Wait for me, I'll be there in a jiffy.",
+    "exampleTr": "Beni bekle, bir saniyede oradayım.",
+    "pron": "Ayl bi der in e cifi."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Don't give up!",
+    "meaning": "Pes etme!",
+    "example": "It's hard but don't give up!",
+    "exampleTr": "Zor ama pes etme!",
+    "pron": "Dont giv ap!"
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Keep up the good work!",
+    "meaning": "Böyle devam et!",
+    "example": "Great results, keep up the good work!",
+    "exampleTr": "Harika sonuçlar, böyle devam et!",
+    "pron": "Kiip ap dı gud vörk!"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "How far is it from here?",
+    "meaning": "Buradan ne kadar uzak?",
+    "example": "How far is it from here to the airport?",
+    "exampleTr": "Buradan havaalanına ne kadar uzak?",
+    "pron": "Hau far iz it from hiir?"
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "Take the second left.",
+    "meaning": "İkinci soldan dön.",
+    "example": "Go straight and take the second left.",
+    "exampleTr": "Düz git ve ikinci soldan dön.",
+    "pron": "Teyk dı sekınd left."
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "What a pleasant surprise!",
+    "meaning": "Ne güzel sürpriz!",
+    "example": "I didn't expect to see you here! What a pleasant surprise!",
+    "exampleTr": "Seni burada görmeyi beklemiyordum! Ne güzel sürpriz!",
+    "pron": "Vat e plezınt sırprayz!"
+  },
+  {
+    "category": "Selamlaşma & Vedalaşma",
+    "pattern": "Keep in touch!",
+    "meaning": "Görüşmeye devam edelim!",
+    "example": "I'm moving away, but keep in touch!",
+    "exampleTr": "Taşınıyorum ama görüşmeye devam edelim!",
+    "pron": "Kiip in taç!"
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "It's on the tip of my tongue.",
+    "meaning": "Dilimin ucunda.",
+    "example": "I know the answer, it's on the tip of my tongue.",
+    "exampleTr": "Cevabı biliyorum, dilimin ucunda.",
+    "pron": "İts on dı tip ov may tang."
+  },
+  {
+    "category": "Günlük Sohbet",
+    "pattern": "I have mixed feelings about it.",
+    "meaning": "Karışık duygularım var.",
+    "example": "I have mixed feelings about the new plan.",
+    "exampleTr": "Yeni plan hakkında karışık duygularım var.",
+    "pron": "Ay hev mikst fiilings ebaunt it."
+  },
+  {
+    "category": "Deyimler & İfadeler",
+    "pattern": "Curiosity killed the cat.",
+    "meaning": "Merak insanı mahveder.",
+    "example": "Don't ask too many questions, curiosity killed the cat.",
+    "exampleTr": "Çok fazla soru sorma, merak insanı mahveder.",
+    "pron": "Kyuriasiti kild dı ket."
+  },
+  {
+    "category": "Para & Finans",
+    "pattern": "Let's go Dutch.",
+    "meaning": "Hesabı ayrı ayrı ödeyelim.",
+    "example": "Let's go Dutch this time, it's only fair.",
+    "exampleTr": "Bu sefer hesabı ayrı ayrı ödeyelim, adil olan bu.",
+    "pron": "Lets go daç."
+  },
+  {
+    "category": "Teknoloji & İnternet",
+    "pattern": "I'll send you a voice note.",
+    "meaning": "Sana sesli mesaj atarım.",
+    "example": "It's too long to type, I'll send you a voice note.",
+    "exampleTr": "Yazmak çok uzun, sana sesli mesaj atarım.",
+    "pron": "Ayl send yu e voys not."
+  },
+  {
+    "category": "Motivasyon & Tavsiye",
+    "pattern": "Rome wasn't built in a day.",
+    "meaning": "Roma bir günde kurulmadı.",
+    "example": "Be patient, Rome wasn't built in a day.",
+    "exampleTr": "Sabırlı ol, Roma bir günde kurulmadı.",
+    "pron": "Rom vazınt bilt in e dey."
+  },
+  {
+    "category": "Ev & Günlük Yaşam",
+    "pattern": "I need to tidy up.",
+    "meaning": "Toparlamam lazım.",
+    "example": "My room is a mess, I need to tidy up.",
+    "exampleTr": "Odam dağınık, toparlamam lazım.",
+    "pron": "Ay niid tu taydi ap."
+  },
+  {
+    "category": "Yön & Ulaşım",
+    "pattern": "We're stuck in traffic.",
+    "meaning": "Trafiğe takıldık.",
+    "example": "Sorry we're late, we're stuck in traffic.",
+    "exampleTr": "Geç kaldığımız için üzgünüz, trafiğe takıldık.",
+    "pron": "Viir stak in trefik."
+  }
 ]
