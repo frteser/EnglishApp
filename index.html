@@ -1369,6 +1369,7 @@
             return !s || (s.correct + s.wrong) === 0;
         });
 
+        const dueReviewCount = getDueReviewCount();
         el.innerHTML = `
             <div class="daily-info">
                 <div class="day-label">Bugünün Dersi Hazır!</div>
@@ -1377,6 +1378,18 @@
                     (${todayReview.length} tekrar + ${todayNew.length} yeni)
                 </div>
             </div>
+
+            ${dueReviewCount > 0 ? `
+            <div onclick="navigateStage('flashcard', null); setTimeout(() => startFlashcards('review'), 100);"
+                style="background:linear-gradient(135deg, #06b6d4, #0891b2); border-radius:12px; padding:16px; margin:14px 0; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 12px rgba(6,182,212,0.3);">
+                <div>
+                    <div style="color:#fff; font-size:13px; opacity:0.9;">🔁 Tekrar Zamanı</div>
+                    <div style="color:#fff; font-size:22px; font-weight:bold; margin-top:4px;">${dueReviewCount} kelime</div>
+                    <div style="color:#fff; font-size:12px; opacity:0.85; margin-top:2px;">tekrar zamanı geldi</div>
+                </div>
+                <div style="color:#fff; font-size:32px;">→</div>
+            </div>
+            ` : ''}
 
             <div class="dashboard-section">
                 <h3>İlerleme Durumu</h3>
@@ -2805,6 +2818,7 @@
         const allWords = getAllWords();
         switch(mode) {
             case 'today': return getTodayWords();
+            case 'review': return getDueReviewWords();
             case 'weak': return allWords.filter(w => {
                 const s = state.wordStats[w.en];
                 return s && s.wrong > 0 && (!s.streak || s.streak < 3);
@@ -2816,6 +2830,30 @@
             case 'all': return [...allWords].sort(() => Math.random() - 0.5).slice(0, 30);
             default: return getTodayWords();
         }
+    }
+
+    // Leitner: tekrar zamani gelmis tum kelimeler
+    function getDueReviewWords() {
+        const BOX_INTERVALS = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 14 };
+        const allWords = getAllWords();
+        const due = [];
+        for (const w of allWords) {
+            const s = state.wordStats[w.en];
+            if (!s || (s.correct + s.wrong) === 0) continue;
+            const box = s.box || 1;
+            const interval = BOX_INTERVALS[box] || 1;
+            const daysSince = s.lastSeen ? Math.floor((Date.now() - new Date(s.lastSeen).getTime()) / 86400000) : 999;
+            if (daysSince >= interval) {
+                due.push({ word: w, box, daysSince, priority: box - daysSince });
+            }
+        }
+        // En acil tekrar gerekenler once (kucuk priority)
+        due.sort((a, b) => a.priority - b.priority);
+        return due.map(d => d.word);
+    }
+
+    function getDueReviewCount() {
+        return getDueReviewWords().length;
     }
 
     function startFlashcards(mode) {
@@ -2846,6 +2884,7 @@
         const accuracy = totalAnswers > 0 ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
         const learnedPatternsCount = (typeof learnedPatterns !== 'undefined') ? learnedPatterns.length : 0;
         const totalPatterns = (typeof PATTERNS !== 'undefined') ? PATTERNS.length : 0;
+        const dueReviewCount = getDueReviewCount();
 
         // Son 7 gün verisi
         const today = new Date();
@@ -2914,6 +2953,18 @@
         el.innerHTML = `
             <div class="stage-title">Performans</div>
             <div class="stage-desc">İlerlemeni takip et</div>
+
+            ${dueReviewCount > 0 ? `
+            <div onclick="navigateStage('flashcard', null); setTimeout(() => startFlashcards('review'), 100);"
+                style="background:linear-gradient(135deg, #06b6d4, #0891b2); border-radius:12px; padding:16px; margin:14px 0; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 12px rgba(6,182,212,0.3);">
+                <div>
+                    <div style="color:#fff; font-size:13px; opacity:0.9;">🔁 Tekrar Zamanı</div>
+                    <div style="color:#fff; font-size:22px; font-weight:bold; margin-top:4px;">${dueReviewCount} kelime</div>
+                    <div style="color:#fff; font-size:12px; opacity:0.85; margin-top:2px;">tekrar zamanı geldi — şimdi tekrar et</div>
+                </div>
+                <div style="color:#fff; font-size:32px;">→</div>
+            </div>
+            ` : ''}
 
             <!-- Üst stat kartları -->
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0;">
@@ -3064,8 +3115,10 @@
     }
 
     function renderFcModeBtns() {
+        const dueCount = getDueReviewCount();
         const modes = [
             { key: 'today', label: 'Bugun' },
+            { key: 'review', label: `Tekrar${dueCount > 0 ? ' (' + dueCount + ')' : ''}` },
             { key: 'weak', label: 'Zayif' },
             { key: 'all', label: 'Karisik' },
             { key: 'mastered', label: 'Ogrenilen' }
