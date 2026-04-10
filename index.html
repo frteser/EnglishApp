@@ -2233,7 +2233,11 @@
                     <div style="font-size:11px;color:#64748b;margin-bottom:6px;">${p.category}</div>
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
                         <div style="flex:1;">
-                            <div class="pattern-text">${p.pattern}</div>
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                                <div class="pattern-text">${p.pattern}</div>
+                                <button onclick="speakWord('${p.pattern.replace(/'/g, "\\'")}')" style="background:transparent; border:1px solid #a78bfa; color:#a78bfa; border-radius:50%; width:30px; height:30px; cursor:pointer; font-size:14px; padding:0;" title="Dinle">&#128264;</button>
+                            </div>
+                            ${p.pron ? `<div class="pattern-pron" style="color:#fbbf24; font-size:13px; font-style:italic; margin:4px 0;">/${p.pron}/</div>` : ''}
                             <div class="pattern-meaning">${p.meaning}</div>
                             <div class="pattern-example">${p.example}</div>
                             <div class="pattern-example-tr">${p.exampleTr}</div>
@@ -2561,18 +2565,34 @@
         const pct = Math.round(correct / total * 100);
         const cls = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'bad';
 
+        const wrongWords = words.filter((w, i) => speakingState.results[i] !== true);
+
         el.innerHTML = `
             <div class="result-card">
                 <div class="stage-title">Konusma Pratigi Sonucu</div>
                 <div class="result-score ${cls}">%${pct}</div>
                 <div class="result-message">${correct}/${total} kelimeyi dogru telaffuz ettin</div>
-                <div class="btn-center">
-                    <button class="btn btn-primary" onclick="renderSpeaking(document.getElementById('contentArea'))">Tekrar Dene</button>
-                    <button class="btn btn-secondary" onclick="document.querySelector('.stage-btn').click()">Ana Sayfa</button>
+                ${wrongWords.length > 0 ? `
+                    <div style="margin:15px 0; padding:12px; background:#1e293b; border-radius:8px;">
+                        <div style="color:#f59e0b; font-size:14px; margin-bottom:8px;">Yanlis telaffuz ettiklerin:</div>
+                        ${wrongWords.map(w => `<div style="color:#e2e8f0; font-size:15px; padding:4px 0;">${w.en} - ${w.tr}</div>`).join('')}
+                    </div>
+                ` : ''}
+                <div class="btn-center" style="flex-direction:column; gap:10px;">
+                    ${wrongWords.length > 0 ? `<button class="btn btn-primary" onclick="retrySpeakingWrong()">Yanlislari Tekrar Dene</button>` : ''}
+                    <button class="btn btn-secondary" onclick="renderSpeaking(document.getElementById('contentArea'))">Bastan Tekrar</button>
+                    <button class="btn btn-secondary" onclick="navigateStage('dashboard')">Ana Sayfa</button>
                 </div>
             </div>
         `;
         completeStage('speaking');
+    }
+
+    function retrySpeakingWrong() {
+        const words = getTodayWords();
+        const wrongWords = words.filter((w, i) => speakingState.results[i] !== true);
+        speakingState = { index: 0, results: new Array(wrongWords.length).fill(null), customWords: wrongWords };
+        renderSpeakingCard(document.getElementById('contentArea'), wrongWords);
     }
 
     // ==================== DICTATION MODE ====================
