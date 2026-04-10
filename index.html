@@ -2819,6 +2819,20 @@
         switch(mode) {
             case 'today': return getTodayWords();
             case 'review': return getDueReviewWords();
+            case 'new': {
+                // Hic gorulmemis kelimeler (oncelikli) + en az gorulenler
+                const unseen = allWords.filter(w => !state.wordStats[w.en] || (state.wordStats[w.en].correct + state.wordStats[w.en].wrong) === 0);
+                if (unseen.length >= 10) {
+                    return [...unseen].sort(() => Math.random() - 0.5).slice(0, 15);
+                }
+                // Yeterli yeni kelime yoksa, en az calisilanlardan tamamla
+                const leastSeen = [...allWords]
+                    .map(w => ({ w, total: state.wordStats[w.en] ? (state.wordStats[w.en].correct + state.wordStats[w.en].wrong) : 0 }))
+                    .sort((a, b) => a.total - b.total)
+                    .slice(0, 15)
+                    .map(x => x.w);
+                return [...new Set([...unseen, ...leastSeen])].slice(0, 15);
+            }
             case 'weak': return allWords.filter(w => {
                 const s = state.wordStats[w.en];
                 return s && s.wrong > 0 && (!s.streak || s.streak < 3);
@@ -3118,6 +3132,7 @@
         const dueCount = getDueReviewCount();
         const modes = [
             { key: 'today', label: 'Bugun' },
+            { key: 'new', label: 'Yeni' },
             { key: 'review', label: `Tekrar${dueCount > 0 ? ' (' + dueCount + ')' : ''}` },
             { key: 'weak', label: 'Zayif' },
             { key: 'all', label: 'Karisik' },
@@ -3213,8 +3228,15 @@
                 </div>
                 <p style="color:#94a3b8; margin-bottom:20px;">Basari: %${pct}</p>
                 <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                    <button class="btn btn-primary" onclick="startFlashcards()">Tekrar Oyna</button>
+                    <button class="btn btn-primary" onclick="startFlashcards('new')" style="background:#22c55e;">Yeni Kelimeler Getir</button>
+                    <button class="btn btn-secondary" onclick="startFlashcards('${fcMode}')">Tekrar Oyna</button>
                     ${fcResults.dontknow > 0 ? `<button class="btn btn-secondary" onclick="replayWrong()">Yanlislari Tekrarla</button>` : ''}
+                </div>
+                <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px;">
+                    ${fcMode !== 'today' ? `<button class="fc-mode-btn" onclick="startFlashcards('today')">Bugun</button>` : ''}
+                    ${fcMode !== 'review' ? `<button class="fc-mode-btn" onclick="startFlashcards('review')">Tekrar</button>` : ''}
+                    ${fcMode !== 'weak' ? `<button class="fc-mode-btn" onclick="startFlashcards('weak')">Zayif</button>` : ''}
+                    ${fcMode !== 'all' ? `<button class="fc-mode-btn" onclick="startFlashcards('all')">Karisik</button>` : ''}
                 </div>
             </div>`;
     }
