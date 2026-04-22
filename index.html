@@ -113,28 +113,73 @@
         .stat-value { font-size: 28px; font-weight: bold; color: #38bdf8; }
         .stat-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
 
-        /* Stage Navigation */
+        /* Stage Navigation - grouped pill-style */
+        #stageNav { margin-bottom: 25px; }
+        .nav-home {
+            display: block !important;
+            width: 100%;
+            padding: 16px !important;
+            font-size: 17px !important;
+            margin-bottom: 14px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7) !important;
+            color: #fff !important;
+            border-color: #0ea5e9 !important;
+            text-align: center;
+        }
+        .nav-home .nav-ico { font-size: 22px; }
+        .nav-group-label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin: 14px 4px 8px;
+        }
         .stage-nav {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 8px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            justify-content: center;
+            margin-bottom: 10px;
         }
         .stage-btn {
-            padding: 10px 20px;
+            padding: 14px 10px;
             border: 2px solid #334155;
-            background: transparent;
+            background: #1e293b;
             color: #94a3b8;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 600;
         }
-        .stage-btn:hover { border-color: #38bdf8; color: #38bdf8; transform: translateY(-1px); }
-        .stage-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; font-weight: bold; }
-        .stage-btn.completed { border-color: #22c55e; color: #22c55e; }
-        .nav-ico { margin-right: 6px; display: inline-block; }
+        .stage-btn .nav-ico { font-size: 20px; line-height: 1; }
+        .stage-btn .nav-label { line-height: 1.2; }
+        .stage-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            border-color: #38bdf8;
+            color: #e2e8f0;
+        }
+        .stage-btn.active {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: #fff;
+            border-color: #0ea5e9;
+            box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
+        }
+        .stage-btn.completed {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.08);
+            color: #86efac;
+        }
+        .stage-btn.completed.active {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            color: #fff;
+        }
 
         /* Content Area */
         .stage-content {
@@ -321,6 +366,39 @@
 
         body.light-mode .cat-btn { background: #ffffff; border-color: #e2e8f0; color: #475569; }
         body.light-mode .cat-btn.active { background: linear-gradient(135deg, #8b5cf6, #a78bfa); color: #fff; }
+
+        /* Notebook tabs */
+        .nb-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .nb-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 14px 10px;
+            border: 2px solid #334155;
+            background: #1e293b;
+            color: #94a3b8;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .nb-tab:hover { transform: translateY(-2px); border-color: #a78bfa; box-shadow: 0 4px 12px rgba(167,139,250,0.2); }
+        .nb-tab.active {
+            background: linear-gradient(135deg, #7c3aed, #a78bfa);
+            color: #fff;
+            border-color: #a78bfa;
+            box-shadow: 0 4px 14px rgba(167, 139, 250, 0.4);
+        }
+        .nb-tab-ico { font-size: 24px; line-height: 1; }
+        .nb-tab-label { font-size: 13px; font-weight: 600; }
+        .nb-tab-count { font-size: 11px; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 10px; }
+        body.light-mode .nb-tab { background: #ffffff; border-color: #e2e8f0; color: #475569; }
 
         /* Writing Practice */
         .writing-area {
@@ -1037,20 +1115,58 @@
             </div>
         </div>
 
-        <div class="stage-nav" id="stageNav">
-            <button class="stage-btn active" onclick="navigateStage('dashboard', this)"><span class="nav-ico">🏠</span>Ana</button>
-            <button class="stage-btn" onclick="navigateStage('stage1', this)" id="navStage1"><span class="nav-ico">📚</span>Kelimeler</button>
-            <button class="stage-btn" onclick="navigateStage('stage2', this)" id="navStage2"><span class="nav-ico">💬</span>Cümleler</button>
-            <button class="stage-btn" onclick="navigateStage('stage3a', this)" id="navStage3a"><span class="nav-ico">🧩</span>Boşluk</button>
-            <button class="stage-btn" onclick="navigateStage('stage3b', this)" id="navStage3b"><span class="nav-ico">🔁</span>Çeviri</button>
-            <button class="stage-btn" onclick="navigateStage('stage4', this)" id="navStage4"><span class="nav-ico">✏️</span>Yazma</button>
-            <button class="stage-btn" onclick="navigateStage('patterns', this)" id="navPatterns"><span class="nav-ico">💡</span>Kalıplar</button>
-            <button class="stage-btn" onclick="navigateStage('speaking', this)" id="navSpeaking" style="border-color:#f59e0b; color:#f59e0b;"><span class="nav-ico">🎤</span>Konuş</button>
-            <button class="stage-btn" onclick="navigateStage('dictation', this)" id="navDictation" style="border-color:#f59e0b; color:#f59e0b;"><span class="nav-ico">🎧</span>Dinle&Yaz</button>
-            <button class="stage-btn" onclick="navigateStage('flashcard', this)" id="navFlashcard" style="border-color:#ec4899; color:#ec4899;"><span class="nav-ico">🗂️</span>Kartlar</button>
-            <button class="stage-btn" onclick="navigateStage('stats', this)" id="navStats" style="border-color:#06b6d4; color:#06b6d4;"><span class="nav-ico">📊</span>İstatistik</button>
-            <button class="stage-btn" onclick="navigateStage('notebook', this)" id="navNotebook" style="border-color:#a78bfa; color:#a78bfa;"><span class="nav-ico">📓</span>Defterim</button>
-            <button class="stage-btn" onclick="navigateStage('addword', this)" id="navAddword" style="border-color:#22c55e; color:#22c55e;"><span class="nav-ico">➕</span>Kelime</button>
+        <div id="stageNav">
+            <button class="stage-btn active nav-home" onclick="navigateStage('dashboard', this)">
+                <span class="nav-ico">🏠</span><span class="nav-label">Ana Sayfa</span>
+            </button>
+
+            <div class="nav-group-label">Günlük Ders</div>
+            <div class="stage-nav">
+                <button class="stage-btn nav-stage" onclick="navigateStage('stage1', this)" id="navStage1">
+                    <span class="nav-ico">📚</span><span class="nav-label">Kelimeler</span>
+                </button>
+                <button class="stage-btn nav-stage" onclick="navigateStage('stage2', this)" id="navStage2">
+                    <span class="nav-ico">💬</span><span class="nav-label">Cümleler</span>
+                </button>
+                <button class="stage-btn nav-stage" onclick="navigateStage('stage3a', this)" id="navStage3a">
+                    <span class="nav-ico">🧩</span><span class="nav-label">Boşluk</span>
+                </button>
+                <button class="stage-btn nav-stage" onclick="navigateStage('stage3b', this)" id="navStage3b">
+                    <span class="nav-ico">🔁</span><span class="nav-label">Çeviri</span>
+                </button>
+                <button class="stage-btn nav-stage" onclick="navigateStage('stage4', this)" id="navStage4">
+                    <span class="nav-ico">✏️</span><span class="nav-label">Yazma</span>
+                </button>
+            </div>
+
+            <div class="nav-group-label">Pratik</div>
+            <div class="stage-nav">
+                <button class="stage-btn nav-practice" onclick="navigateStage('patterns', this)" id="navPatterns" data-color="#a78bfa">
+                    <span class="nav-ico">💡</span><span class="nav-label">Kalıplar</span>
+                </button>
+                <button class="stage-btn nav-practice" onclick="navigateStage('flashcard', this)" id="navFlashcard" data-color="#ec4899">
+                    <span class="nav-ico">🗂️</span><span class="nav-label">Kartlar</span>
+                </button>
+                <button class="stage-btn nav-practice" onclick="navigateStage('speaking', this)" id="navSpeaking" data-color="#f59e0b">
+                    <span class="nav-ico">🎤</span><span class="nav-label">Konuş</span>
+                </button>
+                <button class="stage-btn nav-practice" onclick="navigateStage('dictation', this)" id="navDictation" data-color="#f59e0b">
+                    <span class="nav-ico">🎧</span><span class="nav-label">Dinle</span>
+                </button>
+            </div>
+
+            <div class="nav-group-label">Araçlar</div>
+            <div class="stage-nav">
+                <button class="stage-btn nav-tool" onclick="navigateStage('stats', this)" id="navStats" data-color="#06b6d4">
+                    <span class="nav-ico">📊</span><span class="nav-label">İstatistik</span>
+                </button>
+                <button class="stage-btn nav-tool" onclick="navigateStage('notebook', this)" id="navNotebook" data-color="#a78bfa">
+                    <span class="nav-ico">📓</span><span class="nav-label">Defterim</span>
+                </button>
+                <button class="stage-btn nav-tool" onclick="navigateStage('addword', this)" id="navAddword" data-color="#22c55e">
+                    <span class="nav-ico">➕</span><span class="nav-label">Kelime Ekle</span>
+                </button>
+            </div>
         </div>
 
         <div class="stage-content" id="contentArea">
@@ -2469,10 +2585,10 @@
         }
 
         const tabs = [
-            { key: 'words', label: `Kelimelerim (${studied.length})` },
-            { key: 'patterns', label: `Kalıplarım (${learnedPatterns.length})` },
-            { key: 'writings', label: 'Yazdıklarım' },
-            { key: 'stats', label: 'İstatistik' }
+            { key: 'words', ico: '📖', label: `Kelimeler`, count: studied.length },
+            { key: 'patterns', ico: '💡', label: `Kalıplar`, count: learnedPatterns.length },
+            { key: 'writings', ico: '✍️', label: 'Yazılar', count: (state.writings || []).length },
+            { key: 'stats', ico: '📊', label: 'İstatistik', count: null }
         ];
 
         let contentHtml = '';
@@ -2489,9 +2605,13 @@
 
         el.innerHTML = `
             <div class="stage-title">Defterim</div>
-            <div class="stage-desc">Öğrendiğin kelimeler, kalıplar ve yazdığın cümleler — Obsidian tarzında.</div>
-            <div class="tab-buttons" style="flex-wrap:wrap;">
-                ${tabs.map(t => `<button class="tab-btn ${notebookTab === t.key ? 'active' : ''}" onclick="notebookTab='${t.key}'; renderNotebook(document.getElementById('contentArea'))">${t.label}</button>`).join('')}
+            <div class="stage-desc">Öğrendiğin kelimeler, kalıplar ve yazdığın cümleler.</div>
+            <div class="nb-tabs">
+                ${tabs.map(t => `<button class="nb-tab ${notebookTab === t.key ? 'active' : ''}" onclick="notebookTab='${t.key}'; renderNotebook(document.getElementById('contentArea'))">
+                    <span class="nb-tab-ico">${t.ico}</span>
+                    <span class="nb-tab-label">${t.label}</span>
+                    ${t.count !== null ? `<span class="nb-tab-count">${t.count}</span>` : ''}
+                </button>`).join('')}
             </div>
             ${contentHtml}
         `;
@@ -2618,15 +2738,15 @@
         }
 
         const categories = [
-            { key: 'all', label: `Tümü (${studied.length})`, color: '#a78bfa' },
-            { key: 'fiil', label: `Fiiller (${catCounts.fiil})`, color: '#38bdf8' },
-            { key: 'sifat', label: `Sıfatlar (${catCounts.sifat})`, color: '#f59e0b' },
-            { key: 'isim', label: `İsimler (${catCounts.isim})`, color: '#a78bfa' },
-            { key: 'zarf', label: `Zarflar (${catCounts.zarf})`, color: '#22c55e' },
-            { key: 'diger', label: `Diğer (${catCounts.diger})`, color: '#94a3b8' },
-            { key: 'uncat', label: `Kategorisiz (${catCounts.uncat})`, color: '#64748b' },
-            { key: 'weak', label: `Zayıflar (${studied.filter(w => w.hasStats && w.ratio < 0.5).length})`, color: '#ef4444' },
-            { key: 'mastered', label: `Hakimler (${studied.filter(w => w.hasStats && w.streak >= 5).length})`, color: '#22c55e' }
+            { key: 'all',      ico: '✨', label: 'Tümü',        count: studied.length },
+            { key: 'fiil',     ico: '🏃', label: 'Fiiller',     count: catCounts.fiil },
+            { key: 'sifat',    ico: '🎨', label: 'Sıfatlar',    count: catCounts.sifat },
+            { key: 'isim',     ico: '📦', label: 'İsimler',     count: catCounts.isim },
+            { key: 'zarf',     ico: '⚡', label: 'Zarflar',     count: catCounts.zarf },
+            { key: 'diger',    ico: '🔹', label: 'Diğer',       count: catCounts.diger },
+            { key: 'uncat',    ico: '❓', label: 'Kategorisiz', count: catCounts.uncat },
+            { key: 'weak',     ico: '🔴', label: 'Zayıflar',    count: studied.filter(w => w.hasStats && w.ratio < 0.5).length },
+            { key: 'mastered', ico: '🏆', label: 'Hakimler',    count: studied.filter(w => w.hasStats && w.streak >= 5).length }
         ];
 
         // Limit to 30 for performance
@@ -2660,11 +2780,13 @@
                 oninput="clearTimeout(window._nbSearchTimer); window._nbSearchTimer=setTimeout(()=>{nbWordSearch=this.value; renderNotebook(document.getElementById('contentArea'));},300);"
                 style="margin-bottom:12px;">
 
-            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:15px;">
+            <div class="cat-grid" style="margin-bottom: 15px;">
                 ${categories.map(c => `
                     <button onclick="nbWordCategory='${c.key}'; renderNotebook(document.getElementById('contentArea'));"
-                        style="padding:5px 12px; border-radius:6px; font-size:12px; cursor:pointer; border:1px solid ${nbWordCategory === c.key ? c.color : '#334155'}; background:${nbWordCategory === c.key ? c.color : 'transparent'}; color:${nbWordCategory === c.key ? '#0f172a' : '#94a3b8'};">
-                        ${c.label}
+                        class="cat-btn ${nbWordCategory === c.key ? 'active' : ''}">
+                        <div class="cat-icon">${c.ico}</div>
+                        <div class="cat-name">${c.label}</div>
+                        <div class="cat-count">${c.count}</div>
                     </button>
                 `).join('')}
             </div>
