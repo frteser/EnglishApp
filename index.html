@@ -4854,17 +4854,26 @@
 
         // Update wordStats
         if (type === 'know') {
-            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null };
+            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null, box: 1 };
             state.wordStats[w.en].correct++;
             state.wordStats[w.en].streak++;
+            state.wordStats[w.en].box = Math.min(5, (state.wordStats[w.en].box || 1) + 1);
             state.wordStats[w.en].lastSeen = getTodayStr();
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.totalCorrect++;
         } else if (type === 'dontknow') {
-            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null };
+            if (!state.wordStats[w.en]) state.wordStats[w.en] = { correct: 0, wrong: 0, streak: 0, lastSeen: null, box: 1 };
             state.wordStats[w.en].wrong++;
             state.wordStats[w.en].streak = 0;
+            state.wordStats[w.en].box = 1;
             state.wordStats[w.en].lastSeen = getTodayStr();
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.totalWrong++;
         }
         saveState();
+
+        // Award XP and mark activity (updates streak)
+        if (type === 'know') addXP(3, 'Kart bildim');
 
         fcIndex++;
         fcFlipped = false;
@@ -5515,10 +5524,23 @@
     selectDailyWords();
     // Boot-time streak sanity: if there's recent activity but streak=0, bump to 1
     (function bootStreakCheck() {
-        const lastAct = state.lastActivityDate || state.lastPracticeDate;
+        const today = getTodayStr();
+        let lastAct = state.lastActivityDate || state.lastPracticeDate;
+
+        // Also check if any wordStat was updated today (covers gaps from older code)
+        if (!lastAct || lastAct !== today) {
+            for (const key of Object.keys(state.wordStats || {})) {
+                if (state.wordStats[key].lastSeen === today) {
+                    lastAct = today;
+                    state.lastActivityDate = today;
+                    break;
+                }
+            }
+        }
+
         if (lastAct && (!state.streak || state.streak === 0)) {
-            const diff = Math.floor((Date.now() - new Date(lastAct).getTime()) / 86400000);
-            if (diff <= 1) state.streak = 1;
+            const diff = Math.floor((new Date(today) - new Date(lastAct)) / 86400000);
+            if (diff <= 1) state.streak = Math.max(1, state.streak || 0);
             saveState();
         }
     })();
