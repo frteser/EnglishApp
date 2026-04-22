@@ -2038,6 +2038,10 @@
                 if (parsed.stats[k] === undefined) parsed.stats[k] = 0;
             }
         }
+        // Migrate: lastActivityDate didn't exist before, use lastPracticeDate as fallback
+        if (parsed.lastActivityDate === undefined) {
+            parsed.lastActivityDate = parsed.lastPracticeDate || null;
+        }
         return parsed;
     }
 
@@ -2115,12 +2119,15 @@
                 if (diff === 1) {
                     state.streak = (state.streak || 0) + 1; // consecutive day
                 } else if (diff > 1) {
-                    state.streak = 1; // missed days, reset
+                    state.streak = 1; // missed days, reset to 1
                 }
+                // diff === 0: same day, don't change streak
             } else {
-                state.streak = 1; // first ever activity
+                // No previous activity date, but respect existing streak if any
+                state.streak = Math.max(state.streak || 0, 1);
             }
             state.lastActivityDate = today;
+            saveState();
         }
     }
 
