@@ -3938,6 +3938,22 @@
         if (navBtn) navBtn.classList.add('completed');
         saveState();
         updateStats();
+        refreshCompletedMarks();
+    }
+
+    // Sync visual "completed" marks on nav buttons from state (called on boot + after remote sync)
+    function refreshCompletedMarks() {
+        const completedStages = state.completedStages || {};
+        document.querySelectorAll('.stage-btn').forEach(btn => {
+            const id = btn.id;
+            if (!id || !id.startsWith('nav')) return;
+            const stageKey = id.substring(3, 4).toLowerCase() + id.substring(4);
+            btn.classList.toggle('completed', !!completedStages[stageKey]);
+        });
+        // Also refresh the daily stage pills
+        if (document.getElementById('stageDailyPills').style.display !== 'none') {
+            renderDailyStagePills();
+        }
     }
 
     function saveWritings() {
@@ -5480,6 +5496,7 @@
         learnedPatterns = loadLearnedPatterns();
         wordCategories = loadWordCategories();
         updateStats();
+        refreshCompletedMarks();
         if (currentStage) {
             const activeBtn = document.querySelector('.stage-btn.active');
             navigateStage(currentStage, activeBtn);
@@ -5507,6 +5524,7 @@
     })();
     checkBadges(); // backfill any badges earned before gamification was added
     updateThemeButton();
+    refreshCompletedMarks(); // restore green checkmarks on nav buttons
     renderDashboard(document.getElementById('contentArea'));
     updateStats();
 
