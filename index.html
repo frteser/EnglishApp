@@ -1973,6 +1973,7 @@
 
     // ==================== RENDERING ====================
     function navigateStage(stage, btn) {
+        const isNewStage = currentStage !== stage;
         currentStage = stage;
         document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
@@ -1995,6 +1996,17 @@
             case 'results': renderResults(content); break;
         }
         updateStats();
+
+        // Auto-scroll to content on mobile so user doesn't need to scroll manually
+        if (isNewStage && stage !== 'dashboard') {
+            requestAnimationFrame(() => {
+                const rect = content.getBoundingClientRect();
+                const offset = window.pageYOffset + rect.top - 12;
+                window.scrollTo({ top: offset, behavior: 'smooth' });
+            });
+        } else if (stage === 'dashboard') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     }
 
     function updateStats() {
