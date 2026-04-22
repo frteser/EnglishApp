@@ -2105,6 +2105,7 @@
         markActivity(); // Any XP gain counts as activity
         checkBadges();
         saveState();
+        updateStats(); // refresh streak + total stats in header
         showXPToast(amount, reason);
     }
 
@@ -2254,9 +2255,10 @@
         quizAnswers3a = {};
         quizAnswers3b = {};
 
-        // Update streak
-        if (state.lastPracticeDate) {
-            const lastDate = new Date(state.lastPracticeDate);
+        // Update streak: reset only if NO activity for more than 1 day
+        const lastActivity = state.lastActivityDate || state.lastPracticeDate;
+        if (lastActivity) {
+            const lastDate = new Date(lastActivity);
             const now = new Date();
             const diffDays = Math.floor((now - lastDate) / 86400000);
             if (diffDays > 1) state.streak = 0;
@@ -5472,6 +5474,15 @@
     }
 
     selectDailyWords();
+    // Boot-time streak sanity: if there's recent activity but streak=0, bump to 1
+    (function bootStreakCheck() {
+        const lastAct = state.lastActivityDate || state.lastPracticeDate;
+        if (lastAct && (!state.streak || state.streak === 0)) {
+            const diff = Math.floor((Date.now() - new Date(lastAct).getTime()) / 86400000);
+            if (diff <= 1) state.streak = 1;
+            saveState();
+        }
+    })();
     checkBadges(); // backfill any badges earned before gamification was added
     updateThemeButton();
     renderDashboard(document.getElementById('contentArea'));
