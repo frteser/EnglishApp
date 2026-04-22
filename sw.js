@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v12';
+const CACHE_NAME = 'english-app-v13';
 const ASSETS = [
   './',
   './index.html',
@@ -73,6 +73,8 @@ let alarmTimers = [];
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SCHEDULE_ALARMS') {
     scheduleAlarms(e.data.alarms || []);
+  } else if (e.data && e.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
   }
 });
 

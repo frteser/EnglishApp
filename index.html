@@ -4072,7 +4072,30 @@
             navigator.serviceWorker.ready.then(() => {
                 scheduleAllAlarms();
             });
+
+            // Check for updates every time
+            reg.update();
+
+            // When a new SW is found, activate it and reload
+            reg.addEventListener('updatefound', () => {
+                const newWorker = reg.installing;
+                if (!newWorker) return;
+                newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                        // New version available - skip waiting and reload
+                        newWorker.postMessage({ type: 'SKIP_WAITING' });
+                    }
+                });
+            });
         }).catch(err => console.log('SW failed:', err));
+
+        // Reload once when a new SW takes control
+        let sawSwReload = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (sawSwReload) return;
+            sawSwReload = true;
+            window.location.reload();
+        });
     }
 
     // ==================== SYNC MODAL ====================
