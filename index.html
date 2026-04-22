@@ -1746,7 +1746,7 @@
             case 'patterns': renderPatterns(content); break;
             case 'speaking': renderSpeaking(content); break;
             case 'dictation': renderDictation(content); break;
-            case 'flashcard': renderFlashcard(content); break;
+            case 'flashcard': startFlashcards(fcMode || 'today'); break;
             case 'stats': renderStats(content); break;
             case 'notebook': renderNotebook(content); break;
             case 'addword': renderAddWord(content); break;
@@ -3348,6 +3348,18 @@
     let fcResults = { know: 0, dontknow: 0, skip: 0 };
     let fcAnswers = []; // per-card answer history: 'know','dontknow','skip' or undefined
     let fcMode = 'today'; // today, weak, all, mastered
+    let fcShowingCompleted = false; // bypass completion banner when user clicks 'Yine de bak'
+
+    function reviewFlashcardsAgain() {
+        fcShowingCompleted = true;
+        const words = getFlashcardWords('today');
+        fcCards = [...words].sort(() => Math.random() - 0.5);
+        fcIndex = 0;
+        fcFlipped = false;
+        fcResults = { know: 0, dontknow: 0, skip: 0 };
+        fcAnswers = [];
+        renderFlashcard(document.getElementById('contentArea'));
+    }
 
     function getFlashcardWords(mode) {
         const allWords = getAllWords();
@@ -3406,7 +3418,20 @@
     }
 
     function startFlashcards(mode) {
+        const prevMode = fcMode;
         fcMode = mode || fcMode;
+        // Reset completed-banner bypass when switching away from today
+        if (fcMode !== 'today') fcShowingCompleted = false;
+        // Reset bypass when re-entering today from a different mode (so banner shows again)
+        if (fcMode === 'today' && prevMode !== 'today') fcShowingCompleted = false;
+
+        // Show completion banner for 'today' mode if already done and not reviewing
+        if (fcMode === 'today' && state.completedStages && state.completedStages.flashcard && !fcShowingCompleted) {
+            fcCards = [];
+            renderFlashcard(document.getElementById('contentArea'));
+            return;
+        }
+
         const words = getFlashcardWords(fcMode);
         fcCards = [...words].sort(() => Math.random() - 0.5);
         fcIndex = 0;
@@ -3596,6 +3621,24 @@
     }
 
     function renderFlashcard(el) {
+        // If "today" flashcards already completed and user hasn't started a review, show completion banner
+        if (fcMode === 'today' && state.completedStages && state.completedStages.flashcard && fcCards.length === 0 && !fcShowingCompleted) {
+            el.innerHTML = `
+                <div class="stage-title">Kelime Kartlari</div>
+                <div class="fc-container">
+                    <div style="text-align:center; padding:40px 20px; background:linear-gradient(135deg, #052e16, #14532d); border-radius:12px; border:2px solid #22c55e; margin-bottom:20px;">
+                        <div style="font-size:56px; margin-bottom:12px;">&#127881;</div>
+                        <h2 style="color:#22c55e; margin-bottom:8px;">Bugun tamamlandi!</h2>
+                        <p style="color:#bbf7d0; margin-bottom:20px;">Bugunun kartlarini diger cihazda bitirdin.</p>
+                        <button class="btn btn-secondary" onclick="reviewFlashcardsAgain()" style="border:1px solid #22c55e; color:#22c55e;">Yine de bak</button>
+                    </div>
+                    <div class="fc-mode-btns">
+                        ${renderFcModeBtns()}
+                    </div>
+                </div>`;
+            return;
+        }
+
         if (fcCards.length === 0) {
             const words = getFlashcardWords(fcMode);
             fcCards = [...words].sort(() => Math.random() - 0.5);
@@ -3741,6 +3784,11 @@
     function renderFlashcardResults(el) {
         const total = fcResults.know + fcResults.dontknow + fcResults.skip;
         const pct = total > 0 ? Math.round((fcResults.know / total) * 100) : 0;
+
+        // Mark flashcards as completed for today (syncs across devices)
+        if (fcMode === 'today' && total > 0) {
+            completeStage('flashcard');
+        }
 
         el.innerHTML = `
             <div class="stage-title">Kelime Kartlari</div>
