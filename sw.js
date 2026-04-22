@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v14';
+const CACHE_NAME = 'english-app-v15';
 const ASSETS = [
   './',
   './index.html',
@@ -109,7 +109,7 @@ function scheduleAlarms(alarms) {
       if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
         const timer = setTimeout(() => {
           self.registration.showNotification('English Daily Practice', {
-            body: 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
+            body: alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
             icon: './icon-192.png',
             badge: './icon-192.png',
             tag: 'alarm-' + alarm.id,

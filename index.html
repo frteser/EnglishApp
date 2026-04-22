@@ -83,6 +83,47 @@
         body.light-mode #syncModal > div { background: #ffffff !important; border-color: #cbd5e1 !important; color: #0f172a; }
         body.light-mode #syncModal h3 { color: #0284c7 !important; }
         body.light-mode #syncBtn { background: #ffffff; }
+
+        /* Badge summary button and modal */
+        .badge-summary-btn {
+            display: flex; align-items: center; gap: 12px;
+            width: 100%; padding: 14px 18px; margin-bottom: 15px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid #334155; border-radius: 12px;
+            cursor: pointer; font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        .badge-summary-btn:hover {
+            transform: translateY(-2px);
+            border-color: #fbbf24;
+            box-shadow: 0 4px 14px rgba(251,191,36,0.2);
+        }
+        body.light-mode .badge-summary-btn {
+            background: #ffffff; border-color: #e2e8f0;
+        }
+        body.light-mode .badge-summary-btn > div:first-of-type > div:first-child { color: #0f172a; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+            z-index: 1500; display: flex; align-items: center; justify-content: center;
+            padding: 16px; animation: fadeIn 0.2s ease;
+        }
+        .modal-box {
+            background: #1e293b; border: 1px solid #334155;
+            border-radius: 14px; padding: 24px;
+            max-width: 500px; width: 100%; max-height: 85vh; overflow-y: auto;
+        }
+        body.light-mode .modal-box { background: #ffffff; border-color: #e2e8f0; }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-close-btn {
+            background: transparent; border: none; color: #94a3b8;
+            font-size: 24px; cursor: pointer; padding: 4px 10px;
+            border-radius: 6px;
+        }
+        .modal-close-btn:hover { background: #334155; color: #fff; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
 
         /* Header */
@@ -845,87 +886,143 @@
         /* Flashcard */
         .fc-container {
             display: flex; flex-direction: column; align-items: center;
-            min-height: 400px; padding: 20px 0;
+            padding: 10px 0;
         }
         .fc-progress {
-            font-size: 13px; color: #64748b; margin-bottom: 16px;
+            font-size: 14px; color: #94a3b8; margin-bottom: 18px;
+            font-weight: 600; letter-spacing: 0.5px;
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .fc-progress-bar {
+            width: 200px; height: 6px; background: rgba(236,72,153,0.15);
+            border-radius: 3px; overflow: hidden;
+        }
+        .fc-progress-fill {
+            height: 100%; background: linear-gradient(90deg, #ec4899, #f472b6);
+            border-radius: 3px; transition: width 0.3s ease;
         }
         .fc-card-wrapper {
-            perspective: 800px;
-            width: 100%; max-width: 340px; height: 220px;
-            margin-bottom: 24px; cursor: pointer;
+            perspective: 1200px;
+            width: 100%; max-width: 380px; height: 280px;
+            margin-bottom: 28px; cursor: pointer;
         }
         .fc-card {
             width: 100%; height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.5s;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
         .fc-card.flipped { transform: rotateY(180deg); }
         .fc-card-face {
             position: absolute; width: 100%; height: 100%;
             backface-visibility: hidden;
-            border-radius: 16px;
+            border-radius: 20px;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            padding: 24px; text-align: center;
+            padding: 28px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2);
         }
         .fc-front {
-            background: linear-gradient(135deg, #1e293b, #334155);
-            border: 2px solid #475569;
+            background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            border: none;
+            color: #fff;
         }
         .fc-back {
-            background: linear-gradient(135deg, #164e63, #1e3a5f);
-            border: 2px solid #38bdf8;
+            background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+            border: none;
+            color: #fff;
             transform: rotateY(180deg);
         }
-        .fc-word { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
-        .fc-pron { font-size: 14px; color: #94a3b8; margin-bottom: 12px; }
-        .fc-meaning { font-size: 20px; font-weight: 600; color: #38bdf8; margin-bottom: 8px; }
-        .fc-sentence { font-size: 13px; color: #cbd5e1; line-height: 1.4; }
-        .fc-hint { font-size: 12px; color: #64748b; margin-top: 8px; }
+        .fc-word { font-size: 36px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+        .fc-pron { font-size: 15px; color: rgba(255,255,255,0.85); margin-bottom: 14px; font-style: italic; }
+        .fc-meaning { font-size: 28px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+        .fc-sentence { font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.5; font-style: italic; padding: 0 10px; }
+        .fc-hint {
+            font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 16px;
+            background: rgba(255,255,255,0.15); padding: 6px 14px; border-radius: 20px;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .fc-hint::before { content: '👆'; }
         .fc-actions {
-            display: flex; gap: 12px; width: 100%; max-width: 340px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px; width: 100%; max-width: 380px;
         }
         .fc-btn {
-            flex: 1; padding: 14px; border: none; border-radius: 12px;
-            font-size: 15px; font-weight: 600; cursor: pointer;
-            transition: transform 0.15s, opacity 0.15s;
+            padding: 16px 8px; border: none; border-radius: 14px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
+        .fc-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,0.3); }
         .fc-btn:active { transform: scale(0.96); }
-        .fc-btn-know { background: #22c55e; color: #fff; }
-        .fc-btn-dontknow { background: #ef4444; color: #fff; }
-        .fc-btn-skip { background: #334155; color: #94a3b8; }
-        .fc-btn-selected { outline: 3px solid #facc15; outline-offset: 2px; }
+        .fc-btn-ico { font-size: 22px; line-height: 1; }
+        .fc-btn-know { background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; }
+        .fc-btn-dontknow { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; }
+        .fc-btn-skip { background: linear-gradient(135deg, #475569, #64748b); color: #fff; }
+        .fc-btn-selected { outline: 3px solid #facc15; outline-offset: 3px; box-shadow: 0 0 20px rgba(250,204,21,0.4); }
         .fc-stats-bar {
-            display: flex; gap: 16px; margin-top: 20px;
-            font-size: 13px; color: #94a3b8;
+            display: flex; gap: 18px; margin-top: 22px;
+            font-size: 14px; color: #e2e8f0; font-weight: 600;
+            background: rgba(30,41,59,0.5); padding: 10px 18px; border-radius: 20px;
+            border: 1px solid #334155;
         }
-        .fc-stats-bar span { display: flex; align-items: center; gap: 4px; }
-        .fc-dot-green { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
-        .fc-dot-red { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; }
-        .fc-dot-gray { width: 8px; height: 8px; border-radius: 50%; background: #64748b; }
+        .fc-stats-bar span { display: flex; align-items: center; gap: 6px; }
+        .fc-dot-green { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); }
+        .fc-dot-red { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+        .fc-dot-gray { width: 10px; height: 10px; border-radius: 50%; background: #64748b; }
         .fc-result {
-            text-align: center; padding: 30px 0;
+            text-align: center; padding: 30px 20px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px; border: 1px solid #334155;
         }
-        .fc-result h2 { font-size: 22px; margin-bottom: 12px; }
+        .fc-result h2 { font-size: 26px; margin-bottom: 12px; }
         .fc-result-stats {
-            display: flex; justify-content: center; gap: 30px;
-            margin: 20px 0;
+            display: flex; justify-content: center; gap: 16px;
+            margin: 22px 0;
         }
-        .fc-result-stat { text-align: center; }
-        .fc-result-stat .num { font-size: 28px; font-weight: 700; }
-        .fc-result-stat .label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        .fc-result-stat {
+            text-align: center; padding: 14px 20px;
+            background: rgba(30,41,59,0.6); border-radius: 12px;
+            border: 1px solid #334155;
+            min-width: 80px;
+        }
+        .fc-result-stat .num { font-size: 32px; font-weight: 800; }
+        .fc-result-stat .label { font-size: 12px; color: #94a3b8; margin-top: 4px; font-weight: 600; }
         .fc-mode-btns {
-            display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
-            justify-content: center;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 6px; margin-bottom: 20px; width: 100%;
         }
         .fc-mode-btn {
-            padding: 6px 14px; border-radius: 20px;
-            border: 1px solid #334155; background: none;
-            color: #94a3b8; font-size: 13px; cursor: pointer;
+            padding: 10px 8px; border-radius: 10px;
+            border: 1.5px solid #334155; background: #1e293b;
+            color: #94a3b8; font-size: 13px; font-weight: 600;
+            cursor: pointer; transition: all 0.15s ease;
+            font-family: inherit;
         }
-        .fc-mode-btn.active { border-color: #ec4899; color: #ec4899; background: rgba(236,72,153,0.1); }
+        .fc-mode-btn:hover { border-color: #ec4899; color: #ec4899; transform: translateY(-1px); }
+        .fc-mode-btn.active {
+            background: linear-gradient(135deg, #db2777, #ec4899);
+            border-color: #ec4899; color: #fff;
+            box-shadow: 0 4px 14px rgba(236,72,153,0.3);
+        }
+
+        /* Light mode flashcards */
+        body.light-mode .fc-stats-bar { background: #f8fafc; border-color: #e2e8f0; color: #0f172a; }
+        body.light-mode .fc-mode-btn { background: #ffffff; border-color: #e2e8f0; color: #475569; }
+        body.light-mode .fc-result { background: linear-gradient(135deg, #ffffff, #f1f5f9); border-color: #e2e8f0; }
+        body.light-mode .fc-result-stat { background: #ffffff; border-color: #e2e8f0; }
+
+        @media (max-width: 600px) {
+            .fc-card-wrapper { height: 240px; }
+            .fc-word { font-size: 30px; }
+            .fc-meaning { font-size: 24px; }
+            .fc-btn { padding: 12px 6px; font-size: 13px; }
+            .fc-btn-ico { font-size: 20px; }
+            .fc-progress-bar { width: 140px; }
+            .fc-result-stat { padding: 10px 14px; min-width: 70px; }
+            .fc-result-stat .num { font-size: 26px; }
+        }
 
         /* TTS & Speaking */
         .speak-btn {
@@ -1881,9 +1978,30 @@
 
     function addXP(amount, reason) {
         state.xp = (state.xp || 0) + amount;
+        markActivity(); // Any XP gain counts as activity
         checkBadges();
         saveState();
         showXPToast(amount, reason);
+    }
+
+    function markActivity() {
+        const today = getTodayStr();
+        // First activity of the day -> update streak
+        if (state.lastActivityDate !== today) {
+            if (state.lastActivityDate) {
+                const last = new Date(state.lastActivityDate);
+                const now = new Date(today);
+                const diff = Math.floor((now - last) / 86400000);
+                if (diff === 1) {
+                    state.streak = (state.streak || 0) + 1; // consecutive day
+                } else if (diff > 1) {
+                    state.streak = 1; // missed days, reset
+                }
+            } else {
+                state.streak = 1; // first ever activity
+            }
+            state.lastActivityDate = today;
+        }
     }
 
     function checkBadges() {
@@ -2161,19 +2279,17 @@
                 </div>
             </div>
 
-            <div class="dashboard-section">
-                <h3>Rozetler (${unlockedBadges.length}/${BADGES.length})</h3>
-                <div class="badges-grid">
-                    ${BADGES.map(b => {
-                        const locked = !(state.badges && state.badges[b.id]);
-                        return `<div class="badge-item ${locked ? 'locked' : ''}" title="${b.desc}">
-                            <div class="badge-icon">${b.icon}</div>
-                            <div class="badge-name">${b.name}</div>
-                            <div class="badge-desc">${b.desc}</div>
-                        </div>`;
-                    }).join('')}
+            <button onclick="openBadgesModal()" class="badge-summary-btn">
+                <span style="font-size:22px;">&#127942;</span>
+                <div style="flex:1; text-align:left;">
+                    <div style="font-weight:700; color:#e2e8f0;">Rozetlerim</div>
+                    <div style="font-size:12px; color:#94a3b8;">${unlockedBadges.length} / ${BADGES.length} kazanildi</div>
                 </div>
-            </div>
+                <div style="display:flex; gap:4px;">
+                    ${unlockedBadges.slice(-3).map(b => `<span style="font-size:18px;">${b.icon}</span>`).join('')}
+                </div>
+                <span style="color:#64748b; font-size:14px;">›</span>
+            </button>
 
             <div class="daily-info">
                 <div class="day-label">Bugünün Dersi Hazır!</div>
@@ -2181,6 +2297,13 @@
                 <div class="day-label">${words.length} kelime seni bekliyor
                     (${todayReview.length} tekrar + ${todayNew.length} yeni)
                 </div>
+                ${state.lastActivityDate ? `
+                    <div style="margin-top:10px; font-size:12px; color:#94a3b8;">
+                        ${state.lastActivityDate === getTodayStr()
+                            ? '<span style="color:#22c55e;">&#10003; Bugun pratik yaptin</span>'
+                            : 'Son pratik: ' + new Date(state.lastActivityDate).toLocaleDateString('tr-TR', {day:'numeric', month:'long'})}
+                    </div>
+                ` : '<div style="margin-top:10px; font-size:12px; color:#f59e0b;">Bugun henuz bir sey yapmadın — baslayalim!</div>'}
             </div>
 
             ${dueReviewCount > 0 ? `
@@ -2292,7 +2415,7 @@
                 </tbody>
             </table>
             <div class="btn-center">
-                <button class="btn btn-primary" onclick="completeStage('stage1'); document.getElementById('navStage2').click()">Hazır, Devam Et &rarr;</button>
+                <button class="btn btn-primary" onclick="completeStage('stage1'); navigateStage('stage2', document.getElementById('navStage2'))">Hazır, Devam Et &rarr;</button>
             </div>
         `;
     }
@@ -2361,7 +2484,7 @@
             </table>
             </div>
             <div class="btn-center">
-                <button class="btn btn-primary" onclick="completeStage('stage2'); document.getElementById('navStage3a').click()">Hazır, Teste Geç &rarr;</button>
+                <button class="btn btn-primary" onclick="completeStage('stage2'); navigateStage('stage3a', document.getElementById('navStage3a'))">Hazır, Teste Geç &rarr;</button>
             </div>
         `;
     }
@@ -2429,7 +2552,7 @@
         const btnDiv = formEl.querySelector('.btn-center');
         btnDiv.innerHTML = `
             <span style="font-size:18px; color:${correct >= Math.ceil(count*0.7) ? '#22c55e' : '#f59e0b'}; margin-right:15px;">${correct}/${count} Doğru</span>
-            <button class="btn btn-primary" onclick="completeStage('stage3a'); document.getElementById('navStage3b').click()">Devam Et &rarr;</button>
+            <button class="btn btn-primary" onclick="completeStage('stage3a'); navigateStage('stage3b', document.getElementById('navStage3b'))">Devam Et &rarr;</button>
         `;
         return false;
     }
@@ -2497,7 +2620,7 @@
         const btnDiv = formEl.querySelector('.btn-center');
         btnDiv.innerHTML = `
             <span style="font-size:18px; color:${correct >= Math.ceil(count*0.7) ? '#22c55e' : '#f59e0b'}; margin-right:15px;">${correct}/${count} Doğru</span>
-            <button class="btn btn-primary" onclick="completeStage('stage3b'); document.getElementById('navStage4').click()">Yazma Pratiğine Geç &rarr;</button>
+            <button class="btn btn-primary" onclick="completeStage('stage3b'); navigateStage('stage4', document.getElementById('navStage4'))">Yazma Pratiğine Geç &rarr;</button>
         `;
         return false;
     }
@@ -3685,8 +3808,8 @@
             return;
         }
         state.lastPracticeDate = today;
-        state.streak++;
         state.totalSessions++;
+        markActivity(); // ensure activity counted (in case user skipped to finish)
         saveState();
         addXP(25, 'Gunluk pratik tamam');
 
@@ -4029,7 +4152,12 @@
                 <div class="fc-mode-btns">
                     ${renderFcModeBtns()}
                 </div>
-                <div class="fc-progress">${fcIndex + 1} / ${fcCards.length}</div>
+                <div class="fc-progress">
+                    <span>${fcIndex + 1} / ${fcCards.length}</span>
+                    <div class="fc-progress-bar">
+                        <div class="fc-progress-fill" style="width:${((fcIndex + 1) / fcCards.length) * 100}%"></div>
+                    </div>
+                </div>
                 <div class="fc-card-wrapper" onclick="flipCard()">
                     <div class="fc-card ${fcFlipped ? 'flipped' : ''}" id="fcCard">
                         <div class="fc-card-face fc-front">
@@ -4044,9 +4172,15 @@
                     </div>
                 </div>
                 <div class="fc-actions">
-                    <button class="fc-btn fc-btn-dontknow${fcAnswers[fcIndex] === 'dontknow' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('dontknow')">Bilmiyorum</button>
-                    <button class="fc-btn fc-btn-skip${fcAnswers[fcIndex] === 'skip' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('skip')">Gec</button>
-                    <button class="fc-btn fc-btn-know${fcAnswers[fcIndex] === 'know' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('know')">Biliyorum</button>
+                    <button class="fc-btn fc-btn-dontknow${fcAnswers[fcIndex] === 'dontknow' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('dontknow')">
+                        <span class="fc-btn-ico">❌</span><span>Bilmiyorum</span>
+                    </button>
+                    <button class="fc-btn fc-btn-skip${fcAnswers[fcIndex] === 'skip' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('skip')">
+                        <span class="fc-btn-ico">⏭️</span><span>Geç</span>
+                    </button>
+                    <button class="fc-btn fc-btn-know${fcAnswers[fcIndex] === 'know' ? ' fc-btn-selected' : ''}" onclick="fcAnswer('know')">
+                        <span class="fc-btn-ico">✅</span><span>Biliyorum</span>
+                    </button>
                 </div>
                 <div style="display:flex; gap:12px; margin-top:12px; width:100%; max-width:340px;">
                     <button class="fc-btn fc-btn-skip" style="flex:1; padding:10px; font-size:13px;${fcIndex === 0 ? 'opacity:0.4;cursor:default;' : ''}" onclick="fcPrev()" ${fcIndex === 0 ? 'disabled' : ''}>&#8592; Geri</button>
@@ -4414,6 +4548,7 @@
                     <div class="alarm-time-display">${a.time}</div>
                     <div class="alarm-days">${dayBadges}</div>
                     <div style="font-size:11px; color:#64748b; margin-top:2px;">${dayLabel}</div>
+                    ${a.note ? `<div style="font-size:12px; color:#94a3b8; margin-top:4px; font-style:italic;">&#128172; ${a.note.replace(/</g,'&lt;')}</div>` : ''}
                 </div>
                 <div class="alarm-card-actions">
                     <div class="toggle-switch ${a.enabled ? 'active' : ''}" onclick="toggleAlarm(${a.id})"></div>
@@ -4436,6 +4571,7 @@
         const existing = editId ? alarms.find(a => a.id === editId) : null;
         const currentTime = existing ? existing.time : '09:00';
         const currentDays = existing ? existing.days : [0,1,2,3,4];
+        const currentNote = existing && existing.note ? existing.note : '';
 
         const modal = document.createElement('div');
         modal.className = 'alarm-edit-modal';
@@ -4444,6 +4580,8 @@
         <div class="alarm-edit-box">
             <h3>${existing ? 'Alarmi Duzenle' : 'Yeni Alarm'}</h3>
             <input type="time" id="alarmEditTime" value="${currentTime}">
+            <input type="text" id="alarmEditNote" placeholder="Not (opsiyonel) — bildirimde gorunecek" value="${currentNote.replace(/"/g,'&quot;')}" maxlength="80"
+                style="width:100%; padding:10px; margin-top:10px; border-radius:8px; border:1.5px solid #334155; background:#0f172a; color:#e2e8f0; font-size:14px; font-family:inherit;">
             <div class="alarm-day-selector" id="alarmDaySelector">
                 ${DAY_NAMES.map((d, i) =>
                     `<button class="alarm-day-btn ${currentDays.includes(i) ? 'selected' : ''}" data-day="${i}" onclick="this.classList.toggle('selected')">${d}</button>`
@@ -4480,6 +4618,8 @@
 
     async function saveAlarmFromEditor(editId) {
         const time = document.getElementById('alarmEditTime').value;
+        const noteEl = document.getElementById('alarmEditNote');
+        const note = noteEl ? noteEl.value.trim() : '';
         const selectedDays = [...document.querySelectorAll('#alarmDaySelector .alarm-day-btn.selected')]
             .map(btn => parseInt(btn.dataset.day));
 
@@ -4499,9 +4639,10 @@
             if (idx >= 0) {
                 alarms[idx].time = time;
                 alarms[idx].days = selectedDays;
+                alarms[idx].note = note;
             }
         } else {
-            alarms.push({ id: Date.now(), time, days: selectedDays, enabled: true });
+            alarms.push({ id: Date.now(), time, days: selectedDays, enabled: true, note });
         }
 
         alarms.sort((a, b) => a.time.localeCompare(b.time));
@@ -4561,7 +4702,7 @@
                     const timer = setTimeout(() => {
                         if (Notification.permission === 'granted') {
                             new Notification('English Daily Practice', {
-                                body: 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
+                                body: alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
                                 icon: './icon-192.png',
                                 tag: 'alarm-' + alarm.id
                             });
@@ -4638,6 +4779,32 @@
     }
 
     // ==================== SYNC MODAL ====================
+    function openBadgesModal() {
+        const unlockedCount = BADGES.filter(b => state.badges && state.badges[b.id]).length;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        modal.innerHTML = `
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 style="color:#fbbf24; margin:0; font-size:20px;">&#127942; Rozetlerim (${unlockedCount}/${BADGES.length})</h3>
+                    <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+                </div>
+                <div class="badges-grid">
+                    ${BADGES.map(b => {
+                        const locked = !(state.badges && state.badges[b.id]);
+                        return `<div class="badge-item ${locked ? 'locked' : ''}" title="${b.desc}">
+                            <div class="badge-icon">${b.icon}</div>
+                            <div class="badge-name">${b.name}</div>
+                            <div class="badge-desc">${b.desc}</div>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
     function openSyncModal() {
         const modal = document.getElementById('syncModal');
         const body = document.getElementById('syncModalBody');
