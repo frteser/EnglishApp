@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v13';
+const CACHE_NAME = 'english-app-v14';
 const ASSETS = [
   './',
   './index.html',
@@ -38,8 +38,14 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Network-first for JSON data files (patterns, wordlist)
-  if (url.endsWith('.json') && !url.includes('manifest')) {
+  // Network-first for HTML and JSON (fresh content when online)
+  const isHTML = e.request.mode === 'navigate' ||
+                 url.endsWith('.html') ||
+                 url.endsWith('/') ||
+                 (e.request.headers.get('accept') || '').includes('text/html');
+  const isJSON = url.endsWith('.json') && !url.includes('manifest');
+
+  if (isHTML || isJSON) {
     e.respondWith(
       fetch(e.request).then(response => {
         if (response && response.status === 200) {
@@ -47,12 +53,12 @@ self.addEventListener('fetch', e => {
           caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
         }
         return response;
-      }).catch(() => caches.match(e.request))
+      }).catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
     );
     return;
   }
 
-  // Cache-first for everything else
+  // Cache-first for static assets (images, css, fonts, etc.)
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;

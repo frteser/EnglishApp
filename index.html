@@ -4067,14 +4067,22 @@
 
     // Register Service Worker
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').then(reg => {
+        // updateViaCache: 'none' forces the browser to always check network for sw.js
+        // (fixes stale PWA installations that never pick up new versions)
+        navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(reg => {
             console.log('SW registered:', reg.scope);
             navigator.serviceWorker.ready.then(() => {
                 scheduleAllAlarms();
             });
 
-            // Check for updates every time
+            // Check for updates on load and every 30 seconds while app is open
             reg.update();
+            setInterval(() => reg.update(), 30000);
+
+            // Also check when user returns to the app (important for PWA)
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') reg.update();
+            });
 
             // When a new SW is found, activate it and reload
             reg.addEventListener('updatefound', () => {
