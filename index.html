@@ -762,6 +762,52 @@
             .word-table th, .word-table td { padding: 8px 10px; }
             .pwa-banner { flex-direction: column; text-align: center; }
         }
+
+        /* Gamification */
+        .xp-toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+            background: #1e293b; border: 1px solid #fbbf24; color: #fff;
+            padding: 10px 20px; border-radius: 25px; font-weight: 700; font-size: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4); z-index: 2000; opacity: 0;
+            transition: transform 0.35s ease, opacity 0.3s ease; pointer-events: none;
+        }
+        .xp-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .badge-toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-150px);
+            background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #fbbf24;
+            padding: 14px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3);
+            z-index: 2001; opacity: 0; display: flex; align-items: center; gap: 14px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            pointer-events: none; min-width: 260px;
+        }
+        .badge-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .level-card {
+            background: linear-gradient(135deg, #312e81, #1e40af);
+            border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 1px solid #6366f1;
+        }
+        .level-title { color: #fbbf24; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .level-name { color: #fff; font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+        .xp-bar {
+            height: 10px; background: rgba(0,0,0,0.3); border-radius: 5px; overflow: hidden; margin-bottom: 6px;
+        }
+        .xp-bar-fill {
+            height: 100%; background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            border-radius: 5px; transition: width 0.5s ease;
+        }
+        .xp-text { color: #c7d2fe; font-size: 12px; display: flex; justify-content: space-between; }
+        .badges-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 10px; margin-top: 12px;
+        }
+        .badge-item {
+            background: #1e293b; border-radius: 10px; padding: 12px 8px; text-align: center;
+            border: 1px solid #334155; transition: transform 0.2s;
+        }
+        .badge-item.locked { opacity: 0.35; filter: grayscale(1); }
+        .badge-item:not(.locked):hover { transform: translateY(-2px); border-color: #fbbf24; }
+        .badge-icon { font-size: 28px; margin-bottom: 4px; }
+        .badge-name { font-size: 11px; color: #e2e8f0; font-weight: 600; }
+        .badge-desc { font-size: 10px; color: #64748b; margin-top: 2px; }
     </style>
 </head>
 <body>
@@ -1348,8 +1394,7 @@
 
     function loadState() {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) return JSON.parse(saved);
-        return {
+        const defaults = {
             streak: 0,
             lastPracticeDate: null,
             wordStats: {},
@@ -1358,13 +1403,130 @@
             todayDate: null,
             writings: [],
             totalSessions: 0,
-            dailyStats: {}
+            dailyStats: {},
+            xp: 0,
+            badges: {}, // { badgeId: unlockDateIso }
+            stats: {
+                totalCorrect: 0,
+                totalWrong: 0,
+                patternsLearned: 0,
+                speakingCorrect: 0,
+                dictationCorrect: 0,
+                perfectQuizzes: 0
+            }
         };
+        if (!saved) return defaults;
+        const parsed = JSON.parse(saved);
+        // Migrate: ensure new fields exist
+        if (parsed.xp === undefined) parsed.xp = 0;
+        if (!parsed.badges) parsed.badges = {};
+        if (!parsed.stats) parsed.stats = defaults.stats;
+        else {
+            for (const k of Object.keys(defaults.stats)) {
+                if (parsed.stats[k] === undefined) parsed.stats[k] = 0;
+            }
+        }
+        return parsed;
     }
 
     function saveState() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
+    }
+
+    // ==================== GAMIFICATION: XP, LEVELS, BADGES ====================
+    const LEVELS = [
+        { lv: 1,  min: 0,     title: 'Baslangic' },
+        { lv: 2,  min: 100,   title: 'Cirak' },
+        { lv: 3,  min: 250,   title: 'Ogrenen' },
+        { lv: 4,  min: 500,   title: 'Kararli' },
+        { lv: 5,  min: 1000,  title: 'Aktif' },
+        { lv: 6,  min: 2000,  title: 'Deneyimli' },
+        { lv: 7,  min: 3500,  title: 'Usta Cirak' },
+        { lv: 8,  min: 5500,  title: 'Uzman' },
+        { lv: 9,  min: 8000,  title: 'Usta' },
+        { lv: 10, min: 12000, title: 'Buyuk Usta' },
+        { lv: 11, min: 17000, title: 'Sampiyon' },
+        { lv: 12, min: 25000, title: 'Efsane' }
+    ];
+
+    function getLevelInfo(xp) {
+        let current = LEVELS[0];
+        let next = LEVELS[1];
+        for (let i = 0; i < LEVELS.length; i++) {
+            if (xp >= LEVELS[i].min) {
+                current = LEVELS[i];
+                next = LEVELS[i + 1] || null;
+            } else break;
+        }
+        const curMin = current.min;
+        const nextMin = next ? next.min : curMin + 1000;
+        const progress = next ? (xp - curMin) / (nextMin - curMin) : 1;
+        return { current, next, progress: Math.min(1, progress), xpInLevel: xp - curMin, xpToNext: next ? nextMin - xp : 0 };
+    }
+
+    const BADGES = [
+        { id: 'first_word',      icon: '&#127905;', name: 'Ilk Adim',           desc: 'Ilk kelimeyi ogren', check: s => s.stats.totalCorrect >= 1 },
+        { id: 'ten_words',       icon: '&#128218;', name: 'Okur Yazar',          desc: '10 dogru cevap',    check: s => s.stats.totalCorrect >= 10 },
+        { id: 'fifty_words',     icon: '&#128214;', name: 'Kitap Kurdu',         desc: '50 dogru cevap',    check: s => s.stats.totalCorrect >= 50 },
+        { id: 'hundred_words',   icon: '&#127942;', name: 'Yuzluk Klubu',        desc: '100 dogru cevap',   check: s => s.stats.totalCorrect >= 100 },
+        { id: 'streak_3',        icon: '&#128293;', name: 'Uc Gun Ustuste',      desc: '3 gun streak',      check: s => s.streak >= 3 },
+        { id: 'streak_7',        icon: '&#9889;',   name: 'Haftalik',            desc: '7 gun streak',      check: s => s.streak >= 7 },
+        { id: 'streak_30',       icon: '&#127775;', name: 'Aylik Sampiyon',      desc: '30 gun streak',     check: s => s.streak >= 30 },
+        { id: 'streak_100',      icon: '&#128175;', name: 'Yuzlu Streak',        desc: '100 gun streak',    check: s => s.streak >= 100 },
+        { id: 'first_pattern',   icon: '&#128172;', name: 'Kaliplayan',          desc: 'Ilk kalibi ogren',  check: s => s.stats.patternsLearned >= 1 },
+        { id: 'fifty_patterns',  icon: '&#128483;', name: 'Kalip Ustasi',        desc: '50 kalip ogren',    check: s => s.stats.patternsLearned >= 50 },
+        { id: 'speaker',         icon: '&#127908;', name: 'Hatip',               desc: '20 dogru telaffuz', check: s => s.stats.speakingCorrect >= 20 },
+        { id: 'listener',        icon: '&#127911;', name: 'Iyi Dinleyici',       desc: '20 dogru dinleme',  check: s => s.stats.dictationCorrect >= 20 },
+        { id: 'perfect_quiz',    icon: '&#127941;', name: 'Kusursuz',            desc: 'Hatasiz bir quiz',  check: s => s.stats.perfectQuizzes >= 1 },
+        { id: 'five_perfect',    icon: '&#128081;', name: 'Kusursuz x5',         desc: '5 hatasiz quiz',    check: s => s.stats.perfectQuizzes >= 5 },
+        { id: 'level_5',         icon: '&#11088;',  name: 'Seviye 5',            desc: 'Seviye 5 ulas',     check: s => s.xp >= 1000 },
+        { id: 'level_10',        icon: '&#128142;', name: 'Seviye 10',           desc: 'Seviye 10 ulas',    check: s => s.xp >= 12000 }
+    ];
+
+    function addXP(amount, reason) {
+        state.xp = (state.xp || 0) + amount;
+        checkBadges();
+        saveState();
+        showXPToast(amount, reason);
+    }
+
+    function checkBadges() {
+        const newly = [];
+        for (const b of BADGES) {
+            if (!state.badges[b.id] && b.check(state)) {
+                state.badges[b.id] = new Date().toISOString();
+                newly.push(b);
+            }
+        }
+        if (newly.length > 0) {
+            for (const b of newly) showBadgeToast(b);
+        }
+    }
+
+    function showXPToast(amount, reason) {
+        const t = document.createElement('div');
+        t.className = 'xp-toast';
+        t.innerHTML = `<span style="color:#fbbf24;">+${amount} XP</span>${reason ? ` <span style="color:#94a3b8; font-size:12px;">${reason}</span>` : ''}`;
+        document.body.appendChild(t);
+        setTimeout(() => t.classList.add('show'), 10);
+        setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 400); }, 1800);
+    }
+
+    function showBadgeToast(badge) {
+        const t = document.createElement('div');
+        t.className = 'badge-toast';
+        t.innerHTML = `
+            <div style="font-size:28px;">${badge.icon}</div>
+            <div>
+                <div style="color:#fbbf24; font-weight:700; font-size:15px;">Rozet Kazandin!</div>
+                <div style="color:#e2e8f0; font-size:14px;">${badge.name}</div>
+                <div style="color:#94a3b8; font-size:12px;">${badge.desc}</div>
+            </div>
+        `;
+        document.body.appendChild(t);
+        setTimeout(() => t.classList.add('show'), 10);
+        setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 3500);
     }
 
     let state = loadState();
@@ -1554,7 +1716,33 @@
         });
 
         const dueReviewCount = getDueReviewCount();
+        const lvInfo = getLevelInfo(state.xp || 0);
+        const unlockedBadges = BADGES.filter(b => state.badges && state.badges[b.id]);
         el.innerHTML = `
+            <div class="level-card">
+                <div class="level-title">SEVIYE ${lvInfo.current.lv}</div>
+                <div class="level-name">${lvInfo.current.title}</div>
+                <div class="xp-bar"><div class="xp-bar-fill" style="width:${Math.round(lvInfo.progress*100)}%"></div></div>
+                <div class="xp-text">
+                    <span>${state.xp || 0} XP</span>
+                    <span>${lvInfo.next ? `Sonraki seviyeye ${lvInfo.xpToNext} XP` : 'Max seviye!'}</span>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <h3>Rozetler (${unlockedBadges.length}/${BADGES.length})</h3>
+                <div class="badges-grid">
+                    ${BADGES.map(b => {
+                        const locked = !(state.badges && state.badges[b.id]);
+                        return `<div class="badge-item ${locked ? 'locked' : ''}" title="${b.desc}">
+                            <div class="badge-icon">${b.icon}</div>
+                            <div class="badge-name">${b.name}</div>
+                            <div class="badge-desc">${b.desc}</div>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+
             <div class="daily-info">
                 <div class="day-label">Bugünün Dersi Hazır!</div>
                 <div class="day-num">${new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' })}</div>
@@ -1799,6 +1987,12 @@
 
         quizAnswers3a.score = correct;
         quizAnswers3a.total = count;
+        if (correct === count && count > 0) {
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.perfectQuizzes++;
+            saveState();
+            addXP(20, 'Hatasiz quiz!');
+        }
         const formEl = document.getElementById('quiz3aForm');
         const btnDiv = formEl.querySelector('.btn-center');
         btnDiv.innerHTML = `
@@ -1861,6 +2055,12 @@
 
         quizAnswers3b.score = correct;
         quizAnswers3b.total = count;
+        if (correct === count && count > 0) {
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.perfectQuizzes++;
+            saveState();
+            addXP(20, 'Hatasiz quiz!');
+        }
         const formEl = document.getElementById('quiz3bForm');
         const btnDiv = formEl.querySelector('.btn-center');
         btnDiv.innerHTML = `
@@ -2381,12 +2581,18 @@
 
     function toggleLearnedPattern(pattern) {
         const idx = learnedPatterns.indexOf(pattern);
-        if (idx >= 0) {
+        const wasLearned = idx >= 0;
+        if (wasLearned) {
             learnedPatterns.splice(idx, 1); // geri al
+            if (state.stats && state.stats.patternsLearned > 0) state.stats.patternsLearned--;
         } else {
             learnedPatterns.push(pattern); // öğrendim
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.patternsLearned++;
         }
         saveLearnedPatterns();
+        saveState();
+        if (!wasLearned) addXP(8, 'Kalip ogrenildi');
         renderPatterns(document.getElementById('contentArea'));
     }
 
@@ -2535,7 +2741,13 @@
         if (isCorrect) state.dailyStats[today].correct++;
         else state.dailyStats[today].wrong++;
 
+        // Aggregate stats for gamification
+        if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+        if (isCorrect) state.stats.totalCorrect++;
+        else state.stats.totalWrong++;
+
         saveState();
+        if (isCorrect) addXP(5, 'Dogru cevap');
     }
 
     // ==================== TTS & SPEECH ====================
@@ -2710,6 +2922,10 @@
                     <div class="speaking-heard">Duyulan: "${heard}"</div>
                 `;
                 speakingState.results[speakingState.index] = true;
+                if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+                state.stats.speakingCorrect++;
+                saveState();
+                addXP(10, 'Dogru telaffuz');
                 setTimeout(() => speakingNext(), 1500);
             } else {
                 resultEl.innerHTML = `
@@ -2870,6 +3086,9 @@
             input.classList.add('correct');
             resultEl.innerHTML = '<div class="speaking-score good">Dogru!</div>';
             dictationState.results[dictationState.index] = true;
+            if (!state.stats) state.stats = { totalCorrect: 0, totalWrong: 0, patternsLearned: 0, speakingCorrect: 0, dictationCorrect: 0, perfectQuizzes: 0 };
+            state.stats.dictationCorrect++;
+            addXP(8, 'Dogru dinleme');
             updateWordStat(expected, true);
             setTimeout(() => dictationNext(), 1200);
         } else {
@@ -2986,6 +3205,7 @@
         state.streak++;
         state.totalSessions++;
         saveState();
+        addXP(25, 'Gunluk pratik tamam');
 
         currentStage = 'results';
         renderResults(document.getElementById('contentArea'));
@@ -3947,6 +4167,7 @@
     }
 
     selectDailyWords();
+    checkBadges(); // backfill any badges earned before gamification was added
     renderDashboard(document.getElementById('contentArea'));
     updateStats();
 
