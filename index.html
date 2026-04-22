@@ -441,6 +441,43 @@
         .nb-tab-count { font-size: 11px; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 10px; }
         body.light-mode .nb-tab { background: #ffffff; border-color: #e2e8f0; color: #475569; }
 
+        /* Quick Quiz */
+        .qq-count-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1.5px solid #334155;
+            background: #1e293b;
+            color: #94a3b8;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        .qq-count-btn:hover { border-color: #fbbf24; color: #fbbf24; }
+        .qq-count-btn.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            border-color: #f59e0b;
+            color: #fff;
+        }
+        .qq-choice-btn {
+            padding: 16px 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 2px solid #334155;
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+        .qq-choice-btn:hover { transform: translateY(-2px); border-color: #38bdf8; box-shadow: 0 4px 12px rgba(56,189,248,0.2); }
+        .qq-choice-btn.correct { background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; border-color: #22c55e; }
+        .qq-choice-btn.wrong { background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; border-color: #ef4444; }
+        .qq-choice-btn:disabled { cursor: default; }
+        body.light-mode .qq-count-btn, body.light-mode .qq-choice-btn { background: #ffffff; border-color: #e2e8f0; color: #0f172a; }
+
         /* Full-screen stage mode */
         body.stage-focused .header,
         body.stage-focused .stats-bar,
@@ -2166,7 +2203,8 @@
         stats: '📊 İstatistik',
         notebook: '📓 Defterim',
         addword: '➕ Kelime Ekle',
-        results: '🎯 Sonuçlar'
+        results: '🎯 Sonuçlar',
+        quickquiz: '⚡ Hızlı Quiz'
     };
 
     function navigateStage(stage, btn) {
@@ -2190,6 +2228,7 @@
             case 'notebook': renderNotebook(content); break;
             case 'addword': renderAddWord(content); break;
             case 'results': renderResults(content); break;
+            case 'quickquiz': renderQuickQuizStart(content); break;
         }
         updateStats();
 
@@ -2317,6 +2356,16 @@
                 <div style="color:#fff; font-size:32px;">→</div>
             </div>
             ` : ''}
+
+            <div onclick="navigateStage('quickquiz')"
+                style="background:linear-gradient(135deg, #f59e0b, #d97706); border-radius:12px; padding:16px; margin:14px 0; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 4px 12px rgba(245,158,11,0.3);">
+                <div>
+                    <div style="color:#fff; font-size:13px; opacity:0.9;">⚡ Hızlı Quiz</div>
+                    <div style="color:#fff; font-size:22px; font-weight:bold; margin-top:4px;">Kısa Pratik</div>
+                    <div style="color:#fff; font-size:12px; opacity:0.85; margin-top:2px;">Mod seç, rastgele kelimeler</div>
+                </div>
+                <div style="color:#fff; font-size:32px;">→</div>
+            </div>
 
             <div class="dashboard-section">
                 <h3>İlerleme Durumu</h3>
@@ -4095,6 +4144,392 @@
                 </div>
             ` : ''}
         `;
+    }
+
+    // ==================== QUICK QUIZ ====================
+    let quickQuizState = null;
+
+    function renderQuickQuizStart(el) {
+        const allWords = getAllWords();
+        const seenWords = allWords.filter(w => {
+            const s = state.wordStats[w.en];
+            return s && (s.correct + s.wrong) > 0;
+        });
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+        const allReviewable = [...new Set([...seenWords.map(w=>w.en), ...ORIGINAL_WORDS.map(w=>w.en)])];
+
+        if (allReviewable.length < 4) {
+            el.innerHTML = `
+                <div class="stage-title">&#9889; Hizli Quiz</div>
+                <div style="text-align:center; padding:40px 20px; color:#94a3b8;">
+                    <div style="font-size:48px; margin-bottom:16px;">&#128220;</div>
+                    <p>En az 4 kelime calismis olman lazim. Once bir ders yap!</p>
+                </div>`;
+            return;
+        }
+
+        const modes = [
+            { key: 'choice',    ico: '👆', label: 'Seçmeli',   desc: '4 seçenekten doğruyu seç (hızlı)' },
+            { key: 'writing',   ico: '✏️', label: 'Yazma',     desc: 'Türkçe göster, İngilizce yaz' },
+            { key: 'speaking',  ico: '🎤', label: 'Konuşma',   desc: 'Kelimeyi mikrofona söyle' },
+            { key: 'dictation', ico: '🎧', label: 'Dinle&Yaz', desc: 'Sesi dinle, duyduğunu yaz' },
+            { key: 'mixed',     ico: '🎲', label: 'Karışık',   desc: 'Tüm modlardan rastgele' }
+        ];
+        const counts = [10, 20, 30];
+        const savedCount = parseInt(localStorage.getItem('qq_count') || '10');
+
+        el.innerHTML = `
+            <div class="stage-title">&#9889; Hizli Quiz</div>
+            <div class="stage-desc">Kisa bir pratik seansi. Mod sec, ${allReviewable.length} kelimeden rastgele getirelim.</div>
+
+            <div style="margin-top:20px;">
+                <div style="color:#94a3b8; font-size:13px; margin-bottom:10px; font-weight:600;">MOD SEÇ</div>
+                <div class="cat-grid" id="qqModeGrid">
+                    ${modes.map(m => `
+                        <button class="cat-btn" data-mode="${m.key}" onclick="selectQqMode('${m.key}')" title="${m.desc}">
+                            <div class="cat-icon">${m.ico}</div>
+                            <div class="cat-name">${m.label}</div>
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div style="color:#94a3b8; font-size:13px; margin:18px 0 10px; font-weight:600;">KAÇ KELİME</div>
+                <div style="display:flex; gap:8px;">
+                    ${counts.map(c => `
+                        <button class="qq-count-btn ${c === savedCount ? 'active' : ''}" data-count="${c}" onclick="selectQqCount(${c})">${c} kelime</button>
+                    `).join('')}
+                </div>
+
+                <div id="qqStartMsg" style="margin-top:20px; text-align:center; color:#64748b; font-size:13px;">Bir mod sec</div>
+
+                <div class="btn-center" style="margin-top:20px;">
+                    <button id="qqStartBtn" class="btn btn-primary" onclick="startQuickQuiz()" disabled style="opacity:0.5;">Başla</button>
+                </div>
+            </div>`;
+    }
+
+    function selectQqMode(mode) {
+        document.querySelectorAll('#qqModeGrid .cat-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+        window._qqSelectedMode = mode;
+        const btn = document.getElementById('qqStartBtn');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        document.getElementById('qqStartMsg').textContent = 'Hazir, basla butonuna bas!';
+    }
+
+    function selectQqCount(count) {
+        localStorage.setItem('qq_count', String(count));
+        document.querySelectorAll('.qq-count-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.count) === count));
+    }
+
+    function startQuickQuiz() {
+        const mode = window._qqSelectedMode;
+        if (!mode) return;
+        const count = parseInt(localStorage.getItem('qq_count') || '10');
+
+        const allWords = getAllWords();
+        const seenWords = allWords.filter(w => {
+            const s = state.wordStats[w.en];
+            return s && (s.correct + s.wrong) > 0;
+        });
+        const originalSet = new Set(ORIGINAL_WORDS.map(w => w.en));
+        const pool = [...seenWords];
+        // Include original words that haven't been answered yet
+        for (const w of ORIGINAL_WORDS) {
+            if (!seenWords.find(s => s.en === w.en)) pool.push(w);
+        }
+
+        shuffleArray(pool);
+        const picked = pool.slice(0, count);
+
+        quickQuizState = {
+            mode,
+            words: picked,
+            index: 0,
+            correct: 0,
+            wrong: 0,
+            startTime: Date.now(),
+            answers: [], // { word, correct, timeMs, mode }
+            currentMode: null
+        };
+        renderQuickQuizQuestion(document.getElementById('contentArea'));
+    }
+
+    function renderQuickQuizQuestion(el) {
+        if (!quickQuizState) return renderQuickQuizStart(el);
+        const qs = quickQuizState;
+        if (qs.index >= qs.words.length) {
+            renderQuickQuizResults(el);
+            return;
+        }
+        const word = qs.words[qs.index];
+
+        // Pick actual mode (mixed = random per question)
+        let mode = qs.mode;
+        if (mode === 'mixed') {
+            const modes = ['choice', 'writing', 'speaking', 'dictation'];
+            mode = modes[Math.floor(Math.random() * modes.length)];
+        }
+        qs.currentMode = mode;
+        qs.qStartTime = Date.now();
+
+        const progress = `<div class="fc-progress">
+            <span>${qs.index + 1} / ${qs.words.length}</span>
+            <div class="fc-progress-bar"><div class="fc-progress-fill" style="width:${((qs.index + 1) / qs.words.length) * 100}%; background:linear-gradient(90deg, #fbbf24, #f59e0b);"></div></div>
+            <span style="color:#22c55e;">${qs.correct}</span> <span style="color:#ef4444;">${qs.wrong}</span>
+        </div>`;
+
+        if (mode === 'choice') {
+            // 4 Turkish options, pick correct
+            const allWords = getAllWords();
+            const others = allWords.filter(w => w.en !== word.en);
+            shuffleArray(others);
+            const wrongs = others.slice(0, 3);
+            const options = [word, ...wrongs];
+            shuffleArray(options);
+            el.innerHTML = `
+                <div class="stage-title">&#9889; Hizli Quiz <span style="font-size:13px; color:#64748b; font-weight:normal;">(Secmeli)</span></div>
+                ${progress}
+                <div style="text-align:center; margin:30px 0;">
+                    <div style="font-size:36px; font-weight:800; color:#38bdf8; margin-bottom:8px;">${word.en}</div>
+                    ${word.pron ? `<div style="font-size:14px; color:#94a3b8; font-style:italic;">${word.pron}</div>` : ''}
+                    <button onclick="speakWord('${word.en.replace(/'/g,"\\'")}')" style="margin-top:10px; background:transparent; border:1px solid #38bdf8; color:#38bdf8; border-radius:50%; width:40px; height:40px; cursor:pointer; font-size:18px;">&#128264;</button>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:500px; margin:0 auto;">
+                    ${options.map(opt => `
+                        <button onclick="qqAnswerChoice('${opt.en.replace(/'/g,"\\'")}', '${word.en.replace(/'/g,"\\'")}')" class="qq-choice-btn">
+                            ${opt.tr}
+                        </button>
+                    `).join('')}
+                </div>`;
+        } else if (mode === 'writing') {
+            el.innerHTML = `
+                <div class="stage-title">&#9889; Hizli Quiz <span style="font-size:13px; color:#64748b; font-weight:normal;">(Yazma)</span></div>
+                ${progress}
+                <div style="text-align:center; margin:30px 0;">
+                    <div style="color:#94a3b8; font-size:13px; margin-bottom:8px;">TURKCE</div>
+                    <div style="font-size:28px; font-weight:700; color:#a78bfa;">${word.tr}</div>
+                </div>
+                <div style="max-width:400px; margin:0 auto;">
+                    <input type="text" id="qqWriteInput" placeholder="Ingilizce yaz..." autocomplete="off" autocapitalize="off"
+                        onkeydown="if(event.key==='Enter') qqAnswerWriting('${word.en.replace(/'/g,"\\'")}')"
+                        style="width:100%; padding:14px; border-radius:10px; border:2px solid #334155; background:#0f172a; color:#e2e8f0; font-size:18px; text-align:center; font-family:inherit;">
+                    <button onclick="qqAnswerWriting('${word.en.replace(/'/g,"\\'")}')" class="btn btn-primary" style="width:100%; margin-top:12px;">Kontrol Et</button>
+                </div>`;
+            setTimeout(() => { const inp = document.getElementById('qqWriteInput'); if (inp) inp.focus(); }, 100);
+        } else if (mode === 'speaking') {
+            el.innerHTML = `
+                <div class="stage-title">&#9889; Hizli Quiz <span style="font-size:13px; color:#64748b; font-weight:normal;">(Konusma)</span></div>
+                ${progress}
+                <div style="text-align:center; margin:30px 0;">
+                    <div style="color:#94a3b8; font-size:13px; margin-bottom:8px;">TURKCE</div>
+                    <div style="font-size:28px; font-weight:700; color:#a78bfa; margin-bottom:6px;">${word.tr}</div>
+                    <div style="color:#64748b; font-size:12px;">Mikrofona Ingilizcesini soyle</div>
+                </div>
+                <div style="text-align:center;">
+                    <button onclick="qqAnswerSpeaking('${word.en.replace(/'/g,"\\'")}')" class="mic-btn" id="qqMicBtn" style="font-size:36px;">&#127908;</button>
+                    <div id="qqSpeakResult" style="margin-top:16px; min-height:24px; font-size:14px;"></div>
+                </div>
+                <div class="btn-center">
+                    <button class="btn btn-secondary" onclick="qqSkipQuestion()">Atla &rarr;</button>
+                </div>`;
+        } else if (mode === 'dictation') {
+            el.innerHTML = `
+                <div class="stage-title">&#9889; Hizli Quiz <span style="font-size:13px; color:#64748b; font-weight:normal;">(Dinle & Yaz)</span></div>
+                ${progress}
+                <div style="text-align:center; margin:30px 0;">
+                    <button onclick="speakWord('${word.en.replace(/'/g,"\\'")}')" style="background:linear-gradient(135deg,#0ea5e9,#0284c7); border:none; color:#fff; border-radius:50%; width:80px; height:80px; cursor:pointer; font-size:32px; box-shadow:0 6px 20px rgba(14,165,233,0.3);">&#128264;</button>
+                    <div style="color:#94a3b8; font-size:13px; margin-top:12px;">Butona bas, duydugunu yaz</div>
+                </div>
+                <div style="max-width:400px; margin:0 auto;">
+                    <input type="text" id="qqDictInput" placeholder="Duydugun kelime..." autocomplete="off" autocapitalize="off"
+                        onkeydown="if(event.key==='Enter') qqAnswerDictation('${word.en.replace(/'/g,"\\'")}')"
+                        style="width:100%; padding:14px; border-radius:10px; border:2px solid #334155; background:#0f172a; color:#e2e8f0; font-size:18px; text-align:center; font-family:inherit;">
+                    <button onclick="qqAnswerDictation('${word.en.replace(/'/g,"\\'")}')" class="btn btn-primary" style="width:100%; margin-top:12px;">Kontrol Et</button>
+                </div>`;
+            setTimeout(() => {
+                speakWord(word.en);
+                const inp = document.getElementById('qqDictInput');
+                if (inp) inp.focus();
+            }, 300);
+        }
+    }
+
+    function qqRecordAnswer(isCorrect, word) {
+        const qs = quickQuizState;
+        if (!qs) return;
+        const timeMs = Date.now() - qs.qStartTime;
+        qs.answers.push({ word: word.en, tr: word.tr, correct: isCorrect, timeMs, mode: qs.currentMode });
+        if (isCorrect) qs.correct++; else qs.wrong++;
+        updateWordStat(word.en, isCorrect);
+    }
+
+    function qqAnswerChoice(selected, correct) {
+        const qs = quickQuizState;
+        const word = qs.words[qs.index];
+        const isCorrect = selected === correct;
+        // Visual feedback
+        document.querySelectorAll('.qq-choice-btn').forEach(btn => {
+            btn.disabled = true;
+            const txt = btn.textContent.trim();
+            if (txt === word.tr) btn.classList.add('correct');
+            else if (!isCorrect && btn.onclick.toString().includes(selected)) btn.classList.add('wrong');
+        });
+        qqRecordAnswer(isCorrect, word);
+        setTimeout(() => qqNext(), 900);
+    }
+
+    function qqAnswerWriting(correct) {
+        const qs = quickQuizState;
+        const word = qs.words[qs.index];
+        const input = document.getElementById('qqWriteInput');
+        if (!input) return;
+        const given = input.value.toLowerCase().trim();
+        const expected = correct.toLowerCase().trim();
+        const isCorrect = given === expected;
+        input.style.borderColor = isCorrect ? '#22c55e' : '#ef4444';
+        qqRecordAnswer(isCorrect, word);
+        if (!isCorrect) {
+            input.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center; color:#ef4444; margin-top:10px; font-size:14px;">Dogru: <strong>${correct}</strong></div>`);
+            setTimeout(() => qqNext(), 2000);
+        } else {
+            setTimeout(() => qqNext(), 800);
+        }
+    }
+
+    async function qqAnswerSpeaking(expected) {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            document.getElementById('qqSpeakResult').innerHTML = '<span style="color:#f87171;">Tarayici ses tanima desteklemiyor</span>';
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(t => t.stop());
+        } catch(e) {
+            document.getElementById('qqSpeakResult').innerHTML = '<span style="color:#f87171;">Mikrofon izni gerekli</span>';
+            return;
+        }
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SR();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 5;
+        const btn = document.getElementById('qqMicBtn');
+        btn.classList.add('recording');
+        document.getElementById('qqSpeakResult').innerHTML = '<span style="color:#94a3b8;">Dinliyorum...</span>';
+
+        let resolved = false;
+        recognition.onresult = (event) => {
+            resolved = true;
+            btn.classList.remove('recording');
+            const results = [];
+            for (let i = 0; i < event.results[0].length; i++) {
+                results.push(event.results[0][i].transcript.toLowerCase().trim());
+            }
+            const exp = expected.toLowerCase().trim();
+            const isCorrect = results.some(r => r === exp || r.includes(exp) || exp.includes(r) || similarity(r, exp) >= 0.7);
+            const heard = results[0];
+            document.getElementById('qqSpeakResult').innerHTML = isCorrect
+                ? `<span style="color:#22c55e;">&#10003; Dogru! Duyulan: "${heard}"</span>`
+                : `<span style="color:#ef4444;">Yanlis. Duyulan: "${heard}" | Beklenen: ${expected}</span>`;
+            const word = quickQuizState.words[quickQuizState.index];
+            qqRecordAnswer(isCorrect, word);
+            setTimeout(() => qqNext(), isCorrect ? 1200 : 2200);
+        };
+        recognition.onerror = () => {
+            btn.classList.remove('recording');
+            document.getElementById('qqSpeakResult').innerHTML = '<span style="color:#f59e0b;">Ses algilanamadi, atla veya tekrar dene</span>';
+        };
+        recognition.onend = () => {
+            if (!resolved) btn.classList.remove('recording');
+        };
+        recognition.start();
+    }
+
+    function qqAnswerDictation(correct) {
+        const qs = quickQuizState;
+        const word = qs.words[qs.index];
+        const input = document.getElementById('qqDictInput');
+        if (!input) return;
+        const given = input.value.toLowerCase().trim();
+        const expected = correct.toLowerCase().trim();
+        const isCorrect = given === expected;
+        input.style.borderColor = isCorrect ? '#22c55e' : '#ef4444';
+        qqRecordAnswer(isCorrect, word);
+        if (!isCorrect) {
+            input.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center; color:#ef4444; margin-top:10px; font-size:14px;">Dogru: <strong>${correct}</strong></div>`);
+            setTimeout(() => qqNext(), 2000);
+        } else {
+            setTimeout(() => qqNext(), 800);
+        }
+    }
+
+    function qqSkipQuestion() {
+        const qs = quickQuizState;
+        if (!qs) return;
+        const word = qs.words[qs.index];
+        qs.answers.push({ word: word.en, tr: word.tr, correct: false, timeMs: 0, mode: qs.currentMode, skipped: true });
+        qs.wrong++;
+        qqNext();
+    }
+
+    function qqNext() {
+        const qs = quickQuizState;
+        if (!qs) return;
+        qs.index++;
+        renderQuickQuizQuestion(document.getElementById('contentArea'));
+    }
+
+    function renderQuickQuizResults(el) {
+        const qs = quickQuizState;
+        if (!qs) return;
+        const total = qs.correct + qs.wrong;
+        const pct = Math.round(qs.correct / total * 100);
+        const duration = Math.round((Date.now() - qs.startTime) / 1000);
+        const avgMs = qs.answers.filter(a => !a.skipped).reduce((sum, a) => sum + a.timeMs, 0) / Math.max(1, qs.answers.filter(a => !a.skipped).length);
+
+        // XP: 5 per correct + bonus
+        const xpGained = qs.correct * 5 + (pct >= 80 ? 20 : 0);
+        addXP(xpGained, 'Hizli Quiz');
+
+        const cls = pct >= 80 ? 'great' : pct >= 50 ? 'ok' : 'bad';
+        const emoji = pct >= 80 ? '🏆' : pct >= 50 ? '💪' : '📚';
+
+        const wrongAnswers = qs.answers.filter(a => !a.correct);
+
+        el.innerHTML = `
+            <div class="fc-result">
+                <div style="font-size:56px; margin-bottom:12px;">${emoji}</div>
+                <h2>${pct >= 80 ? 'Harika!' : pct >= 50 ? 'Fena değil!' : 'Pratik yapmaya devam!'}</h2>
+                <div class="fc-result-stats">
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#22c55e;">${qs.correct}</div>
+                        <div class="label">Doğru</div>
+                    </div>
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#ef4444;">${qs.wrong}</div>
+                        <div class="label">Yanlış</div>
+                    </div>
+                    <div class="fc-result-stat">
+                        <div class="num" style="color:#fbbf24;">+${xpGained}</div>
+                        <div class="label">XP</div>
+                    </div>
+                </div>
+                <p style="color:#94a3b8; margin:15px 0;">Başarı: <strong style="color:#38bdf8; font-size:22px;">%${pct}</strong> · Süre: ${duration}s · Ortalama: ${Math.round(avgMs/1000*10)/10}s/kelime</p>
+
+                ${wrongAnswers.length > 0 ? `
+                    <div style="margin-top:20px; padding:16px; background:rgba(239,68,68,0.1); border-radius:10px; border:1px solid rgba(239,68,68,0.3); text-align:left;">
+                        <div style="color:#f87171; font-weight:600; margin-bottom:10px;">Tekrar çalış:</div>
+                        ${wrongAnswers.map(a => `<div style="font-size:14px; padding:4px 0; color:#e2e8f0;">${a.word} — <span style="color:#94a3b8;">${a.tr}</span></div>`).join('')}
+                    </div>
+                ` : ''}
+
+                <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:20px;">
+                    <button class="btn btn-primary" onclick="renderQuickQuizStart(document.getElementById('contentArea'))">Tekrar Quiz</button>
+                    <button class="btn btn-secondary" onclick="navigateStage('dashboard')">Ana Sayfa</button>
+                </div>
+            </div>`;
+        quickQuizState = null;
     }
 
     function renderFlashcard(el) {
