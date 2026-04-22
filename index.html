@@ -1254,6 +1254,7 @@
     let PATTERNS = [];
     let PATTERN_CATEGORIES = [];
     let selectedPatternCategory = 'Tümü';
+    let patternSearchQuery = '';
     let patternsLoaded = false;
 
     // Load patterns from JSON (network-first to avoid stale cache)
@@ -2615,6 +2616,27 @@
         renderPatterns(document.getElementById('contentArea'));
     }
 
+    function onPatternSearchInput(val) {
+        patternSearchQuery = val;
+        // Debounce re-render
+        clearTimeout(window._patternSearchTimer);
+        window._patternSearchTimer = setTimeout(() => {
+            renderPatterns(document.getElementById('contentArea'));
+            // Re-focus the input and position caret at end
+            const input = document.getElementById('patternSearchInput');
+            if (input) {
+                input.focus();
+                const len = input.value.length;
+                input.setSelectionRange(len, len);
+            }
+        }, 250);
+    }
+
+    function clearPatternSearch() {
+        patternSearchQuery = '';
+        renderPatterns(document.getElementById('contentArea'));
+    }
+
     function renderPatterns(el) {
         if (!patternsLoaded) {
             el.innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;">Kalıplar yükleniyor...</div>';
@@ -2627,11 +2649,24 @@
         }
 
         const learnedSet = new Set(learnedPatterns);
-        const filtered = selectedPatternCategory === 'Tümü' ? PATTERNS : PATTERNS.filter(p => p.category === selectedPatternCategory);
+        let filtered = selectedPatternCategory === 'Tümü' ? PATTERNS : PATTERNS.filter(p => p.category === selectedPatternCategory);
+
+        // Apply text search
+        const q = patternSearchQuery.trim().toLowerCase();
+        if (q) {
+            filtered = filtered.filter(p =>
+                p.pattern.toLowerCase().includes(q) ||
+                p.meaning.toLowerCase().includes(q) ||
+                (p.example || '').toLowerCase().includes(q) ||
+                (p.exampleTr || '').toLowerCase().includes(q)
+            );
+        }
+
         const unlearned = filtered.filter(p => !learnedSet.has(p.pattern));
         const shuffled = [...unlearned];
         shuffleArray(shuffled);
-        const daily = shuffled.slice(0, 5);
+        // If searching, show all matches (up to 50); otherwise random 5
+        const daily = q ? unlearned.slice(0, 50) : shuffled.slice(0, 5);
 
         const catBtns = PATTERN_CATEGORIES.map(c => {
             const active = c === selectedPatternCategory;
@@ -2642,8 +2677,13 @@
         el.innerHTML = `
             <div class="stage-title">Günlük Kalıplar</div>
             <div class="stage-desc">
-                ${unlearned.length} yeni kalıp kaldı — öğrendiklerini işaretle.
+                ${q ? `"<strong>${q}</strong>" aramasi icin ${unlearned.length + filtered.filter(p => learnedSet.has(p.pattern)).length} sonuc` : `${unlearned.length} yeni kalıp kaldı — öğrendiklerini işaretle.`}
                 <span style="color:#22c55e;">${learnedPatterns.length} öğrenildi</span> / ${PATTERNS.length} toplam
+            </div>
+
+            <div style="display:flex; gap:8px; margin:12px 0;">
+                <input id="patternSearchInput" type="text" value="${patternSearchQuery.replace(/"/g,'&quot;')}" placeholder="Kaliplarda ara (Ingilizce veya Turkce)..." oninput="onPatternSearchInput(this.value)" style="flex:1; padding:8px 12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:14px;">
+                ${q ? `<button onclick="clearPatternSearch()" style="padding:8px 12px; border-radius:8px; border:1px solid #ef4444; background:transparent; color:#ef4444; cursor:pointer; font-size:13px;">Temizle</button>` : ''}
             </div>
 
             <div style="display:flex;gap:8px;overflow-x:auto;padding:10px 0;-webkit-overflow-scrolling:touch;">
@@ -2670,7 +2710,7 @@
                         </button>
                     </div>
                 </div>
-            `).join('') : '<div style="color:#22c55e; text-align:center; padding:30px; font-size:18px;">Bu kategorideki tüm kalıpları öğrendin!</div>'}
+            `).join('') : (q ? '<div style="color:#94a3b8; text-align:center; padding:30px;">Bu aramayla ogrenilmemis kalip yok.</div>' : '<div style="color:#22c55e; text-align:center; padding:30px; font-size:18px;">Bu kategorideki tüm kalıpları öğrendin!</div>')}
 
             ${learnedPatterns.length > 0 ? `
                 <h3 style="color:#22c55e; font-size:16px; margin:25px 0 10px; border-bottom:1px solid #334155; padding-bottom:6px;">Öğrendiklerin (${learnedPatterns.length})</h3>
@@ -2690,9 +2730,9 @@
                 `).join('')}
             ` : ''}
 
-            <div class="btn-center">
+            ${!q ? `<div class="btn-center">
                 <button class="btn btn-secondary" onclick="renderPatterns(document.getElementById('contentArea'));">Yeni 5 Kalıp Getir</button>
-            </div>
+            </div>` : ''}
         `;
     }
 
