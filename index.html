@@ -478,6 +478,36 @@
         .qq-choice-btn:disabled { cursor: default; }
         body.light-mode .qq-count-btn, body.light-mode .qq-choice-btn { background: #ffffff; border-color: #e2e8f0; color: #0f172a; }
 
+        /* Chat level buttons */
+        .chat-level-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1.5px solid #334155;
+            background: #1e293b;
+            color: #94a3b8;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            transition: all 0.15s ease;
+        }
+        .chat-level-btn:hover { border-color: #8b5cf6; color: #a78bfa; }
+        .chat-level-btn.active {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            border-color: #8b5cf6;
+            color: #fff;
+        }
+        body.light-mode .chat-level-btn { background: #ffffff; border-color: #e2e8f0; color: #475569; }
+
+        #chatMicBtn.recording {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            animation: pulse-red 1s infinite;
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+        }
+
         /* Full-screen stage mode */
         body.stage-focused .header,
         body.stage-focused .stats-bar,
@@ -1407,6 +1437,9 @@
 
             <div class="nav-group-label">Pratik</div>
             <div class="stage-nav">
+                <button class="stage-btn nav-practice" onclick="navigateStage('chat', this)" id="navChat" data-color="#8b5cf6">
+                    <span class="nav-ico">🤖</span><span class="nav-label">AI Sohbet</span>
+                </button>
                 <button class="stage-btn nav-practice" onclick="navigateStage('patterns', this)" id="navPatterns" data-color="#a78bfa">
                     <span class="nav-ico">💡</span><span class="nav-label">Kalıplar</span>
                 </button>
@@ -2318,7 +2351,8 @@
         notebook: '📓 Defterim',
         addword: '➕ Kelime Ekle',
         results: '🎯 Sonuçlar',
-        quickquiz: '⚡ Hızlı Quiz'
+        quickquiz: '⚡ Hızlı Quiz',
+        chat: '🤖 AI Sohbet'
     };
 
     const DAILY_STAGES = [
@@ -2375,6 +2409,7 @@
             case 'addword': renderAddWord(content); break;
             case 'results': renderResults(content); break;
             case 'quickquiz': renderQuickQuizStart(content); break;
+            case 'chat': renderChat(content); break;
         }
         updateStats();
 
@@ -4311,6 +4346,297 @@
                 </div>
             ` : ''}
         `;
+    }
+
+    // ==================== AI CHAT (Gemini) ====================
+    const GEMINI_KEY_LS = 'gemini_api_key';
+    const CHAT_HISTORY_LS = 'chat_history_v1';
+    let chatHistory = JSON.parse(localStorage.getItem(CHAT_HISTORY_LS) || '[]');
+    let chatTopic = 'genel';
+    let chatLevel = 'orta';
+    let chatSending = false;
+
+    const CHAT_TOPICS = {
+        genel:       { ico: '💬', label: 'Günlük Sohbet',     prompt: 'Have a casual conversation with me about everyday topics.' },
+        seyahat:     { ico: '✈️', label: 'Seyahat',           prompt: 'Role-play a travel scenario. You are a hotel receptionist, waiter, or taxi driver.' },
+        is:          { ico: '💼', label: 'İş Hayatı',         prompt: 'Role-play a workplace or job interview scenario. You are a manager or colleague.' },
+        restoran:    { ico: '🍽️', label: 'Restoran',          prompt: 'You are a waiter in a restaurant. Take my order and chat about the menu.' },
+        alisveris:   { ico: '🛍️', label: 'Alışveriş',         prompt: 'You are a shop assistant. Help me find and buy things.' },
+        duygular:    { ico: '💭', label: 'Duygular & Fikir',  prompt: 'Have a deep conversation about feelings, opinions, and life.' },
+        hikaye:      { ico: '📖', label: 'Hikaye Anlat',      prompt: 'Tell me a short interesting story, then ask me what I think or would do.' },
+        roleplay:    { ico: '🎭', label: 'Serbest Rol',       prompt: 'Ask me what scenario I want to practice, then act it out.' }
+    };
+
+    const CHAT_LEVELS = {
+        baslangic: { label: 'Başlangıç', desc: 'basit kelimeler, kısa cümleler',  hint: 'Use VERY simple English (A1 level). Short sentences, basic vocabulary. Speak slowly.' },
+        orta:      { label: 'Orta',      desc: 'normal günlük konuşma',            hint: 'Use everyday English at B1-B2 level. Natural but not too complex.' },
+        ileri:     { label: 'İleri',     desc: 'karmaşık yapılar, ileri kelimeler', hint: 'Use advanced English at C1 level. Idioms, complex structures, rich vocabulary.' }
+    };
+
+    function buildSystemPrompt() {
+        const topic = CHAT_TOPICS[chatTopic] || CHAT_TOPICS.genel;
+        const level = CHAT_LEVELS[chatLevel] || CHAT_LEVELS.orta;
+        return `You are Ece, a friendly English tutor helping a Turkish learner practice conversation. ${topic.prompt} ${level.hint}
+
+RULES:
+1. Always reply in English.
+2. Keep responses SHORT (1-3 sentences max). This is a conversation, not a lecture.
+3. If the user makes a grammar mistake, gently correct them ONCE at the end like this: "(Tip: '...' → '...')". Only correct meaningful errors, not typos.
+4. Ask a follow-up question to keep the conversation going.
+5. Be warm and encouraging.
+6. Do not use markdown formatting.`;
+    }
+
+    function getGeminiKey() { return localStorage.getItem(GEMINI_KEY_LS) || ''; }
+    function setGeminiKey(k) { localStorage.setItem(GEMINI_KEY_LS, k.trim()); }
+
+    function saveChatHistory() {
+        localStorage.setItem(CHAT_HISTORY_LS, JSON.stringify(chatHistory.slice(-40)));
+    }
+
+    async function callGemini(userMessage) {
+        const key = getGeminiKey();
+        if (!key) throw new Error('API anahtari yok');
+
+        // Build conversation context (last 10 messages)
+        const recentHistory = chatHistory.slice(-10);
+        const contents = recentHistory.map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.text }]
+        }));
+        contents.push({ role: 'user', parts: [{ text: userMessage }] });
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`;
+
+        const body = {
+            contents,
+            systemInstruction: { parts: [{ text: buildSystemPrompt() }] },
+            generationConfig: { temperature: 0.9, maxOutputTokens: 300 }
+        };
+
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error?.message || `API hatasi (${res.status})`);
+        }
+
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '(Cevap alinamadi)';
+        return text.trim();
+    }
+
+    function renderChat(el) {
+        const hasKey = !!getGeminiKey();
+
+        if (!hasKey) {
+            el.innerHTML = `
+                <div class="stage-title">🤖 AI Sohbet</div>
+                <div class="stage-desc">İngilizce konuşma pratiği için Google Gemini AI kullanıyoruz. Ücretsiz API anahtarın gerekli.</div>
+
+                <div style="background:#1e293b; border:1px solid #334155; border-radius:12px; padding:20px; margin-top:20px;">
+                    <h3 style="color:#a78bfa; margin-bottom:12px; font-size:17px;">Ücretsiz API Anahtarı Al</h3>
+                    <ol style="color:#cbd5e1; font-size:14px; line-height:1.8; padding-left:20px; margin-bottom:16px;">
+                        <li><a href="https://aistudio.google.com/apikey" target="_blank" style="color:#38bdf8;">aistudio.google.com/apikey</a> adresine git</li>
+                        <li>Gmail hesabınla gir</li>
+                        <li>"Create API Key" butonuna bas</li>
+                        <li>Oluşan anahtarı kopyala ve buraya yapıştır</li>
+                    </ol>
+                    <div style="color:#94a3b8; font-size:12px; margin-bottom:10px;">💡 Ücretsiz: dakikada 15 mesaj, günde 1500 mesaj — fazlasıyla yeterli</div>
+                    <div style="color:#f59e0b; font-size:12px; margin-bottom:14px;">🔒 Anahtarın sadece tarayıcında saklanır, hiçbir yere gönderilmez</div>
+
+                    <input type="password" id="chatApiKeyInput" placeholder="AIzaSy..." style="width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:13px; font-family:monospace;">
+                    <button onclick="saveChatApiKey()" class="btn btn-primary" style="width:100%; margin-top:10px;">Kaydet ve Başla</button>
+                    <div id="chatKeyMsg" style="margin-top:10px; font-size:13px; text-align:center;"></div>
+                </div>`;
+            return;
+        }
+
+        const topicBtns = Object.entries(CHAT_TOPICS).map(([key, t]) => `
+            <button class="cat-btn ${chatTopic === key ? 'active' : ''}" onclick="setChatTopic('${key}')">
+                <div class="cat-icon">${t.ico}</div>
+                <div class="cat-name">${t.label}</div>
+            </button>`).join('');
+
+        const levelBtns = Object.entries(CHAT_LEVELS).map(([key, l]) => `
+            <button class="chat-level-btn ${chatLevel === key ? 'active' : ''}" onclick="setChatLevel('${key}')" title="${l.desc}">
+                ${l.label}
+            </button>`).join('');
+
+        const messagesHtml = chatHistory.length === 0
+            ? `<div style="text-align:center; padding:40px 20px; color:#64748b;">
+                <div style="font-size:48px; margin-bottom:12px;">👋</div>
+                <div style="font-size:15px;">Konu ve seviye sec, sonra bir "Hi!" yazarak basla</div>
+               </div>`
+            : chatHistory.map(m => renderChatMessage(m)).join('');
+
+        el.innerHTML = `
+            <div class="stage-title">🤖 AI Sohbet</div>
+            <div class="stage-desc">İngilizce pratik yap. AI hatalarını düzeltir ve konuşmayı sürdürür.</div>
+
+            <div style="display:flex; gap:8px; justify-content:flex-end; margin-bottom:10px;">
+                <button onclick="clearChat()" class="btn btn-secondary" style="padding:6px 14px; font-size:12px;">🗑️ Temizle</button>
+                <button onclick="openChatSettings()" class="btn btn-secondary" style="padding:6px 14px; font-size:12px;">⚙️ Ayarlar</button>
+            </div>
+
+            <div style="color:#94a3b8; font-size:12px; margin-bottom:6px; font-weight:600;">KONU</div>
+            <div class="cat-grid" style="margin-bottom:12px;">${topicBtns}</div>
+
+            <div style="color:#94a3b8; font-size:12px; margin-bottom:6px; font-weight:600;">SEVİYE</div>
+            <div style="display:flex; gap:8px; margin-bottom:16px;">${levelBtns}</div>
+
+            <div id="chatMessages" style="background:#0f172a; border:1px solid #334155; border-radius:12px; padding:12px; min-height:300px; max-height:450px; overflow-y:auto; margin-bottom:12px;">
+                ${messagesHtml}
+            </div>
+
+            <div style="display:flex; gap:8px;">
+                <button onclick="chatVoiceInput()" id="chatMicBtn" class="btn btn-secondary" style="padding:10px 14px; font-size:18px;" title="Sesle yaz">🎤</button>
+                <input type="text" id="chatInput" placeholder="İngilizce yaz..." autocomplete="off"
+                    onkeydown="if(event.key==='Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"
+                    style="flex:1; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:14px; font-family:inherit;">
+                <button onclick="sendChatMessage()" id="chatSendBtn" class="btn btn-primary" style="padding:10px 18px;">➤</button>
+            </div>
+            <div id="chatStatus" style="margin-top:8px; font-size:12px; color:#64748b; min-height:16px;"></div>`;
+
+        const msgBox = document.getElementById('chatMessages');
+        if (msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+    }
+
+    function renderChatMessage(m) {
+        const isUser = m.role === 'user';
+        return `<div style="display:flex; margin-bottom:10px; ${isUser ? 'justify-content:flex-end;' : ''}">
+            <div style="max-width:80%; padding:10px 14px; border-radius:14px;
+                background:${isUser ? 'linear-gradient(135deg, #0ea5e9, #0284c7)' : '#1e293b'};
+                color:${isUser ? '#fff' : '#e2e8f0'};
+                border:${isUser ? 'none' : '1px solid #334155'};
+                ${isUser ? 'border-bottom-right-radius:4px;' : 'border-bottom-left-radius:4px;'}">
+                <div style="font-size:14px; line-height:1.5; white-space:pre-wrap;">${escapeHtml(m.text)}</div>
+                ${!isUser ? `<button onclick="speakWord('${m.text.replace(/'/g,"\\'").replace(/\n/g,' ')}')" style="background:transparent; border:none; color:#38bdf8; cursor:pointer; font-size:14px; padding:4px 0 0; margin-top:4px;" title="Dinle">🔊 Dinle</button>` : ''}
+            </div>
+        </div>`;
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+
+    function saveChatApiKey() {
+        const input = document.getElementById('chatApiKeyInput');
+        const msg = document.getElementById('chatKeyMsg');
+        const key = input.value.trim();
+        if (!key.startsWith('AIza') || key.length < 30) {
+            msg.style.color = '#ef4444';
+            msg.textContent = 'Gecersiz anahtar. "AIza" ile baslamali.';
+            return;
+        }
+        setGeminiKey(key);
+        renderChat(document.getElementById('contentArea'));
+    }
+
+    function setChatTopic(key) { chatTopic = key; renderChat(document.getElementById('contentArea')); }
+    function setChatLevel(key) { chatLevel = key; renderChat(document.getElementById('contentArea')); }
+
+    function clearChat() {
+        if (!confirm('Tum sohbet gecmisi silinecek. Emin misin?')) return;
+        chatHistory = [];
+        saveChatHistory();
+        renderChat(document.getElementById('contentArea'));
+    }
+
+    function openChatSettings() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        const currentKey = getGeminiKey();
+        const masked = currentKey ? currentKey.substring(0, 6) + '••••' + currentKey.slice(-4) : '';
+        modal.innerHTML = `
+            <div class="modal-box">
+                <div class="modal-header">
+                    <h3 style="color:#a78bfa; margin:0; font-size:18px;">⚙️ AI Sohbet Ayarlari</h3>
+                    <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+                </div>
+                <div style="color:#94a3b8; font-size:13px; margin-bottom:8px;">Mevcut API anahtari:</div>
+                <div style="background:#0f172a; padding:10px; border-radius:8px; font-family:monospace; font-size:13px; color:#e2e8f0; margin-bottom:14px;">${masked || '(yok)'}</div>
+
+                <input type="password" id="chatApiKeyInputEdit" placeholder="Yeni anahtar yapistir..."
+                    style="width:100%; padding:12px; border-radius:8px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:13px; font-family:monospace;">
+                <button onclick="(function(){ const v=document.getElementById('chatApiKeyInputEdit').value.trim(); if(v.startsWith('AIza')&&v.length>=30){ setGeminiKey(v); alert('Kaydedildi'); document.querySelector('.modal-overlay').remove(); } else { alert('Gecersiz anahtar'); } })()" class="btn btn-primary" style="width:100%; margin-top:10px;">Güncelle</button>
+                <button onclick="if(confirm('Anahtari silmek istediginden emin misin?')){ localStorage.removeItem('${GEMINI_KEY_LS}'); this.closest('.modal-overlay').remove(); renderChat(document.getElementById('contentArea')); }" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #ef4444; background:transparent; color:#ef4444; cursor:pointer; font-family:inherit;">Anahtari Sil</button>
+            </div>`;
+        document.body.appendChild(modal);
+    }
+
+    async function sendChatMessage() {
+        if (chatSending) return;
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        chatSending = true;
+        input.value = '';
+        document.getElementById('chatSendBtn').disabled = true;
+        document.getElementById('chatSendBtn').style.opacity = '0.5';
+        document.getElementById('chatStatus').textContent = 'AI düşünüyor...';
+        document.getElementById('chatStatus').style.color = '#f59e0b';
+
+        // Add user message
+        chatHistory.push({ role: 'user', text, ts: Date.now() });
+        saveChatHistory();
+        renderChat(document.getElementById('contentArea'));
+
+        try {
+            const reply = await callGemini(text);
+            chatHistory.push({ role: 'assistant', text: reply, ts: Date.now() });
+            saveChatHistory();
+            addXP(4, 'AI mesaji');
+            renderChat(document.getElementById('contentArea'));
+        } catch(e) {
+            document.getElementById('chatStatus').textContent = 'Hata: ' + e.message;
+            document.getElementById('chatStatus').style.color = '#ef4444';
+            chatHistory.pop(); // remove the user message since we didn't get a reply
+            saveChatHistory();
+        } finally {
+            chatSending = false;
+            const btn = document.getElementById('chatSendBtn');
+            if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+        }
+    }
+
+    async function chatVoiceInput() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            document.getElementById('chatStatus').textContent = 'Tarayici ses tanima desteklemiyor';
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(t => t.stop());
+        } catch(e) {
+            document.getElementById('chatStatus').textContent = 'Mikrofon izni gerekli';
+            return;
+        }
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SR();
+        recognition.lang = 'en-US';
+        recognition.interimResults = true;
+        const btn = document.getElementById('chatMicBtn');
+        btn.classList.add('recording');
+        document.getElementById('chatStatus').textContent = 'Dinliyorum...';
+
+        recognition.onresult = (event) => {
+            const last = event.results[event.results.length - 1];
+            if (last.isFinal) {
+                document.getElementById('chatInput').value = last[0].transcript;
+                btn.classList.remove('recording');
+                document.getElementById('chatStatus').textContent = '';
+            }
+        };
+        recognition.onerror = () => { btn.classList.remove('recording'); document.getElementById('chatStatus').textContent = 'Ses algilanamadi'; };
+        recognition.onend = () => btn.classList.remove('recording');
+        recognition.start();
     }
 
     // ==================== QUICK QUIZ ====================
