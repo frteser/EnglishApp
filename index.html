@@ -400,6 +400,60 @@
         .nb-tab-count { font-size: 11px; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 10px; }
         body.light-mode .nb-tab { background: #ffffff; border-color: #e2e8f0; color: #475569; }
 
+        /* Full-screen stage mode */
+        body.stage-focused .header,
+        body.stage-focused .stats-bar,
+        body.stage-focused #stageNav,
+        body.stage-focused .pwa-banner { display: none !important; }
+        body.stage-focused .container { padding: 0; max-width: 100%; }
+        body.stage-focused .stage-content { border-radius: 0; padding: 20px; min-height: 100vh; }
+
+        #stageTopBar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .stage-back-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1.5px solid #38bdf8;
+            color: #38bdf8;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+        .stage-back-btn:hover { background: #38bdf8; color: #0f172a; }
+        .stage-top-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #e2e8f0;
+            text-align: center;
+            flex: 1;
+        }
+
+        body.light-mode #stageTopBar { background: #ffffff; border-bottom-color: #e2e8f0; }
+        body.light-mode .stage-top-title { color: #0f172a; }
+
+        @media (max-width: 600px) {
+            .stage-back-btn span:last-child { display: none; }
+            .stage-back-btn { padding: 8px 12px; }
+            body.stage-focused .stage-content { padding: 15px; }
+            .stage-top-title { font-size: 15px; }
+        }
+
         /* Writing Practice */
         .writing-area {
             width: 100%;
@@ -1167,6 +1221,15 @@
                     <span class="nav-ico">➕</span><span class="nav-label">Kelime Ekle</span>
                 </button>
             </div>
+        </div>
+
+        <div id="stageTopBar" style="display:none;">
+            <button onclick="backToDashboard()" class="stage-back-btn">
+                <span style="font-size:18px;">←</span>
+                <span>Ana Sayfa</span>
+            </button>
+            <div class="stage-top-title"></div>
+            <div style="width:40px;"></div>
         </div>
 
         <div class="stage-content" id="contentArea">
@@ -1972,8 +2035,23 @@
     }
 
     // ==================== RENDERING ====================
+    const STAGE_TITLES = {
+        stage1: '📚 Kelimeler',
+        stage2: '💬 Cümleler',
+        stage3a: '🧩 Boşluk Doldurma',
+        stage3b: '🔁 Çeviri',
+        stage4: '✏️ Yazma',
+        patterns: '💡 Kalıplar',
+        speaking: '🎤 Konuş',
+        dictation: '🎧 Dinle & Yaz',
+        flashcard: '🗂️ Kartlar',
+        stats: '📊 İstatistik',
+        notebook: '📓 Defterim',
+        addword: '➕ Kelime Ekle',
+        results: '🎯 Sonuçlar'
+    };
+
     function navigateStage(stage, btn) {
-        const isNewStage = currentStage !== stage;
         currentStage = stage;
         document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
         if (btn) btn.classList.add('active');
@@ -1997,16 +2075,26 @@
         }
         updateStats();
 
-        // Auto-scroll to content on mobile so user doesn't need to scroll manually
-        if (isNewStage && stage !== 'dashboard') {
-            requestAnimationFrame(() => {
-                const rect = content.getBoundingClientRect();
-                const offset = window.pageYOffset + rect.top - 12;
-                window.scrollTo({ top: offset, behavior: 'smooth' });
-            });
-        } else if (stage === 'dashboard') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Full-screen stage mode: hide nav/stats, show only the stage content
+        if (stage === 'dashboard') {
+            document.body.classList.remove('stage-focused');
+            const bar = document.getElementById('stageTopBar');
+            if (bar) bar.style.display = 'none';
+        } else {
+            document.body.classList.add('stage-focused');
+            const bar = document.getElementById('stageTopBar');
+            if (bar) {
+                bar.style.display = 'flex';
+                const title = bar.querySelector('.stage-top-title');
+                if (title) title.textContent = STAGE_TITLES[stage] || '';
+            }
         }
+        window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
+    }
+
+    function backToDashboard() {
+        const homeBtn = document.querySelector('.nav-home');
+        navigateStage('dashboard', homeBtn);
     }
 
     function updateStats() {
