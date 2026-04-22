@@ -769,6 +769,21 @@
         <div class="header">
             <h1>English Daily Practice</h1>
             <div class="subtitle">1125 kelime havuzu - Her gün 5 kelime, istersen ekstra getir</div>
+            <div style="margin-top:10px; display:flex; justify-content:center; align-items:center; gap:10px;">
+                <span id="syncStatus" style="font-size:13px; color:#64748b;">Senkron kapalı</span>
+                <button onclick="openSyncModal()" style="padding:4px 12px; font-size:12px; border-radius:15px; border:1px solid #38bdf8; background:transparent; color:#38bdf8; cursor:pointer;">Senkronizasyon</button>
+            </div>
+        </div>
+
+        <!-- Sync Modal -->
+        <div id="syncModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7); z-index:1000; justify-content:center; align-items:center; padding:20px;">
+            <div style="background:#1e293b; border-radius:12px; padding:25px; max-width:400px; width:100%; border:1px solid #334155;">
+                <h3 style="color:#38bdf8; margin:0 0 15px; font-size:20px;">Cihazlar Arası Senkronizasyon</h3>
+                <div id="syncModalBody"></div>
+                <div style="margin-top:20px; text-align:right;">
+                    <button onclick="closeSyncModal()" style="padding:8px 20px; border-radius:6px; border:none; background:#334155; color:#e2e8f0; cursor:pointer;">Kapat</button>
+                </div>
+            </div>
         </div>
 
         <!-- PWA Install Banner -->
@@ -820,6 +835,173 @@
             <!-- Dynamic content here -->
         </div>
     </div>
+
+    <!-- Firebase Sync Module -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyApHwqbaRo0G2rJx4hI8Vv1Llkh-a3DUPI",
+            authDomain: "englishapp-7d94f.firebaseapp.com",
+            projectId: "englishapp-7d94f",
+            storageBucket: "englishapp-7d94f.firebasestorage.app",
+            messagingSenderId: "513162928162",
+            appId: "1:513162928162:web:e44df84625eacb29b52a7b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Generate/get device ID (prevent self-echo loops)
+        let deviceId = localStorage.getItem('sync_device_id');
+        if (!deviceId) {
+            deviceId = 'd_' + Math.random().toString(36).slice(2, 10);
+            localStorage.setItem('sync_device_id', deviceId);
+        }
+
+        let syncCode = localStorage.getItem('sync_code') || null;
+        let unsubscribe = null;
+        let uploadDebounce = null;
+        let isApplyingRemote = false;
+
+        const LS_KEYS = {
+            state: 'english_daily_v1',
+            customWords: 'english_custom_words_v1',
+            learnedPatterns: 'english_learned_patterns_v1',
+            wordCategories: 'english_word_categories_v1',
+            alarms: 'alarms'
+        };
+
+        function collectLocalData() {
+            const data = {};
+            for (const [key, lsKey] of Object.entries(LS_KEYS)) {
+                const raw = localStorage.getItem(lsKey);
+                try { data[key] = raw ? JSON.parse(raw) : null; }
+                catch(e) { data[key] = null; }
+            }
+            return data;
+        }
+
+        function applyRemoteData(data) {
+            if (!data) return;
+            isApplyingRemote = true;
+            for (const [key, lsKey] of Object.entries(LS_KEYS)) {
+                if (data[key] !== undefined && data[key] !== null) {
+                    localStorage.setItem(lsKey, JSON.stringify(data[key]));
+                }
+            }
+            isApplyingRemote = false;
+            if (typeof window.onSyncRemoteUpdate === 'function') {
+                window.onSyncRemoteUpdate();
+            }
+        }
+
+        async function upload() {
+            if (!syncCode || isApplyingRemote) return;
+            if (!auth.currentUser) return;
+
+            const data = collectLocalData();
+            data.updatedAt = serverTimestamp();
+            data.updatedBy = deviceId;
+
+            try {
+                await setDoc(doc(db, 'syncs', syncCode), data);
+                updateStatus('synced');
+            } catch(e) {
+                console.error('Upload failed:', e);
+                updateStatus('error');
+            }
+        }
+
+        function scheduleUpload() {
+            if (!syncCode || isApplyingRemote) return;
+            clearTimeout(uploadDebounce);
+            updateStatus('pending');
+            uploadDebounce = setTimeout(upload, 1500);
+        }
+
+        function startListener() {
+            if (unsubscribe) unsubscribe();
+            if (!syncCode) return;
+
+            unsubscribe = onSnapshot(doc(db, 'syncs', syncCode), (snap) => {
+                if (!snap.exists()) return;
+                const data = snap.data();
+                if (data.updatedBy === deviceId) return; // ignore self
+                if (snap.metadata.hasPendingWrites) return;
+                applyRemoteData(data);
+                updateStatus('synced');
+            }, (err) => {
+                console.error('Listener error:', err);
+                updateStatus('error');
+            });
+        }
+
+        function updateStatus(status) {
+            const el = document.getElementById('syncStatus');
+            if (!el) return;
+            const map = {
+                pending: {text: '⏳ Kaydediliyor...', color: '#f59e0b'},
+                synced: {text: '✓ Senkron', color: '#22c55e'},
+                error: {text: '⚠ Hata', color: '#ef4444'},
+                off: {text: 'Senkron kapalı', color: '#64748b'}
+            };
+            const s = map[status] || map.off;
+            el.textContent = s.text;
+            el.style.color = s.color;
+        }
+
+        async function createSyncCode() {
+            const code = Math.floor(100000 + Math.random() * 900000).toString();
+            syncCode = code;
+            localStorage.setItem('sync_code', code);
+            await upload();
+            startListener();
+            return code;
+        }
+
+        async function joinSyncCode(code) {
+            if (!/^\d{6}$/.test(code)) throw new Error('Kod 6 haneli olmalı');
+            const snap = await getDoc(doc(db, 'syncs', code));
+            if (!snap.exists()) throw new Error('Kod bulunamadı');
+            syncCode = code;
+            localStorage.setItem('sync_code', code);
+            applyRemoteData(snap.data());
+            startListener();
+            return true;
+        }
+
+        function disconnectSync() {
+            if (unsubscribe) unsubscribe();
+            unsubscribe = null;
+            syncCode = null;
+            localStorage.removeItem('sync_code');
+            updateStatus('off');
+        }
+
+        // Initialize: anonymous auth, then start listener if code exists
+        signInAnonymously(auth).catch(err => console.error('Auth failed:', err));
+        onAuthStateChanged(auth, (user) => {
+            if (user && syncCode) {
+                startListener();
+                updateStatus('synced');
+            } else {
+                updateStatus('off');
+            }
+        });
+
+        window.FirebaseSync = {
+            scheduleUpload,
+            createSyncCode,
+            joinSyncCode,
+            disconnectSync,
+            getSyncCode: () => syncCode,
+            isConnected: () => !!syncCode
+        };
+    </script>
 
     <script>
     // ==================== ORIGINAL 45 WORDS (already studied, with sentences) ====================
@@ -1152,6 +1334,7 @@
 
     function saveCustomWords() {
         localStorage.setItem(CUSTOM_WORDS_KEY, JSON.stringify(customWords));
+        if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
     }
 
     let customWords = loadCustomWords();
@@ -1181,6 +1364,7 @@
 
     function saveState() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
     }
 
     let state = loadState();
@@ -1908,6 +2092,7 @@
     }
     function saveWordCategories() {
         localStorage.setItem(WORD_CATEGORIES_KEY, JSON.stringify(wordCategories));
+        if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
     }
     let wordCategories = loadWordCategories(); // { "commit": "fiil", "efficient": "sifat", ... }
 
@@ -2189,6 +2374,7 @@
 
     function saveLearnedPatterns() {
         localStorage.setItem(LEARNED_PATTERNS_KEY, JSON.stringify(learnedPatterns));
+        if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
     }
 
     let learnedPatterns = loadLearnedPatterns(); // array of pattern strings
@@ -3458,6 +3644,7 @@
     function saveAlarms(alarms) {
         localStorage.setItem('alarms', JSON.stringify(alarms));
         scheduleAllAlarms();
+        if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
     }
 
     function renderAlarmList() {
@@ -3653,6 +3840,102 @@
             });
         }).catch(err => console.log('SW failed:', err));
     }
+
+    // ==================== SYNC MODAL ====================
+    function openSyncModal() {
+        const modal = document.getElementById('syncModal');
+        const body = document.getElementById('syncModalBody');
+        const connected = window.FirebaseSync && window.FirebaseSync.isConnected();
+        const code = window.FirebaseSync && window.FirebaseSync.getSyncCode();
+
+        if (connected && code) {
+            body.innerHTML = `
+                <div style="color:#22c55e; font-size:14px; margin-bottom:10px;">&#10003; Bu cihaz senkronize</div>
+                <div style="color:#94a3b8; font-size:13px; margin-bottom:15px;">Senkronizasyon kodun:</div>
+                <div style="background:#0f172a; border:2px dashed #38bdf8; border-radius:8px; padding:20px; text-align:center; font-size:28px; font-weight:bold; color:#38bdf8; letter-spacing:8px; margin-bottom:15px;">${code}</div>
+                <div style="color:#94a3b8; font-size:13px; margin-bottom:15px;">Baska cihazda bu kodu girerek ayni veriye erisebilirsin. Telefon ile bilgisayar arasinda otomatik senkron olacak.</div>
+                <button onclick="disconnectSyncConfirm()" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ef4444; background:transparent; color:#ef4444; cursor:pointer; font-size:14px;">Bu cihazdan baglanti kes</button>
+            `;
+        } else {
+            body.innerHTML = `
+                <div style="color:#94a3b8; font-size:14px; margin-bottom:15px;">Ilerlemeni telefon ve bilgisayar arasinda senkronize et.</div>
+
+                <div style="margin-bottom:20px;">
+                    <div style="color:#38bdf8; font-size:14px; font-weight:600; margin-bottom:8px;">1. Yeni Senkron Baslat</div>
+                    <div style="color:#64748b; font-size:12px; margin-bottom:10px;">6 haneli bir kod olusturur. Diger cihazda bu kodu gir.</div>
+                    <button onclick="createSyncNow()" style="width:100%; padding:10px; border-radius:6px; border:none; background:#38bdf8; color:#fff; cursor:pointer; font-size:14px; font-weight:600;">Senkron Kodu Olustur</button>
+                </div>
+
+                <div style="border-top:1px solid #334155; padding-top:20px;">
+                    <div style="color:#22c55e; font-size:14px; font-weight:600; margin-bottom:8px;">2. Mevcut Kodla Baglan</div>
+                    <div style="color:#64748b; font-size:12px; margin-bottom:10px;">Diger cihazindan aldigin 6 haneli kodu gir.</div>
+                    <input id="syncCodeInput" type="text" inputmode="numeric" maxlength="6" placeholder="123456" style="width:100%; padding:10px; border-radius:6px; border:1px solid #334155; background:#0f172a; color:#e2e8f0; font-size:18px; text-align:center; letter-spacing:6px; margin-bottom:10px;">
+                    <button onclick="joinSyncNow()" style="width:100%; padding:10px; border-radius:6px; border:none; background:#22c55e; color:#fff; cursor:pointer; font-size:14px; font-weight:600;">Bu Kodla Baglan</button>
+                </div>
+
+                <div id="syncModalMsg" style="margin-top:15px; font-size:13px; text-align:center;"></div>
+            `;
+        }
+        modal.style.display = 'flex';
+    }
+
+    function closeSyncModal() {
+        document.getElementById('syncModal').style.display = 'none';
+    }
+
+    async function createSyncNow() {
+        const msg = document.getElementById('syncModalMsg');
+        msg.style.color = '#94a3b8';
+        msg.textContent = 'Kod olusturuluyor...';
+        try {
+            await window.FirebaseSync.createSyncCode();
+            openSyncModal(); // re-render with connected state
+        } catch(e) {
+            msg.style.color = '#ef4444';
+            msg.textContent = 'Hata: ' + e.message;
+        }
+    }
+
+    async function joinSyncNow() {
+        const input = document.getElementById('syncCodeInput');
+        const msg = document.getElementById('syncModalMsg');
+        const code = input.value.trim();
+        if (!/^\d{6}$/.test(code)) {
+            msg.style.color = '#ef4444';
+            msg.textContent = 'Kod 6 haneli sayi olmali';
+            return;
+        }
+        msg.style.color = '#94a3b8';
+        msg.textContent = 'Baglaniliyor...';
+        try {
+            await window.FirebaseSync.joinSyncCode(code);
+            closeSyncModal();
+            setTimeout(() => location.reload(), 500);
+        } catch(e) {
+            msg.style.color = '#ef4444';
+            msg.textContent = e.message;
+        }
+    }
+
+    function disconnectSyncConfirm() {
+        if (confirm('Bu cihazin senkronizasyonu kesilecek. Yerel veriler silinmez. Devam?')) {
+            window.FirebaseSync.disconnectSync();
+            closeSyncModal();
+        }
+    }
+
+    // When remote data comes in, refresh local state and re-render
+    window.onSyncRemoteUpdate = () => {
+        state = loadState();
+        customWords = loadCustomWords();
+        learnedPatterns = loadLearnedPatterns();
+        wordCategories = loadWordCategories();
+        updateStats();
+        if (currentStage) {
+            const activeBtn = document.querySelector('.stage-btn.active');
+            navigateStage(currentStage, activeBtn);
+        }
+    };
 
     // ==================== INIT ====================
     // Clear old sentence cache without Turkish translations (one-time migration)

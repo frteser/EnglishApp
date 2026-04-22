@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v11';
+const CACHE_NAME = 'english-app-v12';
 const ASSETS = [
   './',
   './index.html',
@@ -30,6 +30,13 @@ self.addEventListener('activate', e => {
 // Fetch - network-first for JSON, cache-first for others
 self.addEventListener('fetch', e => {
   const url = e.request.url;
+
+  // Bypass SW for cross-origin (Firebase, Google APIs, CDNs)
+  if (url.includes('firebaseio.com') || url.includes('googleapis.com') ||
+      url.includes('gstatic.com') || url.includes('firebasestorage') ||
+      url.includes('firebaseapp.com') || !url.startsWith(self.location.origin)) {
+    return;
+  }
 
   // Network-first for JSON data files (patterns, wordlist)
   if (url.endsWith('.json') && !url.includes('manifest')) {
