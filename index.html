@@ -815,9 +815,10 @@
         <div class="header">
             <h1>English Daily Practice</h1>
             <div class="subtitle">1125 kelime havuzu - Her gün 5 kelime, istersen ekstra getir</div>
-            <div style="margin-top:10px; display:flex; justify-content:center; align-items:center; gap:10px;">
-                <span id="syncStatus" style="font-size:13px; color:#64748b;">Senkron kapalı</span>
-                <button onclick="openSyncModal()" style="padding:4px 12px; font-size:12px; border-radius:15px; border:1px solid #38bdf8; background:transparent; color:#38bdf8; cursor:pointer;">Senkronizasyon</button>
+            <div style="margin-top:10px; display:flex; justify-content:center; align-items:center; gap:8px;">
+                <button id="syncBtn" onclick="openSyncModal()" style="padding:4px 14px; font-size:12px; border-radius:15px; border:1px solid #64748b; background:transparent; color:#64748b; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+                    <span id="syncStatus">Senkronize edilmedi</span>
+                </button>
             </div>
         </div>
 
@@ -988,16 +989,22 @@
 
         function updateStatus(status) {
             const el = document.getElementById('syncStatus');
+            const btn = document.getElementById('syncBtn');
             if (!el) return;
+            const codeText = syncCode ? ' (' + syncCode + ')' : '';
             const map = {
-                pending: {text: '⏳ Kaydediliyor...', color: '#f59e0b'},
-                synced: {text: '✓ Senkron', color: '#22c55e'},
-                error: {text: '⚠ Hata', color: '#ef4444'},
-                off: {text: 'Senkron kapalı', color: '#64748b'}
+                pending: {text: '⏳ Kaydediliyor...' + codeText, color: '#f59e0b'},
+                synced: {text: '✓ Senkron' + codeText, color: '#22c55e'},
+                error: {text: '⚠ Hata' + codeText, color: '#ef4444'},
+                off: {text: 'Senkron aç', color: '#64748b'}
             };
             const s = map[status] || map.off;
             el.textContent = s.text;
             el.style.color = s.color;
+            if (btn) {
+                btn.style.borderColor = s.color;
+                btn.style.color = s.color;
+            }
         }
 
         async function createSyncCode() {
@@ -1029,12 +1036,19 @@
         }
 
         // Initialize: anonymous auth, then start listener if code exists
+        // Set initial status based on saved code (before auth completes)
+        if (syncCode) {
+            setTimeout(() => updateStatus('pending'), 0);
+        } else {
+            setTimeout(() => updateStatus('off'), 0);
+        }
+
         signInAnonymously(auth).catch(err => console.error('Auth failed:', err));
         onAuthStateChanged(auth, (user) => {
             if (user && syncCode) {
                 startListener();
                 updateStatus('synced');
-            } else {
+            } else if (!syncCode) {
                 updateStatus('off');
             }
         });
