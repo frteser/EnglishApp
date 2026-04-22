@@ -1484,6 +1484,7 @@
         let unsubscribe = null;
         let uploadDebounce = null;
         let isApplyingRemote = false;
+        let localDirty = false; // true = we have unsaved local changes, don't apply remote
 
         const LS_KEYS = {
             state: 'english_daily_v1',
@@ -1520,6 +1521,8 @@
         async function upload() {
             if (!syncCode || isApplyingRemote) return;
             if (!auth.currentUser) return;
+            clearTimeout(uploadDebounce);
+            uploadDebounce = null;
 
             const data = collectLocalData();
             data.updatedAt = serverTimestamp();
@@ -1527,6 +1530,7 @@
 
             try {
                 await setDoc(doc(db, 'syncs', syncCode), data);
+                localDirty = false;
                 updateStatus('synced');
             } catch(e) {
                 console.error('Upload failed:', e);
@@ -1536,10 +1540,23 @@
 
         function scheduleUpload() {
             if (!syncCode || isApplyingRemote) return;
+            localDirty = true;
             clearTimeout(uploadDebounce);
             updateStatus('pending');
-            uploadDebounce = setTimeout(upload, 1500);
+            uploadDebounce = setTimeout(upload, 500);
         }
+
+        // Flush pending upload before page unload/hide (prevents data loss on quick refresh)
+        function flushUpload() {
+            if (uploadDebounce && localDirty) {
+                clearTimeout(uploadDebounce);
+                upload();
+            }
+        }
+        window.addEventListener('beforeunload', flushUpload);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') flushUpload();
+        });
 
         function startListener() {
             if (unsubscribe) unsubscribe();
@@ -1550,6 +1567,11 @@
                 const data = snap.data();
                 if (data.updatedBy === deviceId) return; // ignore self
                 if (snap.metadata.hasPendingWrites) return;
+                // Don't overwrite local changes that haven't been uploaded yet
+                if (localDirty) {
+                    console.log('Skipping remote snapshot: local changes pending');
+                    return;
+                }
                 applyRemoteData(data);
                 updateStatus('synced');
             }, (err) => {
