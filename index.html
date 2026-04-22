@@ -4406,7 +4406,8 @@ RULES:
         }));
         contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`;
+        // Try models in order: the first one that works will be used
+        const models = ['gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash-8b'];
 
         const body = {
             contents,
@@ -4414,20 +4415,30 @@ RULES:
             generationConfig: { temperature: 0.9, maxOutputTokens: 300 }
         };
 
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.error?.message || `API hatasi (${res.status})`);
+        let lastErr = null;
+        for (const model of models) {
+            try {
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`;
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                if (!res.ok) {
+                    const err = await res.json().catch(() => ({}));
+                    lastErr = err.error?.message || `API hatasi (${res.status})`;
+                    // If quota exceeded, try next model
+                    if (res.status === 429 || /quota/i.test(lastErr)) continue;
+                    throw new Error(lastErr);
+                }
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '(Cevap alinamadi)';
+                return text.trim();
+            } catch(e) {
+                lastErr = e.message;
+            }
         }
-
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '(Cevap alinamadi)';
-        return text.trim();
+        throw new Error(lastErr || 'Tum modeller denendi, cevap alinamadi');
     }
 
     function renderChat(el) {
