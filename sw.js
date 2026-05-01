@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v18';
+const CACHE_NAME = 'english-app-v19';
 const ASSETS = [
   './',
   './index.html',
@@ -136,6 +136,7 @@ async function scheduleAlarms(alarms) {
       if (target <= now) continue;
 
       const body = alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!';
+      const originalFireMs = target.getTime();
       const baseOpts = {
         body,
         icon: './icon-192.png',
@@ -143,7 +144,7 @@ async function scheduleAlarms(alarms) {
         renotify: true,
         requireInteraction: false,
         actions: [{ action: 'open', title: 'Basla' }],
-        data: { alarmId: alarm.id, dateKey: dateKey(target) }
+        data: { alarmId: alarm.id, dateKey: dateKey(target), originalFireMs }
       };
 
       if (SUPPORTS_TRIGGER) {
@@ -151,13 +152,13 @@ async function scheduleAlarms(alarms) {
         try {
           await self.registration.showNotification('English Daily Practice', {
             ...baseOpts,
-            tag: 'alarm-' + alarm.id + '-' + target.getTime(),
-            showTrigger: new TimestampTrigger(target.getTime())
+            tag: 'alarm-' + alarm.id + '-' + originalFireMs,
+            showTrigger: new TimestampTrigger(originalFireMs)
           });
         } catch(e) { console.warn('Main alarm schedule failed:', e); }
 
         // Follow-up notifications every hour until FOLLOWUP_END_HOUR
-        let followTime = target.getTime() + FOLLOWUP_INTERVAL_MS;
+        let followTime = originalFireMs + FOLLOWUP_INTERVAL_MS;
         const endOfDay = new Date(target);
         endOfDay.setHours(FOLLOWUP_END_HOUR, 0, 0, 0);
         const endMs = endOfDay.getTime();
@@ -193,16 +194,19 @@ async function scheduleAlarms(alarms) {
   }
 }
 
-// Cancel today's follow-up notifications when user opens the app
+// Cancel only follow-ups whose original alarm has already fired (per-alarm independence)
 async function cancelTodaysFollowups() {
   if (!SUPPORTS_TRIGGER) return;
   try {
+    const now = Date.now();
     const today = dateKey(new Date());
     const existing = await self.registration.getNotifications({ includeTriggered: true });
     for (const n of existing) {
-      if (n.tag && n.tag.startsWith('followup-') && n.tag.includes('-' + today + '-')) {
-        n.close();
-      }
+      if (!n.tag || !n.tag.startsWith('followup-')) continue;
+      if (!n.tag.includes('-' + today + '-')) continue;
+      const orig = n.data && n.data.originalFireMs;
+      // Only cancel if the alarm this follow-up belongs to has already fired
+      if (orig && orig <= now) n.close();
     }
     openedDates.add(today);
   } catch(e) { console.warn('Cancel followups failed:', e); }

@@ -2164,6 +2164,7 @@
         showXPToast(amount, reason);
     }
 
+    let _lastSnoozeCancelMs = 0;
     function markActivity() {
         const today = getTodayStr();
         const isFirstActivityToday = state.lastActivityDate !== today;
@@ -2185,7 +2186,13 @@
             }
             state.lastActivityDate = today;
             saveState();
-            // Tell SW to cancel today's follow-up reminders
+        }
+        // Tell SW to cancel ALREADY-FIRED alarms' follow-ups (debounced to once per minute)
+        // Each call only cancels follow-ups whose main alarm has already passed,
+        // so morning practice doesn't kill evening alarm's reminders.
+        const now = Date.now();
+        if (now - _lastSnoozeCancelMs > 60000) {
+            _lastSnoozeCancelMs = now;
             if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({ type: 'PRACTICED_TODAY' });
             }
