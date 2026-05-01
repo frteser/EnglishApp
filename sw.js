@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v17';
+const CACHE_NAME = 'english-app-v18';
 const ASSETS = [
   './',
   './index.html',
@@ -83,10 +83,19 @@ self.addEventListener('message', e => {
   } else if (e.data && e.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   } else if (e.data && e.data.type === 'CHECK_TRIGGER_SUPPORT' && e.ports && e.ports[0]) {
-    // Reply with true if TimestampTrigger is available in this SW context
     e.ports[0].postMessage({ supported: typeof TimestampTrigger !== 'undefined' });
+  } else if (e.data && e.data.type === 'PRACTICED_TODAY') {
+    // User did an activity today - cancel remaining follow-up notifications for today
+    cancelTodaysFollowups();
   }
 });
+
+// Track which dates the user has already opened the app on (skip follow-ups for those)
+let openedDates = new Set();
+
+function dateKey(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
 
 async function scheduleAlarms(alarms) {
   // Clear timeout-based timers
@@ -98,7 +107,7 @@ async function scheduleAlarms(alarms) {
     try {
       const existing = await self.registration.getNotifications({ includeTriggered: true });
       for (const n of existing) {
-        if (n.tag && n.tag.startsWith('alarm-')) n.close();
+        if (n.tag && (n.tag.startsWith('alarm-') || n.tag.startsWith('followup-'))) n.close();
       }
     } catch(e) {}
   }
@@ -107,13 +116,15 @@ async function scheduleAlarms(alarms) {
   const jsDay = now.getDay();
   const today = jsDay === 0 ? 6 : jsDay - 1;
 
+  // Schedule for next 14 days using TimestampTrigger (survives SW death)
+  // Without trigger support, only schedule for next 24h via setTimeout (less reliable on mobile)
+  const daysToSchedule = SUPPORTS_TRIGGER ? 14 : 1;
+  const FOLLOWUP_END_HOUR = 22; // stop follow-ups at 22:00
+  const FOLLOWUP_INTERVAL_MS = 60 * 60 * 1000; // 1 hour
+
   for (const alarm of alarms) {
     if (!alarm.enabled) continue;
     const [h, m] = alarm.time.split(':').map(Number);
-
-    // Schedule for next 14 days using TimestampTrigger (survives SW death)
-    // Without trigger support, only schedule for next 24h via setTimeout (less reliable on mobile)
-    const daysToSchedule = SUPPORTS_TRIGGER ? 14 : 1;
 
     for (let offset = 0; offset < daysToSchedule; offset++) {
       const checkDay = (today + offset) % 7;
@@ -125,30 +136,53 @@ async function scheduleAlarms(alarms) {
       if (target <= now) continue;
 
       const body = alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!';
-      const opts = {
+      const baseOpts = {
         body,
         icon: './icon-192.png',
         badge: './icon-192.png',
-        tag: 'alarm-' + alarm.id + '-' + target.getTime(),
         renotify: true,
         requireInteraction: false,
-        actions: [{ action: 'open', title: 'Basla' }]
+        actions: [{ action: 'open', title: 'Basla' }],
+        data: { alarmId: alarm.id, dateKey: dateKey(target) }
       };
 
       if (SUPPORTS_TRIGGER) {
-        // Schedule notification with OS - works even when SW is killed
-        opts.showTrigger = new TimestampTrigger(target.getTime());
+        // Main notification at scheduled time
         try {
-          await self.registration.showNotification('English Daily Practice', opts);
-        } catch(e) {
-          console.warn('Trigger schedule failed:', e);
+          await self.registration.showNotification('English Daily Practice', {
+            ...baseOpts,
+            tag: 'alarm-' + alarm.id + '-' + target.getTime(),
+            showTrigger: new TimestampTrigger(target.getTime())
+          });
+        } catch(e) { console.warn('Main alarm schedule failed:', e); }
+
+        // Follow-up notifications every hour until FOLLOWUP_END_HOUR
+        let followTime = target.getTime() + FOLLOWUP_INTERVAL_MS;
+        const endOfDay = new Date(target);
+        endOfDay.setHours(FOLLOWUP_END_HOUR, 0, 0, 0);
+        const endMs = endOfDay.getTime();
+        let followIdx = 1;
+        while (followTime <= endMs) {
+          try {
+            await self.registration.showNotification('English Daily Practice', {
+              ...baseOpts,
+              body: '🔔 Hala bekliyorum! ' + body,
+              tag: 'followup-' + alarm.id + '-' + dateKey(target) + '-' + followIdx,
+              showTrigger: new TimestampTrigger(followTime)
+            });
+          } catch(e) { console.warn('Follow-up schedule failed:', e); }
+          followTime += FOLLOWUP_INTERVAL_MS;
+          followIdx++;
         }
       } else {
         // Fallback: setTimeout (only fires if SW alive)
         const delay = target - now;
         if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
           const timer = setTimeout(() => {
-            self.registration.showNotification('English Daily Practice', opts);
+            self.registration.showNotification('English Daily Practice', {
+              ...baseOpts,
+              tag: 'alarm-' + alarm.id + '-' + target.getTime()
+            });
             scheduleAlarms(alarms);
           }, delay);
           alarmTimers.push(timer);
@@ -157,6 +191,21 @@ async function scheduleAlarms(alarms) {
       }
     }
   }
+}
+
+// Cancel today's follow-up notifications when user opens the app
+async function cancelTodaysFollowups() {
+  if (!SUPPORTS_TRIGGER) return;
+  try {
+    const today = dateKey(new Date());
+    const existing = await self.registration.getNotifications({ includeTriggered: true });
+    for (const n of existing) {
+      if (n.tag && n.tag.startsWith('followup-') && n.tag.includes('-' + today + '-')) {
+        n.close();
+      }
+    }
+    openedDates.add(today);
+  } catch(e) { console.warn('Cancel followups failed:', e); }
 }
 
 // Notification click - open app

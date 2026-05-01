@@ -2166,8 +2166,9 @@
 
     function markActivity() {
         const today = getTodayStr();
+        const isFirstActivityToday = state.lastActivityDate !== today;
         // First activity of the day -> update streak
-        if (state.lastActivityDate !== today) {
+        if (isFirstActivityToday) {
             if (state.lastActivityDate) {
                 const last = new Date(state.lastActivityDate);
                 const now = new Date(today);
@@ -2184,6 +2185,10 @@
             }
             state.lastActivityDate = today;
             saveState();
+            // Tell SW to cancel today's follow-up reminders
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ type: 'PRACTICED_TODAY' });
+            }
         }
     }
 
