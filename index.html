@@ -2605,6 +2605,7 @@
                         <div class="notif-desc">Gun icinde birden fazla alarm kur</div>
                     </div>
                 </div>
+                <div id="notifPermBanner"></div>
                 <div class="alarm-list" id="alarmList">
                     ${renderAlarmList()}
                 </div>
@@ -2620,6 +2621,8 @@
                 </div>
             </div>
         `;
+        // Show notification permission banner under alarms
+        setTimeout(() => renderNotifPermBanner(), 0);
     }
 
     function renderStage1(el) {
@@ -5524,6 +5527,10 @@ RULES:
         localStorage.setItem('alarms', JSON.stringify(alarms));
         scheduleAllAlarms();
         if (window.FirebaseSync) window.FirebaseSync.scheduleUpload();
+        // Also push to SW so it can use TimestampTrigger for reliable mobile delivery
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.controller.postMessage({ type: 'SCHEDULE_ALARMS', alarms });
+        }
     }
 
     function renderAlarmList() {
@@ -5664,6 +5671,55 @@ RULES:
     function refreshAlarmUI() {
         const list = document.getElementById('alarmList');
         if (list) list.innerHTML = renderAlarmList();
+        renderNotifPermBanner();
+    }
+
+    function renderNotifPermBanner() {
+        const banner = document.getElementById('notifPermBanner');
+        if (!banner) return;
+        if (!('Notification' in window)) {
+            banner.innerHTML = `<div style="background:#3f1d1d; border:1px solid #ef4444; border-radius:8px; padding:10px; margin-bottom:10px; color:#fecaca; font-size:13px;">⚠ Bu tarayici bildirimleri desteklemiyor.</div>`;
+            return;
+        }
+        const perm = Notification.permission;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const supportsTrigger = 'serviceWorker' in navigator && 'showTrigger' in (Notification.prototype || {});
+
+        let html = '';
+        if (perm === 'denied') {
+            html = `<div style="background:#3f1d1d; border:1px solid #ef4444; border-radius:8px; padding:10px; margin-bottom:10px; color:#fecaca; font-size:13px;">
+                ⚠ Bildirim izni reddedilmis. Tarayici ayarlarindan bu site icin bildirim iznini ac.
+            </div>`;
+        } else if (perm === 'default') {
+            html = `<div style="background:#1e3a5f; border:1px solid #38bdf8; border-radius:8px; padding:10px; margin-bottom:10px; color:#bae6fd; font-size:13px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <span>Bildirim izni gerekli. Alarm kursan da bildirim gelmez.</span>
+                <button onclick="requestNotifPerm()" style="padding:6px 12px; border-radius:6px; border:none; background:#38bdf8; color:#0f172a; font-weight:600; cursor:pointer;">Izin Ver</button>
+            </div>`;
+        } else if (perm === 'granted' && isIOS && !isStandalone) {
+            html = `<div style="background:#3a2e15; border:1px solid #f59e0b; border-radius:8px; padding:10px; margin-bottom:10px; color:#fde68a; font-size:13px;">
+                ⚠ iOS'ta bildirimler sadece "Ana Ekrana Ekle" ile yuklenmis uygulamada calisir. Safari Paylas > Ana Ekrana Ekle.
+            </div>`;
+        } else if (perm === 'granted' && !supportsTrigger) {
+            html = `<div style="background:#3a2e15; border:1px solid #f59e0b; border-radius:8px; padding:10px; margin-bottom:10px; color:#fde68a; font-size:13px;">
+                ⚠ Bu tarayici/cihaz arka plan bildirimleri sinirli destekliyor. Telefonu uzun sure kapali tutarsan bildirimler dusmeyebilir. Chrome (Android) en iyi sonucu verir. Uygulamayi gunde 1-2 kere ac, kacirilmis hatirlatmalar telafi olur.
+            </div>`;
+        } else {
+            html = `<div style="background:#0f3a1e; border:1px solid #22c55e; border-radius:8px; padding:8px; margin-bottom:10px; color:#bbf7d0; font-size:12px;">
+                ✓ Bildirimler aktif (arka planda zamanlanir).
+            </div>`;
+        }
+        banner.innerHTML = html;
+    }
+
+    async function requestNotifPerm() {
+        if (!('Notification' in window)) return;
+        const perm = await Notification.requestPermission();
+        renderNotifPermBanner();
+        if (perm === 'granted') {
+            // Re-schedule alarms now that we have permission
+            scheduleAllAlarms();
+        }
     }
 
     window._alarmTimers = [];

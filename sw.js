@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v15';
+const CACHE_NAME = 'english-app-v16';
 const ASSETS = [
   './',
   './index.html',
@@ -75,6 +75,7 @@ self.addEventListener('fetch', e => {
 
 // Alarm system
 let alarmTimers = [];
+const SUPPORTS_TRIGGER = 'showTrigger' in Notification.prototype;
 
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SCHEDULE_ALARMS') {
@@ -84,45 +85,75 @@ self.addEventListener('message', e => {
   }
 });
 
-function scheduleAlarms(alarms) {
+async function scheduleAlarms(alarms) {
+  // Clear timeout-based timers
   alarmTimers.forEach(t => clearTimeout(t));
   alarmTimers = [];
+
+  // Clear previously-scheduled trigger notifications
+  if (SUPPORTS_TRIGGER) {
+    try {
+      const existing = await self.registration.getNotifications({ includeTriggered: true });
+      for (const n of existing) {
+        if (n.tag && n.tag.startsWith('alarm-')) n.close();
+      }
+    } catch(e) {}
+  }
 
   const now = new Date();
   const jsDay = now.getDay();
   const today = jsDay === 0 ? 6 : jsDay - 1;
 
-  alarms.forEach(alarm => {
-    if (!alarm.enabled) return;
+  for (const alarm of alarms) {
+    if (!alarm.enabled) continue;
     const [h, m] = alarm.time.split(':').map(Number);
 
-    for (let offset = 0; offset < 7; offset++) {
+    // Schedule for next 14 days using TimestampTrigger (survives SW death)
+    // Without trigger support, only schedule for next 24h via setTimeout (less reliable on mobile)
+    const daysToSchedule = SUPPORTS_TRIGGER ? 14 : 1;
+
+    for (let offset = 0; offset < daysToSchedule; offset++) {
       const checkDay = (today + offset) % 7;
       if (!alarm.days.includes(checkDay)) continue;
 
-      let target = new Date();
+      const target = new Date();
       target.setDate(target.getDate() + offset);
       target.setHours(h, m, 0, 0);
-      if (target <= now && offset === 0) continue;
+      if (target <= now) continue;
 
-      const delay = target - now;
-      if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
-        const timer = setTimeout(() => {
-          self.registration.showNotification('English Daily Practice', {
-            body: alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!',
-            icon: './icon-192.png',
-            badge: './icon-192.png',
-            tag: 'alarm-' + alarm.id,
-            renotify: true,
-            actions: [{ action: 'open', title: 'Basla' }]
-          });
-          scheduleAlarms(alarms);
-        }, delay);
-        alarmTimers.push(timer);
+      const body = alarm.note && alarm.note.trim() ? alarm.note : 'Bugunun kelimelerini calistinmi? Hadi pratik yapalim!';
+      const opts = {
+        body,
+        icon: './icon-192.png',
+        badge: './icon-192.png',
+        tag: 'alarm-' + alarm.id + '-' + target.getTime(),
+        renotify: true,
+        requireInteraction: false,
+        actions: [{ action: 'open', title: 'Basla' }]
+      };
+
+      if (SUPPORTS_TRIGGER) {
+        // Schedule notification with OS - works even when SW is killed
+        opts.showTrigger = new TimestampTrigger(target.getTime());
+        try {
+          await self.registration.showNotification('English Daily Practice', opts);
+        } catch(e) {
+          console.warn('Trigger schedule failed:', e);
+        }
+      } else {
+        // Fallback: setTimeout (only fires if SW alive)
+        const delay = target - now;
+        if (delay > 0 && delay < 24 * 60 * 60 * 1000) {
+          const timer = setTimeout(() => {
+            self.registration.showNotification('English Daily Practice', opts);
+            scheduleAlarms(alarms);
+          }, delay);
+          alarmTimers.push(timer);
+        }
+        break; // only schedule next occurrence in fallback mode
       }
-      break;
     }
-  });
+  }
 }
 
 // Notification click - open app
