@@ -5674,7 +5674,26 @@ RULES:
         renderNotifPermBanner();
     }
 
-    function renderNotifPermBanner() {
+    let _swTriggerSupportCache = null;
+    async function checkSWTriggerSupport() {
+        if (_swTriggerSupportCache !== null) return _swTriggerSupportCache;
+        if (!('serviceWorker' in navigator)) return false;
+        const reg = await navigator.serviceWorker.ready.catch(() => null);
+        if (!reg || !reg.active) return false;
+        return new Promise((resolve) => {
+            const ch = new MessageChannel();
+            const timer = setTimeout(() => resolve(false), 1500);
+            ch.port1.onmessage = (e) => {
+                clearTimeout(timer);
+                _swTriggerSupportCache = !!(e.data && e.data.supported);
+                resolve(_swTriggerSupportCache);
+            };
+            try { reg.active.postMessage({ type: 'CHECK_TRIGGER_SUPPORT' }, [ch.port2]); }
+            catch(e) { resolve(false); }
+        });
+    }
+
+    async function renderNotifPermBanner() {
         const banner = document.getElementById('notifPermBanner');
         if (!banner) return;
         if (!('Notification' in window)) {
@@ -5684,7 +5703,6 @@ RULES:
         const perm = Notification.permission;
         const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-        const supportsTrigger = 'serviceWorker' in navigator && 'showTrigger' in (Notification.prototype || {});
 
         let html = '';
         if (perm === 'denied') {
@@ -5700,14 +5718,20 @@ RULES:
             html = `<div style="background:#3a2e15; border:1px solid #f59e0b; border-radius:8px; padding:10px; margin-bottom:10px; color:#fde68a; font-size:13px;">
                 ⚠ iOS'ta bildirimler sadece "Ana Ekrana Ekle" ile yuklenmis uygulamada calisir. Safari Paylas > Ana Ekrana Ekle.
             </div>`;
-        } else if (perm === 'granted' && !supportsTrigger) {
-            html = `<div style="background:#3a2e15; border:1px solid #f59e0b; border-radius:8px; padding:10px; margin-bottom:10px; color:#fde68a; font-size:13px;">
-                ⚠ Bu tarayici/cihaz arka plan bildirimleri sinirli destekliyor. Telefonu uzun sure kapali tutarsan bildirimler dusmeyebilir. Chrome (Android) en iyi sonucu verir. Uygulamayi gunde 1-2 kere ac, kacirilmis hatirlatmalar telafi olur.
-            </div>`;
         } else {
+            // Render the success first, then update if SW says no trigger support
             html = `<div style="background:#0f3a1e; border:1px solid #22c55e; border-radius:8px; padding:8px; margin-bottom:10px; color:#bbf7d0; font-size:12px;">
-                ✓ Bildirimler aktif (arka planda zamanlanir).
+                ✓ Bildirimler aktif.
             </div>`;
+            banner.innerHTML = html;
+            // Check actual trigger support from SW
+            const swSupports = await checkSWTriggerSupport();
+            if (!swSupports) {
+                banner.innerHTML = `<div style="background:#0f3a1e; border:1px solid #22c55e; border-radius:8px; padding:8px; margin-bottom:10px; color:#bbf7d0; font-size:12px;">
+                    ✓ Bildirimler aktif. (Uygulama acikken her zaman, kapali iken cihaza gore degisir — Android Chrome en iyi destekler.)
+                </div>`;
+            }
+            return;
         }
         banner.innerHTML = html;
     }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v16';
+const CACHE_NAME = 'english-app-v17';
 const ASSETS = [
   './',
   './index.html',
@@ -75,13 +75,16 @@ self.addEventListener('fetch', e => {
 
 // Alarm system
 let alarmTimers = [];
-const SUPPORTS_TRIGGER = 'showTrigger' in Notification.prototype;
+const SUPPORTS_TRIGGER = typeof TimestampTrigger !== 'undefined';
 
 self.addEventListener('message', e => {
   if (e.data && e.data.type === 'SCHEDULE_ALARMS') {
     scheduleAlarms(e.data.alarms || []);
   } else if (e.data && e.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
+  } else if (e.data && e.data.type === 'CHECK_TRIGGER_SUPPORT' && e.ports && e.ports[0]) {
+    // Reply with true if TimestampTrigger is available in this SW context
+    e.ports[0].postMessage({ supported: typeof TimestampTrigger !== 'undefined' });
   }
 });
 
