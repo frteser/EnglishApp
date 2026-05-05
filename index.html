@@ -2623,9 +2623,13 @@
                 </div>
                 <button class="add-alarm-btn" onclick="openAlarmEditor()">+ Yeni Alarm Ekle</button>
                 <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
-                    <button onclick="testNotifNow()" style="flex:1; min-width:120px; padding:8px 12px; border-radius:8px; border:1px solid #38bdf8; background:transparent; color:#38bdf8; cursor:pointer; font-size:13px; font-family:inherit;">🔔 Test (anlik)</button>
-                    <button onclick="testNotifScheduled()" style="flex:1; min-width:120px; padding:8px 12px; border-radius:8px; border:1px solid #f59e0b; background:transparent; color:#f59e0b; cursor:pointer; font-size:13px; font-family:inherit;">⏱️ Test (30sn sonra)</button>
+                    <button onclick="testNotifNow()" style="flex:1; min-width:110px; padding:8px 12px; border-radius:8px; border:1px solid #38bdf8; background:transparent; color:#38bdf8; cursor:pointer; font-size:13px; font-family:inherit;">🔔 Test (anlik)</button>
+                    <button onclick="testNotifScheduled()" style="flex:1; min-width:110px; padding:8px 12px; border-radius:8px; border:1px solid #f59e0b; background:transparent; color:#f59e0b; cursor:pointer; font-size:13px; font-family:inherit;">⏱️ Test (30sn)</button>
+                    <button onclick="rescheduleAllAlarms()" style="flex:1; min-width:110px; padding:8px 12px; border-radius:8px; border:1px solid #22c55e; background:transparent; color:#22c55e; cursor:pointer; font-size:13px; font-family:inherit;">🔄 Yeniden Zamanla</button>
                     <button onclick="showNotifDiag()" style="padding:8px 12px; border-radius:8px; border:1px solid #64748b; background:transparent; color:#94a3b8; cursor:pointer; font-size:13px; font-family:inherit;">ℹ️ Tani</button>
+                </div>
+                <div style="margin-top:8px; padding:10px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; color:#fde68a; font-size:12px;">
+                    💡 <strong>Telefonda alarm gelmiyorsa:</strong> Cihaz Ayarlari > Pil > Pil Optimizasyonu (veya "Arka Plan Etkinligi") icinden Chrome / English Daily Practice icin "Optimize Etme / Sinirsiz" sec. Yoksa OS gece tarayiciyi uyutur ve bildirimler dusmez.
                 </div>
                 <div id="notifTestResult" style="margin-top:8px; font-size:12px; color:#94a3b8;"></div>
             </div>
@@ -5828,22 +5832,67 @@ RULES:
         lines.push('SW kayitli/aktif: ' + (reg && !!reg.active));
         const trig = await checkSWTriggerSupport();
         lines.push('TimestampTrigger (SW): ' + trig);
+        lines.push('');
 
-        // Count scheduled notifications
         if (reg) {
             try {
                 const n = await reg.getNotifications({ includeTriggered: true }).catch(() => []);
-                const alarms = n.filter(x => x.tag && x.tag.startsWith('alarm-')).length;
-                const followups = n.filter(x => x.tag && x.tag.startsWith('followup-')).length;
-                lines.push('Zamanli alarm sayisi: ' + alarms);
-                lines.push('Zamanli snooze sayisi: ' + followups);
+                const alarms = n.filter(x => x.tag && x.tag.startsWith('alarm-'));
+                const followups = n.filter(x => x.tag && x.tag.startsWith('followup-'));
+                lines.push('Zamanli alarm: ' + alarms.length);
+                lines.push('Zamanli snooze: ' + followups.length);
+                // Show first 5 upcoming notifications
+                const upcoming = [...alarms, ...followups]
+                    .filter(x => x.data && x.data.originalFireMs)
+                    .map(x => x.data.originalFireMs)
+                    .sort((a, b) => a - b)
+                    .filter(t => t > Date.now())
+                    .slice(0, 5);
+                if (upcoming.length > 0) {
+                    lines.push('');
+                    lines.push('Sonraki bildirimler:');
+                    upcoming.forEach(ms => {
+                        const d = new Date(ms);
+                        lines.push('  ' + d.toLocaleString('tr-TR', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }));
+                    });
+                }
             } catch(e) { lines.push('Bildirim listesi alinamadi: ' + e.message); }
         }
 
+        lines.push('');
         const alarms = (function(){ try { return JSON.parse(localStorage.getItem('alarms')||'[]'); } catch(e) { return []; }})();
         lines.push('Kayitli alarm: ' + alarms.filter(a=>a.enabled).length + ' aktif / ' + alarms.length + ' toplam');
+        if (alarms.length > 0) {
+            alarms.forEach(a => {
+                lines.push('  ' + (a.enabled ? '✓' : '✗') + ' ' + a.time + ' (' + (a.days || []).length + ' gun)');
+            });
+        }
 
         alert('TANI BILGISI:\n\n' + lines.join('\n'));
+    }
+
+    async function rescheduleAllAlarms() {
+        setNotifResult('Yeniden zamanlaniyor...', '#f59e0b');
+        const alarms = (function(){ try { return JSON.parse(localStorage.getItem('alarms')||'[]'); } catch(e) { return []; }})();
+        if (Notification.permission !== 'granted') {
+            await requestNotifPerm();
+            if (Notification.permission !== 'granted') {
+                setNotifResult('Once izin ver.', '#ef4444');
+                return;
+            }
+        }
+        const reg = await navigator.serviceWorker.ready.catch(() => null);
+        if (!reg || !reg.active) {
+            setNotifResult('SW hazir degil.', '#ef4444');
+            return;
+        }
+        reg.active.postMessage({ type: 'SCHEDULE_ALARMS', alarms });
+        scheduleAllAlarms();
+        setTimeout(async () => {
+            const n = await reg.getNotifications({ includeTriggered: true }).catch(() => []);
+            const count = n.filter(x => x.tag && x.tag.startsWith('alarm-')).length;
+            setNotifResult('✓ Yeniden zamanlandi. ' + count + ' alarm aktif. Tani ile detay gor.', '#22c55e');
+        }, 800);
     }
 
     window._alarmTimers = [];
