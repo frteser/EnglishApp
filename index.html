@@ -2628,9 +2628,11 @@
                     <button onclick="rescheduleAllAlarms()" style="flex:1; min-width:110px; padding:8px 12px; border-radius:8px; border:1px solid #22c55e; background:transparent; color:#22c55e; cursor:pointer; font-size:13px; font-family:inherit;">🔄 Yeniden Zamanla</button>
                     <button onclick="showNotifDiag()" style="padding:8px 12px; border-radius:8px; border:1px solid #64748b; background:transparent; color:#94a3b8; cursor:pointer; font-size:13px; font-family:inherit;">ℹ️ Tani</button>
                 </div>
-                <div style="margin-top:8px; padding:10px; background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); border-radius:8px; color:#fde68a; font-size:12px;">
-                    💡 <strong>Telefonda alarm gelmiyorsa:</strong> Cihaz Ayarlari > Pil > Pil Optimizasyonu (veya "Arka Plan Etkinligi") icinden Chrome / English Daily Practice icin "Optimize Etme / Sinirsiz" sec. Yoksa OS gece tarayiciyi uyutur ve bildirimler dusmez.
+                <div style="margin-top:8px; padding:10px; background:rgba(56,189,248,0.1); border:1px solid rgba(56,189,248,0.3); border-radius:8px; color:#bae6fd; font-size:12px;">
+                    📱 <strong>iPhone icin:</strong> Web bildirimleri uygulama kapaliyken iOS'ta calismiyor (Apple kisitlamasi). Asagidaki <strong>iOS Takvim'e Aktar</strong> butonuyla alarmlari iPhone takvimine yukle — native bildirim alirsin, telefon kapaliyken bile calisir.<br>
+                    🤖 <strong>Android icin:</strong> Cihaz Ayarlari > Pil > Pil Optimizasyonu icinden Chrome'a "Optimize Etme/Sinirsiz" izni ver.
                 </div>
+                <button onclick="exportAlarmsToICS()" style="width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px solid #38bdf8; background:linear-gradient(135deg, rgba(56,189,248,0.15), rgba(14,165,233,0.15)); color:#38bdf8; cursor:pointer; font-size:14px; font-weight:600; font-family:inherit;">📅 Alarmlari iOS/Google Takvim'e Aktar</button>
                 <div id="notifTestResult" style="margin-top:8px; font-size:12px; color:#94a3b8;"></div>
             </div>
 
@@ -5869,6 +5871,79 @@ RULES:
         }
 
         alert('TANI BILGISI:\n\n' + lines.join('\n'));
+    }
+
+    function exportAlarmsToICS() {
+        const alarms = (function(){ try { return JSON.parse(localStorage.getItem('alarms')||'[]'); } catch(e) { return []; }})();
+        const enabled = alarms.filter(a => a.enabled);
+        if (enabled.length === 0) {
+            setNotifResult('Aktif alarm yok.', '#ef4444');
+            return;
+        }
+
+        const pad = n => String(n).padStart(2, '0');
+        const fmtLocal = d => d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + 'T' + pad(d.getHours()) + pad(d.getMinutes()) + '00';
+        const fmtUTC = d => d.getUTCFullYear() + pad(d.getUTCMonth()+1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+        const dayMap = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+
+        const dtstamp = fmtUTC(new Date());
+        const lines = [
+            'BEGIN:VCALENDAR',
+            'VERSION:2.0',
+            'PRODID:-//EnglishDailyPractice//TR',
+            'CALSCALE:GREGORIAN',
+            'METHOD:PUBLISH'
+        ];
+
+        enabled.forEach(alarm => {
+            const [h, m] = alarm.time.split(':').map(Number);
+            // Find next occurrence as DTSTART (must be a day in alarm.days)
+            const now = new Date();
+            const todayDayMon0 = (now.getDay() + 6) % 7; // Mon=0..Sun=6
+            let firstOccur = null;
+            for (let off = 0; off < 8; off++) {
+                const checkDay = (todayDayMon0 + off) % 7;
+                if (!alarm.days.includes(checkDay)) continue;
+                const t = new Date();
+                t.setDate(t.getDate() + off);
+                t.setHours(h, m, 0, 0);
+                if (t > now) { firstOccur = t; break; }
+            }
+            if (!firstOccur) return;
+            const endOccur = new Date(firstOccur.getTime() + 5 * 60000);
+            const byday = alarm.days.map(d => dayMap[d]).join(',');
+            const note = (alarm.note && alarm.note.trim()) ? alarm.note : 'Bugunun kelimelerini calistinmi?';
+            const safeNote = note.replace(/[\n,;\\]/g, ' ');
+
+            lines.push(
+                'BEGIN:VEVENT',
+                'UID:alarm-' + alarm.id + '@englishdailypractice',
+                'DTSTAMP:' + dtstamp,
+                'DTSTART:' + fmtLocal(firstOccur),
+                'DTEND:' + fmtLocal(endOccur),
+                'RRULE:FREQ=WEEKLY;BYDAY=' + byday,
+                'SUMMARY:📚 İngilizce Pratik (' + alarm.time + ')',
+                'DESCRIPTION:' + safeNote,
+                'BEGIN:VALARM',
+                'ACTION:DISPLAY',
+                'DESCRIPTION:' + safeNote,
+                'TRIGGER:PT0M',
+                'END:VALARM',
+                'END:VEVENT'
+            );
+        });
+        lines.push('END:VCALENDAR');
+
+        const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'english-daily-alarms.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 200);
+        setNotifResult('✓ Indirildi. iPhone\'da Takvim uygulamasiyla ac, "Tumunu Ekle" de. Native bildirim alirsin.', '#22c55e');
     }
 
     async function rescheduleAllAlarms() {
