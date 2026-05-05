@@ -2622,6 +2622,12 @@
                     ${renderAlarmList()}
                 </div>
                 <button class="add-alarm-btn" onclick="openAlarmEditor()">+ Yeni Alarm Ekle</button>
+                <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <button onclick="testNotifNow()" style="flex:1; min-width:120px; padding:8px 12px; border-radius:8px; border:1px solid #38bdf8; background:transparent; color:#38bdf8; cursor:pointer; font-size:13px; font-family:inherit;">🔔 Test (anlik)</button>
+                    <button onclick="testNotifScheduled()" style="flex:1; min-width:120px; padding:8px 12px; border-radius:8px; border:1px solid #f59e0b; background:transparent; color:#f59e0b; cursor:pointer; font-size:13px; font-family:inherit;">⏱️ Test (30sn sonra)</button>
+                    <button onclick="showNotifDiag()" style="padding:8px 12px; border-radius:8px; border:1px solid #64748b; background:transparent; color:#94a3b8; cursor:pointer; font-size:13px; font-family:inherit;">ℹ️ Tani</button>
+                </div>
+                <div id="notifTestResult" style="margin-top:8px; font-size:12px; color:#94a3b8;"></div>
             </div>
 
             <div class="start-section">
@@ -5753,9 +5759,91 @@ RULES:
         const perm = await Notification.requestPermission();
         renderNotifPermBanner();
         if (perm === 'granted') {
-            // Re-schedule alarms now that we have permission
             scheduleAllAlarms();
         }
+    }
+
+    function setNotifResult(msg, color) {
+        const el = document.getElementById('notifTestResult');
+        if (el) { el.textContent = msg; el.style.color = color || '#94a3b8'; }
+    }
+
+    async function testNotifNow() {
+        if (Notification.permission !== 'granted') {
+            await requestNotifPerm();
+            if (Notification.permission !== 'granted') {
+                setNotifResult('Once izin ver.', '#ef4444');
+                return;
+            }
+        }
+        setNotifResult('Anlik test gonderildi...', '#f59e0b');
+        const reg = await navigator.serviceWorker.ready.catch(() => null);
+        if (reg && reg.active) {
+            reg.active.postMessage({ type: 'TEST_NOW' });
+            setTimeout(() => setNotifResult('SW test bildirim gonderdi. Gormediysen sorun: tarayici/cihaz bildirimleri engelliyor olabilir.', '#94a3b8'), 1000);
+        } else {
+            // Fallback: page-level notification
+            try {
+                new Notification('Test Bildirim (Page)', { body: 'SW yok, sayfa-uzeri test.', icon: './icon-192.png' });
+                setNotifResult('Page-uzeri bildirim denendi.', '#94a3b8');
+            } catch(e) {
+                setNotifResult('Hata: ' + e.message, '#ef4444');
+            }
+        }
+    }
+
+    async function testNotifScheduled() {
+        if (Notification.permission !== 'granted') {
+            await requestNotifPerm();
+            if (Notification.permission !== 'granted') return;
+        }
+        const reg = await navigator.serviceWorker.ready.catch(() => null);
+        if (!reg || !reg.active) {
+            setNotifResult('SW hazir degil', '#ef4444');
+            return;
+        }
+        setNotifResult('30 saniye sonra bildirim zamanlaniyor...', '#f59e0b');
+        const ch = new MessageChannel();
+        ch.port1.onmessage = (e) => {
+            if (e.data && e.data.ok) {
+                const eta = new Date(e.data.target).toLocaleTimeString('tr-TR');
+                setNotifResult('Zamanlandi (' + e.data.method + '). Beklenen: ' + eta + '. Bildirim gelmezse cihaz bildirimleri engelliyor demek. Tarayiciyi kapatip bekleyebilirsin — TimestampTrigger kapali olsa da calisir.', '#22c55e');
+            } else {
+                setNotifResult('Hata: ' + (e.data?.err || 'bilinmiyor'), '#ef4444');
+            }
+        };
+        reg.active.postMessage({ type: 'TEST_SCHEDULED', delayMs: 30000 }, [ch.port2]);
+    }
+
+    async function showNotifDiag() {
+        const lines = [];
+        lines.push('Tarayici: ' + (navigator.userAgent.match(/(Chrome|Safari|Firefox|Edg)\/[\d.]+/g) || ['?']).join(' '));
+        lines.push('iOS: ' + /iPad|iPhone|iPod/.test(navigator.userAgent));
+        lines.push('Android: ' + /Android/.test(navigator.userAgent));
+        lines.push('Standalone (PWA): ' + (window.matchMedia('(display-mode: standalone)').matches || !!navigator.standalone));
+        lines.push('Notification destegi: ' + ('Notification' in window));
+        lines.push('Notification izni: ' + (window.Notification ? Notification.permission : 'yok'));
+        lines.push('Service Worker: ' + ('serviceWorker' in navigator));
+        const reg = await navigator.serviceWorker.ready.catch(() => null);
+        lines.push('SW kayitli/aktif: ' + (reg && !!reg.active));
+        const trig = await checkSWTriggerSupport();
+        lines.push('TimestampTrigger (SW): ' + trig);
+
+        // Count scheduled notifications
+        if (reg) {
+            try {
+                const n = await reg.getNotifications({ includeTriggered: true }).catch(() => []);
+                const alarms = n.filter(x => x.tag && x.tag.startsWith('alarm-')).length;
+                const followups = n.filter(x => x.tag && x.tag.startsWith('followup-')).length;
+                lines.push('Zamanli alarm sayisi: ' + alarms);
+                lines.push('Zamanli snooze sayisi: ' + followups);
+            } catch(e) { lines.push('Bildirim listesi alinamadi: ' + e.message); }
+        }
+
+        const alarms = (function(){ try { return JSON.parse(localStorage.getItem('alarms')||'[]'); } catch(e) { return []; }})();
+        lines.push('Kayitli alarm: ' + alarms.filter(a=>a.enabled).length + ' aktif / ' + alarms.length + ' toplam');
+
+        alert('TANI BILGISI:\n\n' + lines.join('\n'));
     }
 
     window._alarmTimers = [];

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'english-app-v19';
+const CACHE_NAME = 'english-app-v20';
 const ASSETS = [
   './',
   './index.html',
@@ -85,8 +85,40 @@ self.addEventListener('message', e => {
   } else if (e.data && e.data.type === 'CHECK_TRIGGER_SUPPORT' && e.ports && e.ports[0]) {
     e.ports[0].postMessage({ supported: typeof TimestampTrigger !== 'undefined' });
   } else if (e.data && e.data.type === 'PRACTICED_TODAY') {
-    // User did an activity today - cancel remaining follow-up notifications for today
     cancelTodaysFollowups();
+  } else if (e.data && e.data.type === 'TEST_NOW') {
+    // Immediate test notification
+    self.registration.showNotification('Test Bildirim', {
+      body: 'Bu bir anlik test bildirim. Goruyorsan izinler ve SW calisiyor.',
+      icon: './icon-192.png',
+      tag: 'test-now-' + Date.now()
+    });
+  } else if (e.data && e.data.type === 'TEST_SCHEDULED') {
+    const ms = e.data.delayMs || 30000;
+    const target = Date.now() + ms;
+    if (typeof TimestampTrigger !== 'undefined') {
+      try {
+        self.registration.showNotification('Test Zamanli', {
+          body: 'Zamanli test (' + Math.round(ms/1000) + 'sn sonra). Bu geliyorsa TimestampTrigger calisiyor.',
+          icon: './icon-192.png',
+          tag: 'test-scheduled-' + target,
+          showTrigger: new TimestampTrigger(target)
+        });
+        if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: true, method: 'TimestampTrigger', target });
+      } catch(err) {
+        if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: false, err: String(err) });
+      }
+    } else {
+      // Fallback: setTimeout (will fail if SW killed)
+      setTimeout(() => {
+        self.registration.showNotification('Test Zamanli (setTimeout)', {
+          body: 'setTimeout fallback test. Daha az guvenilir.',
+          icon: './icon-192.png',
+          tag: 'test-scheduled-' + target
+        });
+      }, ms);
+      if (e.ports && e.ports[0]) e.ports[0].postMessage({ ok: true, method: 'setTimeout', target });
+    }
   }
 });
 
